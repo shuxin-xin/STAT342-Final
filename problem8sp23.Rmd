@@ -58,7 +58,7 @@ h(\pi_0 | x) &\sim Beta(x+ \alpha_0, n - x + \beta_0) \\
 The likelihood function is $\binom{n}{k}$
 
 \begin{align*}
-L(\pi) &= f(x_1) \cdot f(x_2) \cdot \dots f(x_500) \\
+L(\pi) &= f(x_1) \cdot f(x_2) \cdot \dots f(x_{241}) \\
 &= \binom{n}{k}\\
 \end{align*}
 
