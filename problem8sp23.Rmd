@@ -14,6 +14,7 @@ library(tidyverse)
 library(LearnBayes)
 ```
 
+test for knit
 
 ## Background
 
@@ -42,7 +43,6 @@ g(\pi) &= \frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0) \: \Gamma(\beta_0)}
 &= \frac{\Gamma(131.15)}{\Gamma(13.38) \: \Gamma(117.77)} \cdot \pi^{12.38} \cdot ( 1 - \pi)^{116.77} \\
 &= 8.046574\times 10^{18} \cdot \pi^{12.38} \cdot ( 1 - \pi)^{116.77} \\
 \end{align*}
-
 
 b. Dr. Cardiya's protocol calls for one interim analysis near 50\% of testing. Of the first 241 subjects, 7 tested positive for S. heftans. 
 
