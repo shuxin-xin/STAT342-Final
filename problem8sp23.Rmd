@@ -12,6 +12,7 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(LearnBayes)
+library(mosaic)
 ```
 
 ## Background
@@ -85,6 +86,12 @@ ggplot()+
 ```
 
    ii. Contrast the prior median with the posterior median. Also contrast the middle 95\% of the beta prior with the middle 95\% of the interim posterior distribution. 
+```{r}
+prior_median <- qbeta(0.5, 1.38, 105.62)
+prior_median
+posterior_median <- qbeta(0.5, 8.38, 339.62)
+posterior_median
+```
 
 
    iii. Contrast the prior probability that less than 1 percentage of the population have S. heftans with the posterior probability. 
