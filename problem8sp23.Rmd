@@ -10,11 +10,7 @@ header-includes:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-<<<<<<< HEAD
 library(tidyverse)
-=======
-
->>>>>>> 3faa4a87faef57554cae1e323f6db5489809df60
 ```
 
 
