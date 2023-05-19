@@ -14,8 +14,6 @@ library(tidyverse)
 library(LearnBayes)
 ```
 
-test for knit
-
 ## Background
 
 Suppose that Streptococcus heftans (fictitious) is an uncommon oral bacteria that has recently been found to cause rare heart infections affecting chambers and valves, especially in the elderly and those with existing chronic heart diseases. The prevalence for S. heftans has never been rigorously estimated, but is believed to be less than 0.005 (0.5% of the population), is very likely to be less than 0.01, and is virtually certain to be less than 0.05.
