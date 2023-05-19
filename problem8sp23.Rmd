@@ -50,7 +50,8 @@ b. Dr. Cardiya's protocol calls for one interim analysis near 50\% of testing. O
 ggplot()+
   stat_function(fun = dbeta,
                 args = list(shape1 =params[1],
-                            shape2=params[2]))
+                            shape2=params[2]),
+                xlim = c(0, 0.1))
 ```
 
    ii. Contrast the prior median with the posterior median. Also contrast the middle 95\% of the beta prior with the middle 95\% of the interim posterior distribution. 
