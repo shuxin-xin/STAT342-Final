@@ -26,20 +26,21 @@ a. Find the beta prior. (Use `beta.select` from `LearnBayes` to find the shape p
 
 
 ```{r}
-quantile1 = list(p = 1 - 0.5, x = 0.1)
-quantile2 = list(p = 1 - 0.99, x = 0.05)
+quantile1 = list(p = 0.5, x = 0.01)
+quantile2 = list(p = 0.99, x = 0.05)
 params <- beta.select(quantile1, quantile2)
+params
 ```
 
 The beta prior distribution is given $g(\pi) = \frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0) \: \Gamma(\beta_0)} \cdot \pi^{\alpha_0 - 1} \cdot ( 1 - \pi)^{\beta_0 - 1}$.
 
-Plug in $\alpha_0 = 13.38$ and $\beta_0 = 117.77$.
+Plug in $\alpha_0 = 1.38$ and $\beta_0 = 105.62$.
 
 \begin{align*}
 g(\pi) &= \frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0) \: \Gamma(\beta_0)} \cdot \pi^{\alpha_0 - 1} \cdot ( 1 - \pi)^{\beta_0 - 1} \\
-&= \frac{\Gamma(13.38 + 117.77)}{\Gamma(13.38) \: \Gamma(117.77)} \cdot \pi^{13.38 - 1} \cdot ( 1 - \pi)^{117.77 - 1} \\
-&= \frac{\Gamma(131.15)}{\Gamma(13.38) \: \Gamma(117.77)} \cdot \pi^{12.38} \cdot ( 1 - \pi)^{116.77} \\
-&= 8.046574\times 10^{18} \cdot \pi^{12.38} \cdot ( 1 - \pi)^{116.77} \\
+&= \frac{\Gamma(1.38 + 105.62)}{\Gamma(1.38) \: \Gamma(105.62)} \cdot \pi^{1.38 - 1} \cdot ( 1 - \pi)^{105.62 - 1} \\
+&= \frac{\Gamma(107)}{\Gamma(1.38) \: \Gamma(105.62)} \cdot \pi^{0.38} \cdot ( 1 - \pi)^{104.62} \\
+&= 700.1148 \cdot \pi^{0.38} \cdot ( 1 - \pi)^{104.62} \\
 \end{align*}
 
 b. Dr. Cardiya's protocol calls for one interim analysis near 50\% of testing. Of the first 241 subjects, 7 tested positive for S. heftans. 
@@ -50,15 +51,15 @@ Based on Example 26.4, we know the interim posterior distribution is
 
 \begin{align*}
 h(\pi_0 | x) &\sim Beta(x+ \alpha_0, n - x + \beta_0) \\
-&\sim Beta(7 + 13.38, 241 - 7 + 117.77) \\
-&\sim Beta(20.38, 351.77) \\
+&\sim Beta(7 + 1.38, 241 - 7 + 105.62) \\
+&\sim Beta(8.38, 339.62) \\
 \end{align*}
 
-The likelihood function is 
+The likelihood function is $\binom{n}{k}$
 
 \begin{align*}
 L(\pi) &= f(x_1) \cdot f(x_2) \cdot \dots f(x_500) \\
-&= \\
+&= \binom{n}{k}\\
 \end{align*}
 
 ```{r}
