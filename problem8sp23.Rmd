@@ -29,7 +29,7 @@ a. Find the beta prior. (Use `beta.select` from `LearnBayes` to find the shape p
 ```{r}
 quantile1 = list(p = 1 - 0.5, x = 0.1)
 quantile2 = list(p = 1 - 0.99, x = 0.05)
-beta.select(quantile1, quantile2)
+params <- beta.select(quantile1, quantile2)
 ```
 
 The beta prior distribution is given $g(\pi) = \frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0) \: \Gamma(\beta_0)} \cdot \pi^{\alpha_0 - 1} \cdot ( 1 - \pi)^{\beta_0 - 1}$.
@@ -45,6 +45,13 @@ g(\pi) &= \frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0) \: \Gamma(\beta_0)}
 b. Dr. Cardiya's protocol calls for one interim analysis near 50\% of testing. Of the first 241 subjects, 7 tested positive for S. heftans. 
 
    i. Calculate the interim posterior distribution. Make a plot of the prior, likelihood and interim posterior distribution. Use the range $0 < \pi < 0.1$ since that's where the action is.
+
+```{r}
+ggplot()+
+  stat_function(fun = dbeta,
+                args = list(shape1 =params[1],
+                            shape2=params[2]))
+```
 
    ii. Contrast the prior median with the posterior median. Also contrast the middle 95\% of the beta prior with the middle 95\% of the interim posterior distribution. 
 
