@@ -44,7 +44,6 @@ g(\pi) &= \frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0) \: \Gamma(\beta_0)}
 &= 8.046574\times 10^{18} \cdot \pi^{12.38} \cdot ( 1 - \pi)^{116.77} \\
 \end{align*}
 
-
 b. Dr. Cardiya's protocol calls for one interim analysis near 50\% of testing. Of the first 241 subjects, 7 tested positive for S. heftans. 
 
    i. Calculate the interim posterior distribution. Make a plot of the prior, likelihood and interim posterior distribution. Use the range $0 < \pi < 0.1$ since that's where the action is.
