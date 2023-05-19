@@ -39,6 +39,8 @@ Plug in $\alpha_0 = 13.38$ and $\beta_0 = 117.77$.
 \begin{align*}
 g(\pi) &= \frac{\Gamma(\alpha_0 + \beta_0)}{\Gamma(\alpha_0) \: \Gamma(\beta_0)} \cdot \pi^{\alpha_0 - 1} \cdot ( 1 - \pi)^{\beta_0 - 1} \\
 &= \frac{\Gamma(13.38 + 117.77)}{\Gamma(13.38) \: \Gamma(117.77)} \cdot \pi^{13.38 - 1} \cdot ( 1 - \pi)^{117.77 - 1} \\
+&= \frac{\Gamma(131.15)}{\Gamma(13.38) \: \Gamma(117.77)} \cdot \pi^{12.38} \cdot ( 1 - \pi)^{116.77} \\
+&= 8.046574\times 10^{18} \cdot \pi^{12.38} \cdot ( 1 - \pi)^{116.77} \\
 \end{align*}
 
 
