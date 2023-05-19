@@ -13,7 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-test github
 
 ## Background
 
