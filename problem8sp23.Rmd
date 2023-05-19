@@ -84,6 +84,10 @@ ggplot()+
 ```
 
    ii. Contrast the prior median with the posterior median. Also contrast the middle 95\% of the beta prior with the middle 95\% of the interim posterior distribution. 
+```{r}
+prior_median <- qbeta(0.5, quantile1, quantile2)
+#posterior_median <- qbeta(0.5, )
+```
 
 
    iii. Contrast the prior probability that less than 1 percentage of the population have S. heftans with the posterior probability. 
