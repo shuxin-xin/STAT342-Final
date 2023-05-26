@@ -1,0 +1,37 @@
+---
+title: "Final Project"
+subtitle: "In Progress"
+author: "Three Awesome Intelligent Genius"
+graphics: yes
+output: 
+        pdf_document:
+         toc: false
+         number_sections: true
+urlcolor: blue
+header-includes:
+- \usepackage{amsmath,amsfonts,amssymb}
+- \usepackage{multicol,graphicx,hyperref,xcolor}
+- \usepackage{setspace} \doublespacing
+fontsize: 11pt
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Abstract
+
+## Keywords
+
+## Introduction
+
+## Statistical Method
+
+## Results
+
+## Discussion/Conclusion
+
+## References
+
+## Appendix
