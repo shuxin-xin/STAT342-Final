@@ -93,21 +93,17 @@ loglikelihood = function(params) {
 
 Now, want to treat the problem together. Let S denotes the total cases in two groups and let T denotes the number of cases in vaccine group from S total cases.
 
-Then, we have $T \sim Binom(s, \pi)$ where $\pi = P(\text{BNT162b2 | Covid 19})$. And we have $\pi = \frac{n_1 \cdot \pi_1}{n_1 \cdot \pi_1 + n_2 \cdot \pi_2}$. Because $n_1 = 17411$ and $n_2 = 17511$ are approximately equal, we have $$\pi = \frac{\pi_v}{\pi_v +\pi_p}$$
-
+Then, we have $T \sim Binom(s, \pi)$ where $\pi = P(\text{BNT162b2 | Covid 19})$. And we have $\pi = \frac{n_1 \cdot \pi_1}{n_1 \cdot \pi_1 + n_2 \cdot \pi_2}$. Because $n_1 = 17411$ and $n_2 = 17511$ are approximately equal, we have $\pi = \frac{\pi_v}{\pi_v +\pi_p}$.
 $$T \sim Binom(s, \pi = \frac{\pi_v}{\pi_v +\pi_p})$$
 \begin{align*}
 \pi &= \frac{\pi_v}{\pi_v +\pi_p} \\
-\pi_v &= \pi \cdot (\pi_v +\pi_p) \\
 \pi_v &= \pi \cdot \pi_v + \pi \cdot \pi_p \\
-\pi \cdot \pi_p &= (1 - \pi) \cdot \pi_v \\
 \pi_p &= \frac{(1 - \pi) \cdot \pi_v}{\pi} \\
 \text{Because known that: } \psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
 \text{Plug $\pi_p$ into $\psi$, we have: } \psi &= \frac{\frac{(1 - \pi) \cdot \pi_v}{\pi} - \pi_v}{\frac{(1 - \pi) \cdot \pi_v}{\pi}} \\
 &= \frac{1 - 2\pi}{\pi} \cdot \pi_v \cdot \frac{\pi}{(1 - \pi) \cdot \pi_v}\\
 &= \frac{1 - 2 \pi}{1 - \pi} \\
 (1 - \pi) \psi &= 1 - 2\pi \\
-\psi - \pi \: \psi &= 1 - 2 \pi \\
 (2 - \psi) \: \pi &= 1 - \psi \\
 \pi &= \frac{1 - \psi}{2 - \psi} \\
 \end{align*}
@@ -121,16 +117,16 @@ f(t) &= \binom{170}{t} \cdot \pi_0^{t} \cdot (1 - \pi_0)^{170 - t} \\
 L(\psi) &= \binom{170}{t} \cdot (\frac{1 - \psi}{2 - \psi})^{t} \cdot (1 - \frac{1 - \psi}{2 - \psi})^{170 - t} \\
 &= \binom{170}{t} \cdot (\frac{1 - \psi}{2 - \psi})^{t} \cdot (\frac{1}{2 - \psi})^{170 - t} \\
 \ell(\psi) &= log(\binom{170}{t} \cdot (\frac{1 - \psi}{2 - \psi})^{t} \cdot (\frac{1}{2 - \psi})^{170 - t}) \\
-&= ln(\binom{170}{t}) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (170 - t) \cdot (ln(1) - ln(2 - \psi)) \\
 &= ln(\binom{170}{t}) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi) \\
 \end{align*}
+
+Then, in order to calculate the candidates for MLE, we need to know the first derivative condition:
 
 \begin{align*}
 \frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} (ln(\binom{170}{t}) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)) \\
 &= -\frac{t}{1 - \psi} + \frac{t}{2 - \psi} - \frac{t - 170}{2 - \psi} \\
 &= -\frac{t}{1 - \psi} + \frac{170}{2 - \psi} \\
 &= \frac{-t(2 - \psi) + 170(1 - \psi)}{(1 - \psi)(2 - \psi)} \\
-&= \frac{-2t - 2\psi + 170 - 170\psi}{(1 - \psi)(2 - \psi)} \\
 &= \frac{-2t + 170 - 172\psi}{(1 - \psi)(2 - \psi)} = 0 \\
 -2t + 170 - 172\psi &= 0 \\
 \psi &= \frac{170 - 2t}{172} \\
@@ -138,7 +134,7 @@ L(\psi) &= \binom{170}{t} \cdot (\frac{1 - \psi}{2 - \psi})^{t} \cdot (1 - \frac
 &= 0.8953488 \\
 \end{align*}
 
-Therefore, $\widehat{\psi^{mle}} = 0.8953488$ is a candidate for MLE
+Therefore, $\widehat{\psi^{mle}} = 0.8953488$ is a candidate for the MLE of $\psi$. To check whether this candidate is a maximum value, we need to calculate the second derivative test:
 
 \begin{align*}
 \frac{d^2}{d \psi^2} \ell(\psi) &= \ell''(\psi) \\
@@ -156,12 +152,9 @@ Therefore, $\widehat{\psi^{mle}} = 0.8953488$ is a MLE for $\psi$. Based on the 
 \begin{align*}
 Var[\widehat{\psi^{mle}}] &= -\frac{1}{\ell''(\widehat{\psi^{mle}})} \\
 &= -\frac{1}{\frac{-8}{(1 - 0.8953488)^{2}} + \frac{170}{(2 - 0.8953488)^{2}}} \\
-&= -\frac{1}{\frac{-8}{0.01095187} + \frac{170}{1.220254}} \\
 &= -\frac{1}{-730.4689 + 139.3153} \\
-&= -\frac{1}{-591.1536} \\
 &= 0.001691608 \\
 SD[\widehat{\psi^{mle}}] &= \sqrt{Var[\widehat{\psi^{mle}}]} \\
-&= \sqrt{0.001691608} \\
 &= 0.04112916 \\
 \end{align*}
 
@@ -171,8 +164,7 @@ Then, to find the confidence interval, we have:
 \widehat{\psi^{mle}} &\pm Z \cdot \widehat{SE} \\
 \widehat{\psi^{mle}} &\pm Z \cdot \sqrt{-\frac{1}{\ell''(\widehat{\psi^{mle}})}} \\
 0.8953488 &\pm 1.96 \cdot 0.04112916 \\
-0.8953488 &\pm 0.08061315 \\
-[0.8147356, & 0.9759619] \\
+[0.8147356, & \: 0.9759619] \\
 \end{align*}
 
 The null hypothesis is $\psi = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\pi = \frac{1 - \psi}{2 - \psi} = \frac{0.7}{1.7} = 0.4117647$.
