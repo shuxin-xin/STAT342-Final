@@ -175,20 +175,6 @@ And the $\widehat{\psi^{mle}} = 0.8953488$, we have $\pi = \frac{1 - \psi}{2 - \
 pbinom(q = 0.09473689* 170,size = 170, prob = 0.4117647, lower.tail = F)
 ```
 
-
-```{r, include = F}
-set.seed(666)
-B <- 1000
-sim_func <- function(t){
-  t = rbinom(n = 1, size = 170, prob = 0.8953488)
-  t1 = (170 - 2*t)/172
-  return(c("t1" = t1))
-}
-sims <- lapply(1:B, sim_func)
-sims_df <- data.frame(do.call(rbind,sims))
-
-```
-
 ## Bootstrap
 ```{r}
 set.seed(666)
