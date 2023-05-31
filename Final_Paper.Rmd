@@ -20,20 +20,194 @@ fontsize: 11pt
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+```{r load-packages, message=FALSE, echo = F}
+library(tidyverse)
+library(openintro)
+library(maxLik)
+library(ggplot2)
+```
+
 ## Abstract
 
 ## Keywords
 
+Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
+
 ## Introduction
 
-Introduction huh
+  In 2019, human beings experiences an unprecedented outbreak of respiratory infections. This is a worldwide disease known as coronavirus disease 2019 (Covid-19). The first cases of novel coronavirus are detected in China and then spread to other countries across the world. During more than 3 years pandemic, “over 2 million people in the European Region have died from the disease.” \footnote{(Coronavirus Disease (COVID-19) Pandemic)} At the beginning of the outbreak, people didn't expect it to last for a long time and treated it like a common flu. However, because the infected person is exposed to the crowd for a long time, the development of new coronary pneumonia is out of control and gradually forms a global disease.
+
+  How to effectively control the epidemic? Isolation is often the first and most effective measure that comes to mind when attempting to control an epidemic. It is a logical approach since, without person-to-person contact, the virus cannot spread. However, it is essential to understand that this approach requires a sustained effort until the government can confidently ensure the quarantine of all infected individuals. It is undeniable that Quarantine and social distancing are one of the most effective ways to prevent the virus from spreading, however, this method also lead to "elevated levels of loneliness and social isolation, which in turn produce physical- and mental-health related repercussions." \footnote{(Hwang et al.)}
+  
+  So it becomes meaningful to control the spread of the virus from the human body itself, and vaccination is one of them. The effective vaccines can greatly reduce "diseases that once routinely harmed or killed babies, children, and adults." \footnote{(“Adult Vaccination - Reasons to Vaccinate.”)}
+  
+  BNT162b2 vaccine, a Covid 19 vaccine developed by Pfizer, has entered public's view. BNT162b2 is a vaccine containing modified RNA, encapsulated in lipid nanoparticles, that carries the genetic instructions for producing a stable form of the SARS-CoV-2 spike protein, which is anchored to the viral membrane. And in this research, individuals aged 16 years or older were randomly divided into two groups. One group received two doses of either a placebo or the BNT162b2 vaccine. The two doses were rigorously administered 21 days apart. And then, researchers measure the effectiveness of vaccine by record the number of occurrence of laboratory-confirmed COVID-19. By analyzing the data calculated, we could use many statistics model to illustrates the effectiveness of the BNT162b2 vaccine.
+  
+  How does this work relate to other work in the scientific literature?
+  
+  The following sections will analyse whether BNT162b2 vaccine is efficient and safety enough to against laboratory-confirmed Covid 19 by three methods: likelihood, Bayesian, and bootstrapping.
 
 ## Statistical Method
+
+## Likelihood 
+
+Let $X$ denote the number of Covid 19 cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group while use $Y$ denote the number of Covid 19 cases among $n_2 = 17511$ subjects assigned to the Placebo group.
+
+Based on these, we can use $\pi_1$ denote the probability of Covid 19 cases happened in the BNT162b2 group and use $\pi_2$ denote the probability of Covid 19 cases happened in the Placebo group.
+
+Therefore, we have $X \sim Binomial(\pi_1, n_1 = 17411)$ and $Y \sim Binomial(\pi_2, n_2 = 17511)$. 
+
+Then, we have $\psi = 1 - \frac{\pi_1}{\pi_2} = \frac{\pi_2 - \pi_1}{\pi_2} = \frac{\pi_p - \pi_v}{\pi_p}$
+
+```{r, echo = F}
+group <- c("BNT162b2", "Placebo", "Total")
+cases <- c(8,162,170)
+normal <- c(17403,17349,34752)
+subject <- c(17411, 17511, 34922)
+df <- data.frame(Group = group, Cases = cases, Normal = normal, No_subjects = subject)
+print(df)
+```
+
+Based on the table provided above, we have $\pi_v = \frac{8}{17411}$ and $\pi_p = \frac{162}{17511}$. Therefore, we have $$\psi = \frac{\pi_p - \pi_v}{\pi_p} = \frac{\frac{162}{17511} - \frac{8}{17411}}{\frac{162}{17511}} = 1 - \frac{8 \cdot 17511}{17411 \cdot 162} = 1 - \frac{140088}{2820582} = 0.9503337$$
+
+This means vaccine BNT162b2 can reduce risk of having Covid 19 by 95\% compare to placebo.
+
+```{r ,include = F}
+loglikelihood = function(params) {
+  pi_v <- params[1]
+  pi_p <- params[2]
+  
+  binom_v = choose(df[1,4],df[1,2])* pi_v^(df[1,2]) * (1- pi_v)^(df[1,4]-df[1,2])
+  binom_p = choose(df[2,4],df[2,2])* pi_p^(df[2,2]) * (1- pi_p)^(df[2,4]-df[2,2])
+  result = log(binom_v) + log(binom_p)
+  #return(-result)
+  ifelse(pi_v < 0 | pi_v > 1 | pi_p < 0 | pi_p > 1, NA,
+         result)
+}
+#maxLik(logLik = loglikelihood, start = c(0.0004,0.009), method = "NR")
+#maxLik(logLik = loglikelihood, start = c(0.001,0.0004), method = "NR")
+#optim(par = c(0,1), function(m)loglikelihood(m[1],m[2],m[3]), fn = loglikelihood)$par
+#optim(par = c(0.001, 0.0009), function(m)loglikelihood(m[1],m[2]), method = "BFGS")$par
+```
+
+Now, want to treat the problem together. Let S denotes the total cases in two groups and let T denotes the number of cases in vaccine group from S total cases.
+
+Then, we have $T \sim Binom(s, \pi)$ where $\pi = P(\text{BNT162b2 | Covid 19})$. And we have $\pi = \frac{n_1 \cdot \pi_1}{n_1 \cdot \pi_1 + n_2 \cdot \pi_2}$. Because $n_1 = 17411$ and $n_2 = 17511$ are approximately equal, we have $$\pi = \frac{\pi_v}{\pi_v +\pi_p}$$
+
+$$T \sim Binom(s, \pi = \frac{\pi_v}{\pi_v +\pi_p})$$
+\begin{align*}
+\pi &= \frac{\pi_v}{\pi_v +\pi_p} \\
+\pi_v &= \pi \cdot (\pi_v +\pi_p) \\
+\pi_v &= \pi \cdot \pi_v + \pi \cdot \pi_p \\
+\pi \cdot \pi_p &= (1 - \pi) \cdot \pi_v \\
+\pi_p &= \frac{(1 - \pi) \cdot \pi_v}{\pi} \\
+\text{Because known that: } \psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
+\text{Plug $\pi_p$ into $\psi$, we have: } \psi &= \frac{\frac{(1 - \pi) \cdot \pi_v}{\pi} - \pi_v}{\frac{(1 - \pi) \cdot \pi_v}{\pi}} \\
+&= \frac{1 - 2\pi}{\pi} \cdot \pi_v \cdot \frac{\pi}{(1 - \pi) \cdot \pi_v}\\
+&= \frac{1 - 2 \pi}{1 - \pi} \\
+(1 - \pi) \psi &= 1 - 2\pi \\
+\psi - \pi \: \psi &= 1 - 2 \pi \\
+(2 - \psi) \: \pi &= 1 - \psi \\
+\pi &= \frac{1 - \psi}{2 - \psi} \\
+\end{align*}
+
+Based on the data given, $s = 170$, so we have $T \sim Binom(170, \pi_0)$
+
+The likelihood function is then 
+
+\begin{align*}
+f(t) &= \binom{170}{t} \cdot \pi_0^{t} \cdot (1 - \pi_0)^{170 - t} \\
+L(\psi) &= \binom{170}{t} \cdot (\frac{1 - \psi}{2 - \psi})^{t} \cdot (1 - \frac{1 - \psi}{2 - \psi})^{170 - t} \\
+&= \binom{170}{t} \cdot (\frac{1 - \psi}{2 - \psi})^{t} \cdot (\frac{1}{2 - \psi})^{170 - t} \\
+\ell(\psi) &= log(\binom{170}{t} \cdot (\frac{1 - \psi}{2 - \psi})^{t} \cdot (\frac{1}{2 - \psi})^{170 - t}) \\
+&= ln(\binom{170}{t}) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (170 - t) \cdot (ln(1) - ln(2 - \psi)) \\
+&= ln(\binom{170}{t}) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi) \\
+\end{align*}
+
+\begin{align*}
+\frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} (ln(\binom{170}{t}) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)) \\
+&= -\frac{t}{1 - \psi} + \frac{t}{2 - \psi} - \frac{t - 170}{2 - \psi} \\
+&= -\frac{t}{1 - \psi} + \frac{170}{2 - \psi} \\
+&= \frac{-t(2 - \psi) + 170(1 - \psi)}{(1 - \psi)(2 - \psi)} \\
+&= \frac{-2t - 2\psi + 170 - 170\psi}{(1 - \psi)(2 - \psi)} \\
+&= \frac{-2t + 170 - 172\psi}{(1 - \psi)(2 - \psi)} = 0 \\
+-2t + 170 - 172\psi &= 0 \\
+\psi &= \frac{170 - 2t}{172} \\
+\text{Given that 8 cases in Vaccine group: } \psi &= \frac{170 - 16}{172} \\
+&= 0.8953488 \\
+\end{align*}
+
+Therefore, $\widehat{\psi^{mle}} = 0.8953488$ is a candidate for MLE
+
+\begin{align*}
+\frac{d^2}{d \psi^2} \ell(\psi) &= \ell''(\psi) \\
+&= \frac{d^2}{d \psi^2} (-\frac{t}{1 - \psi} + \frac{170}{2 - \psi}) \\
+&= \frac{-t}{(1 - \psi)^{2}} + \frac{170}{(2 - \psi)^{2}} \\
+\text{Given that 8 cases in Vaccine group: } &= \frac{-8}{(1 - \psi)^{2}} + \frac{170}{(2 - \psi)^{2}} \\
+&= \frac{-8\cdot (2 - \psi)^{2} + 170 \cdot (1 - \psi)^{2}}{(1 - \psi)^{2} \cdot (2 - \psi)^{2}} \\
+\text{Because $0 < \psi < 1$: } (1 - \psi)^{2} \cdot (2 - \psi)^{2} &> 0 \\
+-8\cdot (2 - \psi)^{2} + 170 \cdot (1 - \psi)^{2} &< 0 \\
+\text{we have } \ell''(\psi) &<0 \\
+\end{align*}
+
+Therefore, $\widehat{\psi^{mle}} = 0.8953488$ is a MLE for $\psi$. Based on the given information in Chapter 25, we have the estimated variance of the MLE of $\psi$ is $-\frac{1}{\ell''(\widehat{\psi^{mle}})}$
+
+\begin{align*}
+Var[\widehat{\psi^{mle}}] &= -\frac{1}{\ell''(\widehat{\psi^{mle}})} \\
+&= -\frac{1}{\frac{-8}{(1 - 0.8953488)^{2}} + \frac{170}{(2 - 0.8953488)^{2}}} \\
+&= -\frac{1}{\frac{-8}{0.01095187} + \frac{170}{1.220254}} \\
+&= -\frac{1}{-730.4689 + 139.3153} \\
+&= -\frac{1}{-591.1536} \\
+&= 0.001691608 \\
+SD[\widehat{\psi^{mle}}] &= \sqrt{Var[\widehat{\psi^{mle}}]} \\
+&= \sqrt{0.001691608} \\
+&= 0.04112916 \\
+\end{align*}
+
+Then, to find the confidence interval, we have: 
+
+\begin{align*}
+\widehat{\psi^{mle}} &\pm Z \cdot \widehat{SE} \\
+\widehat{\psi^{mle}} &\pm Z \cdot \sqrt{-\frac{1}{\ell''(\widehat{\psi^{mle}})}} \\
+0.8953488 &\pm 1.96 \cdot 0.04112916 \\
+0.8953488 &\pm 0.08061315 \\
+[0.8147356, & 0.9759619] \\
+\end{align*}
+
+The null hypothesis is $\psi = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\pi = \frac{1 - \psi}{2 - \psi} = \frac{0.7}{1.7} = 0.4117647$.
+
+And the $\widehat{\psi^{mle}} = 0.8953488$, we have $\pi = \frac{1 - \psi}{2 - \psi} = \frac{1 - 0.8953488}{2 - 0.8953488} = \frac{0.1046512}{1.104651} = 0.09473689$
+
+```{r}
+pbinom(q = 0.09473689* 170,size = 170, prob = 0.4117647, lower.tail = F)
+```
+
+
+```{r, include = F}
+set.seed(666)
+B <- 1000
+sim_func <- function(t){
+  t = rbinom(n = 1, size = 170, prob = 0.8953488)
+  t1 = (170 - 2*t)/172
+  return(c("t1" = t1))
+}
+sims <- lapply(1:B, sim_func)
+sims_df <- data.frame(do.call(rbind,sims))
+
+```
 
 ## Results
 
 ## Discussion/Conclusion
 
 ## References
+
+Coronavirus disease (COVID-19) pandemic. (2023, May 24).                  
+https://www.who.int/europe/emergencies/situations/covid-19
+
+Hwang TJ, Rabheru K, Peisah C, Reichman W, Ikeda M. Loneliness and social isolation during the COVID-19 pandemic. Int Psychogeriatr. 2020 Oct;32(10):1217-1220. doi: 10.1017/S1041610220000988. Epub 2020 May 26. PMID: 32450943; PMCID: PMC7306546.
+
+“Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
 
 ## Appendix
