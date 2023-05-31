@@ -175,6 +175,108 @@ And the $\widehat{\psi^{mle}} = 0.8953488$, we have $\pi = \frac{1 - \psi}{2 - \
 pbinom(q = 0.09473689* 170,size = 170, prob = 0.4117647, lower.tail = F)
 ```
 
+## Bayesian
+```{r}
+library(LearnBayes)
+```
+
+$$\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{1-2\pi}{1-\pi}$$
+Null Hypothesis: $H_0: \psi_0 = 0.3$
+
+Alternative Hypothesis: $H_1: \psi_0 > 0.3$
+
+```{r}
+subject_v <- 17411
+case_v <- 8
+subject_p <- 17511
+case_p <- 162
+
+pi_v <- case_v/subject_v
+pi_p <- case_p/subject_p
+#pi <- pi_v/(pi_v+pi_p)
+psi <- (pi_p - pi_v)/pi_p
+psi
+```
+The estimated efficacy of BNT162b2 vaccine is 95.03337%.
+
+BNT162b2 vaccine reduces risk of Covid-19 by about 95% compared to placebo.
+
+The parameter $\pi$ was modeled with a $Beta(0.700102, 1)$ prior.
+
+```{r}
+n <- 170
+t <- 8
+
+prior_alpha <- 0.700102
+prior_beta <- 1
+
+posterior_median_pi <- qbeta(p=0.5, shape1=t+prior_alpha, shape2=n-t+prior_beta)
+posterior_median_pi
+posterior_0.05_pi <- qbeta(p=0.05, shape1=t+prior_alpha, shape2=n-t+prior_beta)
+posterior_0.05_pi
+
+CI_pi <- qbeta(p = c(0.025,0.975), shape1=t+prior_alpha, shape2=n-t+prior_beta)
+CI_pi_lower <- CI_pi[1]
+CI_pi_upper <- CI_pi[2]
+
+prior_psi <- beta.select(quantile1 = list(p=0.5, x=0.948),
+                         quantile2 = list(p=0.95, x=0.96559))
+
+prior_psi_alpha <- prior_psi[1]
+prior_psi_alpha
+prior_psi_beta <- prior_psi[2]
+prior_psi_beta 
+```
+
+The median of $\pi$ is `r posterior_median_pi`. The median vaccine efficacy against Covid 19 is about 0.4878%, which indicates that 50% vaccine efficacy against Covid 19 is lower than 0.4878% and 50% vaccine efficacy against Covid 19 is higher than 0.4878%.
+
+
+Prior: $g(\psi_0)$ = Beta(`r prior_psi_alpha`, `r prior_psi_beta`)
+
+Posterior distribution: 
+
+$h(\psi_0|t)=$ Beta(`r prior_psi_alpha`+8, 170-8+`r prior_psi_beta`)
+
+```{r}
+alpha_post <- prior_psi_alpha+8
+alpha_post
+beta_post <- 170-8+prior_psi_beta
+beta_post
+```
+
+Therefore, $h(\psi_0|t)=$ Beta(`r alpha_post`, `r beta_post`)
+
+```{r}
+library(ggplot2)
+
+ggplot()+
+  stat_function(fun = dbeta,
+                args = list(shape1 = prior_psi_alpha,
+                            shape2 = prior_psi_beta))+
+  stat_function(fun = dbeta,
+                args = list(shape1 = alpha_post,
+                            shape2 = beta_post),
+                color='blue')+
+  labs(title = "Prior(black) and Posterior(blue) for Vaccine Data",
+       ylab = "Density",
+       xlab = expression(psi))
+```
+```{r}
+CI_psi <- qbeta(p = c(0.025,0.975), shape1=t+prior_psi_alpha, shape2=n-t+prior_psi_beta)
+CI_psi
+```
+
+The 95\% Bayesian credible interval reported as [0.02319402, 0.08799074], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [0.02319402, 0.08799074]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately  and . It suggests that the true vaccine efficacy is very low and falls within a narrow interval.
+
+Calculate posterior probability $P(\psi_0 > 0.3|t)$
+
+```{r}
+post_prob <- pbeta(q=0.3, shape1=t+prior_psi_alpha, shape2=n-t+prior_psi_beta, lower.tail = FALSE)
+post_prob
+```
+
+The posterior probability $P(\psi_0 > 0.3|t)=1$, which means that the probability that the true vaccine efficacy against Covid 19 is greater than 30% is about `r post_prob`. The evidence suggests that vaccine efficacy is greater than 30%.
+
 ## Bootstrap
 ```{r}
 set.seed(666)
