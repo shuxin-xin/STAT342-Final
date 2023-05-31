@@ -183,105 +183,125 @@ And the $\widehat{\psi^{mle}} = 0.8953488$, we have $\pi = \frac{1 - \psi}{2 - \
 pbinom(q = 0.09473689* 170,size = 170, prob = 0.4117647, lower.tail = F)
 ```
 
-
-```{r, include = F}
+## Bootstrap
+```{r}
 set.seed(666)
-B <- 1000
-sim_func <- function(t){
-  t = rbinom(n = 1, size = 170, prob = 0.8953488)
-  t1 = (170 - 2*t)/172
-  return(c("t1" = t1))
-}
-sims <- lapply(1:B, sim_func)
-sims_df <- data.frame(do.call(rbind,sims))
 
+case_vaccine <- 8
+total_vaccine <- 17411
+case_placebo <- 162
+total_placebo <- 17511
+total_case <- case_vaccine + case_placebo
+
+pi_v <- case_vaccine / total_vaccine
+pi_p <- case_placebo / total_placebo
+psi_hat <- (pi_p - pi_v) / pi_p
+pi_hat <- pi_v / (pi_p + pi_v)
+
+B <- 10000
 ```
 
-## Bayesian
+### Parametric bootstrap
 
 ```{r}
-library(LearnBayes)
+para_bootstrap_samples <- lapply(1:B, function(X) {
+  bootstrap_t <- rbinom(1, size = total_case, prob = pi_hat)
+  bootstrap_pi <- bootstrap_t / total_case
+  bootstrap_psi_hat <- (1 - 2 * bootstrap_pi) / (1 - bootstrap_pi)
+  data.frame(sample_pi = bootstrap_pi,
+             sample_psi_hat = bootstrap_psi_hat)
+})
+
+para_sample_summary <- do.call(rbind, para_bootstrap_samples)
+
+# Calculate the binwidth using the method we have learned in class:
+# Here, n = B = 10000
+# log2(10000) + 1 = 14.28771
+# Here, I took a number of 15.
+# Now, I need the range from my data.
+# para_sample_summary$sample_psi_hat %>% range()
+# From the summary, I got the range for the data is: 1.0000000 - 0.8741722= 0.1258278
+# Thus, here, I resize the binwidth into 0.1258278/15 and breaks the bar by (0.8741722, 1.0000000, 0.1258278/15)
+ggplot(data = para_sample_summary,
+       mapping = aes(x = sample_psi_hat)) + 
+  geom_histogram(binwidth = 0.1258278/15,
+                 breaks = seq(0.8741722, 1.0000000, 0.1258278/15),
+                 alpha = 0.8,
+                 color = 'gray') +
+  labs(title = "The distribution of bootstrapped sample ")
+
+ggplot(data = para_sample_summary, mapping = aes(sample = sample_psi_hat)) +
+  stat_qq(distribution = qnorm) +
+  stat_qq_line(distribution = qnorm)
+
+# without bias correction
+a = 0.05
+z <- qnorm(p = 1 - a/2)
+para_ci <- para_sample_summary %>% summarize(psi_hat = mean(sample_psi_hat),
+                                         s = sd(sample_psi_hat),
+                                         lower = psi_hat - z * s,
+                                         upper = psi_hat + z * s)
+para_ci$lower
+para_ci$upper
+
+# Perform hypothesis testing
+h_0_psi <- 0.3
+para_p_value <- sum(para_sample_summary$sample_psi_hat > h_0_psi) / B
+para_p_value
+
+
+# with bias correction
+bias <- mean(para_sample_summary$sample_psi_hat) - psi_hat
+ci_correction <- para_sample_summary %>% summarize(psi_hat = mean(sample_psi_hat),
+                                         s = sd(sample_psi_hat),
+                                         lower = psi_hat - bias - z * s,
+                                         upper = psi_hat - bias + z * s)
+ci_correction$lower
+ci_correction$upper
+
+corr_p_value <- sum(para_sample_summary$sample_psi_hat > h_0_psi) / B
+corr_p_value
+
+mosaic::prop.test(x = sum(para_sample_summary$sample_psi_hat > h_0_psi),
+                  n = B, 
+                  p = 0.3,
+                  alt = "greater",
+                  conf.level = 0.95,
+                  correct = FALSE)
 ```
 
-$$\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{1-2\pi}{1-\pi}$$
-Null Hypothesis: $H_0: \psi_0 = 0.3$
+### Non-parametric bootstrap 
 
-Alternative Hypothesis: $H_1: \psi_0 > 0.3$
-
-The parameter $\pi$ was modeled with a $Beta(0.700102, 1)$ prior.
+Simple percentile method 
 
 ```{r}
-n <- 170
-t <- 8
+non_bootstrap_samples <- lapply(1:B, function(X) {
+  # Resample from the combined dataset
+  bootstrap_data <- sample(c(rep("vaccine", case_vaccine), 
+                             rep("placebo", case_placebo)), 
+                             total_case, replace = TRUE)
+  bootstrap_case_vaccine <- sum(bootstrap_data == "vaccine")
+  bootstrap_case_placebo <- sum(bootstrap_data == "placebo")
+  bootstrap_pi_v <- bootstrap_case_vaccine / total_vaccine
+  bootstrap_pi_p <- bootstrap_case_placebo / total_placebo
 
-prior_alpha <- 0.700102
-prior_beta <- 1
+  bootstrap_psi_hat <- (bootstrap_pi_p - bootstrap_pi_v) / bootstrap_pi_p
+  
+  data.frame(sample_psi_hat = bootstrap_psi_hat)
+})
 
-posterior_median_pi <- qbeta(p=0.5, shape1=t+prior_alpha, shape2=n-t+prior_beta)
-posterior_median_pi
-posterior_0.05_pi <- qbeta(p=0.05, shape1=t+prior_alpha, shape2=n-t+prior_beta)
-posterior_0.05_pi
+non_sample_summary <- do.call(rbind, non_bootstrap_samples)
 
-CI_pi <- qbeta(p = c(0.025,0.975), shape1=t+prior_alpha, shape2=n-t+prior_beta)
-CI_pi_lower <- CI_pi[1]
-CI_pi_upper <- CI_pi[2]
+lower_ci <- quantile(non_sample_summary$sample_psi_hat, a/2)
+upper_ci <- quantile(non_sample_summary$sample_psi_hat, 1 - a/2)
 
-prior_psi <- beta.select(quantile1 = list(p=0.5, x=0.948),
-                         quantile2 = list(p=0.95, x=0.96559))
+# Perform hypothesis testing
+non_p_value <- sum(non_sample_summary$sample_psi_hat > h_0_psi) / B
 
-prior_psi_alpha <- prior_psi[1]
-prior_psi_alpha
-prior_psi_beta <- prior_psi[2]
-prior_psi_beta 
+lower_ci
+upper_ci
+non_p_value
 ```
-
-The median of $\pi$ is `r posterior_median_pi`.
-
-Prior: $g(\psi_0)$ = Beta(`r prior_psi_alpha`, `r prior_psi_beta`)
-
-Posterior distribution: 
-
-$h(\psi_0|t)=$ Beta(`r prior_psi_alpha`+8, 170-8+`r prior_psi_beta`)
-
-```{r}
-alpha_post <- prior_psi_alpha+8
-alpha_post
-beta_post <- 170-8+prior_psi_beta
-beta_post
-```
-
-Therefore, $h(\psi_0|t)=$ Beta(`r alpha_post`, `r beta_post`)
-
-```{r}
-library(ggplot2)
-
-ggplot()+
-  stat_function(fun = dbeta,
-                args = list(shape1 = prior_psi_alpha,
-                            shape2 = prior_psi_beta))+
-  stat_function(fun = dbeta,
-                args = list(shape1 = alpha_post,
-                            shape2 = beta_post),
-                color='blue')+
-  labs(title = "Prior(black) and Posterior(blue) for Vaccine Data",
-       ylab = "Density",
-       xlab = expression(psi))
-```
-```{r}
-CI_psi <- qbeta(p = c(0.025,0.975), shape1=t+prior_psi_alpha, shape2=n-t+prior_psi_beta)
-CI_psi
-```
-
-The 95\% Bayesian credible interval reported as [0.6015455, 0.6849974], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [0.6015455, 0.6849974]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately  and . It suggests that the true vaccine efficacy is very low and falls within a narrow interval.
-
-Calculate posterior probability $P(\psi_0 > 0.3|t)$
-
-```{r}
-post_prob <- pbeta(q=0.3, shape1=t+prior_psi_alpha, shape2=n-t+prior_psi_beta, lower.tail = FALSE)
-post_prob
-```
-
-The posterior probability $P(\psi_0 > 0.3|t)=1$, which means that the probability that the true vaccine efficacy against Covid 19 is greater than 30% is about `r post_prob`. The evidence suggests that vaccine efficacy is greater than 30%.
 
 ## Results
 
