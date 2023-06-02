@@ -1,7 +1,7 @@
 ---
-title: "Final Project"
-subtitle: "In Progress"
-author: "Three Awesome Intelligent Genius"
+title: "BNT162b2 Vaccine Efficiency Analysis"
+subtitle: "Likelihood, Bayesian, Bootstrapping"
+author: "Yanting Hu, Liuyixin Shao, Shuxin Zhang"
 graphics: yes
 output: 
         pdf_document:
@@ -59,7 +59,7 @@ Therefore, we have $X \sim Binomial(\pi_1, n_1 = 17411)$ and $Y \sim Binomial(\p
 
 Then, we have $\psi = 1 - \frac{\pi_1}{\pi_2} = \frac{\pi_2 - \pi_1}{\pi_2} = \frac{\pi_p - \pi_v}{\pi_p}$
 
-```{r, echo = F}
+```{r, echo = F, include = F}
 group <- c("BNT162b2", "Placebo", "Total")
 cases <- c(8,162,170)
 normal <- c(17403,17349,34752)
@@ -98,12 +98,9 @@ $$T \sim Binom(s, \pi = \frac{\pi_v}{\pi_v +\pi_p})$$
 \pi &= \frac{\pi_v}{\pi_v +\pi_p} \\
 \pi_v &= \pi \cdot \pi_v + \pi \cdot \pi_p \\
 \pi_p &= \frac{(1 - \pi) \cdot \pi_v}{\pi} \\
-\text{Because known that: } \psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
-\text{Plug $\pi_p$ into $\psi$, we have: } \psi &= \frac{\frac{(1 - \pi) \cdot \pi_v}{\pi} - \pi_v}{\frac{(1 - \pi) \cdot \pi_v}{\pi}} \\
+\text{Because known that: } \psi &= \frac{\pi_p - \pi_v}{\pi_p} = \frac{\frac{(1 - \pi) \cdot \pi_v}{\pi} - \pi_v}{\frac{(1 - \pi) \cdot \pi_v}{\pi}} \\
 &= \frac{1 - 2\pi}{\pi} \cdot \pi_v \cdot \frac{\pi}{(1 - \pi) \cdot \pi_v}\\
-&= \frac{1 - 2 \pi}{1 - \pi} \\
-(1 - \pi) \psi &= 1 - 2\pi \\
-(2 - \psi) \: \pi &= 1 - \psi \\
+\psi &= \frac{1 - 2 \pi}{1 - \pi} \\
 \pi &= \frac{1 - \psi}{2 - \psi} \\
 \end{align*}
 
@@ -125,12 +122,10 @@ Then, in order to calculate the candidates for MLE, we need to know the first de
 \frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} (ln(\binom{170}{t}) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)) \\
 &= -\frac{t}{1 - \psi} + \frac{t}{2 - \psi} - \frac{t - 170}{2 - \psi} \\
 &= -\frac{t}{1 - \psi} + \frac{170}{2 - \psi} \\
-&= \frac{-t(2 - \psi) + 170(1 - \psi)}{(1 - \psi)(2 - \psi)} \\
 &= \frac{-2t + 170 - 172\psi}{(1 - \psi)(2 - \psi)} = 0 \\
 -2t + 170 - 172\psi &= 0 \\
 \psi &= \frac{170 - 2t}{172} \\
-\text{Given that 8 cases in Vaccine group: } \psi &= \frac{170 - 16}{172} \\
-&= 0.8953488 \\
+\text{Given that 8 cases in Vaccine group: } \psi &= \frac{170 - 16}{172} = 0.8953488 \\
 \end{align*}
 
 Therefore, $\widehat{\psi^{mle}} = 0.8953488$ is a candidate for the MLE of $\psi$. To check whether this candidate is a maximum value, we need to calculate the second derivative test:
@@ -480,6 +475,9 @@ p1+p2
 ```
 
 ## Results
+
+  In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.8953488. And then, use this estimator, we build a 95\% confidence interval.
+
 
   In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.8953488. And then, use this estimator, we build a 95\% confidence interval.
 
