@@ -26,7 +26,6 @@ library(tidyverse)
 library(openintro)
 library(maxLik)
 library(ggplot2)
-library(patchwork)
 ```
 
 ## Abstract
@@ -49,7 +48,7 @@ Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
   
 ## Statistical Method
 
-## Likelihood 
+## Parameters and Assumptions
 
 Let $X$ denote the number of Covid 19 cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group while use $Y$ denote the number of Covid 19 cases among $n_2 = 17511$ subjects assigned to the Placebo group.
 
@@ -68,7 +67,7 @@ df <- data.frame(Group = group, Cases = cases, Normal = normal, No_subjects = su
 print(df)
 ```
 
-Based on the table provided above, we have $\pi_v = \frac{8}{17411}$ and $\pi_p = \frac{162}{17511}$. Therefore, we have $$\psi = \frac{\pi_p - \pi_v}{\pi_p} = \frac{\frac{162}{17511} - \frac{8}{17411}}{\frac{162}{17511}} = 1 - \frac{8 \cdot 17511}{17411 \cdot 162} = 1 - \frac{140088}{2820582} = 0.9503337$$
+Based on the table provided, we have $\pi_v = \frac{8}{17411}$ and $\pi_p = \frac{162}{17511}$. Therefore, we have $$\psi = \frac{\pi_p - \pi_v}{\pi_p} = \frac{\frac{162}{17511} - \frac{8}{17411}}{\frac{162}{17511}} = 1 - \frac{8 \cdot 17511}{17411 \cdot 162} = 1 - \frac{140088}{2820582} = 0.9503337$$
 
 This means vaccine BNT162b2 can reduce risk of having Covid 19 by 95\% compare to placebo.
 
@@ -94,6 +93,11 @@ Now, want to treat the problem together. Let S denotes the total cases in two gr
 
 Then, we have $T \sim Binom(s, \pi)$ where $\pi = P(\text{BNT162b2 | Covid 19})$. And we have $\pi = \frac{n_1 \cdot \pi_1}{n_1 \cdot \pi_1 + n_2 \cdot \pi_2}$. Because $n_1 = 17411$ and $n_2 = 17511$ are approximately equal, we have $\pi = \frac{\pi_v}{\pi_v +\pi_p}$.
 $$T \sim Binom(s, \pi = \frac{\pi_v}{\pi_v +\pi_p})$$
+
+## Likelihood 
+
+Now, want to find the Likelihood Estimator
+
 \begin{align*}
 \pi &= \frac{\pi_v}{\pi_v +\pi_p} \\
 \pi_v &= \pi \cdot \pi_v + \pi \cdot \pi_p \\
@@ -416,9 +420,6 @@ post_prob
 The posterior probability $P(\psi_0 > 0.3|t)=1$, which means that the probability that the true vaccine efficacy against Covid 19 is greater than 30% is about `r post_prob`. The evidence suggests that vaccine efficacy is greater than 30%.
 
 ## Bootstrap
-
-
-
 ```{r}
 set.seed(666)
 
@@ -438,7 +439,7 @@ B <- 10000
 
 ### Parametric bootstrap
 
-```{r, warning = F}
+```{r}
 para_bootstrap_samples <- lapply(1:B, function(X) {
   bootstrap_t <- rbinom(1, size = total_case, prob = pi_hat)
   bootstrap_pi <- bootstrap_t / total_case
@@ -457,27 +458,88 @@ para_sample_summary <- do.call(rbind, para_bootstrap_samples)
 # para_sample_summary$sample_psi_hat %>% range()
 # From the summary, I got the range for the data is: 1.0000000 - 0.8741722= 0.1258278
 # Thus, here, I resize the binwidth into 0.1258278/15 and breaks the bar by (0.8741722, 1.0000000, 0.1258278/15)
-p1 <- ggplot(data = para_sample_summary,
+ggplot(data = para_sample_summary,
        mapping = aes(x = sample_psi_hat)) + 
   geom_histogram(binwidth = 0.1258278/15,
                  breaks = seq(0.8741722, 1.0000000, 0.1258278/15),
                  alpha = 0.8,
                  color = 'gray') +
-  labs(title =  expression(paste("The Distribution of the \nBootstrapped Sample ", widehat(psi))),
-       subtitle = "n=10000",
-       x = expression(widehat(psi)))
+  labs(title = "The distribution of bootstrapped sample ")
 
-p2 <- ggplot(data = para_sample_summary, 
-             mapping = aes(sample = sample_psi_hat)) +
-  stat_qq(distribution = qnorm) + stat_qq_line(distribution = qnorm) +
-  labs(title = "The Normal Probability Plot of \n the Bootstrapped Distribution")
-p1+p2
+ggplot(data = para_sample_summary, mapping = aes(sample = sample_psi_hat)) +
+  stat_qq(distribution = qnorm) +
+  stat_qq_line(distribution = qnorm)
+
+# without bias correction
+a = 0.05
+z <- qnorm(p = 1 - a/2)
+para_ci <- para_sample_summary %>% summarize(psi_hat = mean(sample_psi_hat),
+                                         s = sd(sample_psi_hat),
+                                         lower = psi_hat - z * s,
+                                         upper = psi_hat + z * s)
+para_ci$lower
+para_ci$upper
+
+# Perform hypothesis testing
+h_0_psi <- 0.3
+para_p_value <- sum(para_sample_summary$sample_psi_hat > h_0_psi) / B
+para_p_value
+
+
+# with bias correction
+bias <- mean(para_sample_summary$sample_psi_hat) - psi_hat
+ci_correction <- para_sample_summary %>% summarize(psi_hat = mean(sample_psi_hat),
+                                         s = sd(sample_psi_hat),
+                                         lower = psi_hat - bias - z * s,
+                                         upper = psi_hat - bias + z * s)
+ci_correction$lower
+ci_correction$upper
+
+corr_p_value <- sum(para_sample_summary$sample_psi_hat > h_0_psi) / B
+corr_p_value
+
+mosaic::prop.test(x = sum(para_sample_summary$sample_psi_hat > h_0_psi),
+                  n = B, 
+                  p = 0.3,
+                  alt = "greater",
+                  conf.level = 0.95,
+                  correct = FALSE)
+```
+
+### Non-parametric bootstrap 
+
+Simple percentile method 
+
+```{r}
+non_bootstrap_samples <- lapply(1:B, function(X) {
+  # Resample from the combined dataset
+  bootstrap_data <- sample(c(rep("vaccine", case_vaccine), 
+                             rep("placebo", case_placebo)), 
+                             total_case, replace = TRUE)
+  bootstrap_case_vaccine <- sum(bootstrap_data == "vaccine")
+  bootstrap_case_placebo <- sum(bootstrap_data == "placebo")
+  bootstrap_pi_v <- bootstrap_case_vaccine / total_vaccine
+  bootstrap_pi_p <- bootstrap_case_placebo / total_placebo
+
+  bootstrap_psi_hat <- (bootstrap_pi_p - bootstrap_pi_v) / bootstrap_pi_p
+  
+  data.frame(sample_psi_hat = bootstrap_psi_hat)
+})
+
+non_sample_summary <- do.call(rbind, non_bootstrap_samples)
+
+lower_ci <- quantile(non_sample_summary$sample_psi_hat, a/2)
+upper_ci <- quantile(non_sample_summary$sample_psi_hat, 1 - a/2)
+
+# Perform hypothesis testing
+non_p_value <- sum(non_sample_summary$sample_psi_hat > h_0_psi) / B
+
+lower_ci
+upper_ci
+non_p_value
 ```
 
 ## Results
-
-  In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.8953488. And then, use this estimator, we build a 95\% confidence interval.
-
 
   In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.8953488. And then, use this estimator, we build a 95\% confidence interval.
 
