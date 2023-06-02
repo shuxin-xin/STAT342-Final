@@ -26,6 +26,7 @@ library(tidyverse)
 library(openintro)
 library(maxLik)
 library(ggplot2)
+library(patchwork)
 ```
 
 ## Abstract
@@ -44,10 +45,8 @@ Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
   
   BNT162b2 vaccine, a Covid 19 vaccine developed by Pfizer, has entered public's view. BNT162b2 is a vaccine containing modified RNA, encapsulated in lipid nanoparticles, that carries the genetic instructions for producing a stable form of the SARS-CoV-2 spike protein, which is anchored to the viral membrane. And in this research, individuals aged 16 years or older were randomly divided into two groups. One group received two doses of either a placebo or the BNT162b2 vaccine. The two doses were rigorously administered 21 days apart. And then, researchers measure the effectiveness of vaccine by record the number of occurrence of laboratory-confirmed COVID-19. By analyzing the data calculated, we could use many statistics model to illustrates the effectiveness of the BNT162b2 vaccine.
   
-  How does this work relate to other work in the scientific literature?
+  Many previous studies have already explored the effects of the BNT162b2 vaccine, while this study illustrates and records a real-life experiment. In the following sections, we will analyse whether BNT162b2 vaccine is efficient and safety enough to against laboratory-confirmed Covid 19 by three methods: likelihood, Bayesian, and bootstrapping.
   
-  The following sections will analyse whether BNT162b2 vaccine is efficient and safety enough to against laboratory-confirmed Covid 19 by three methods: likelihood, Bayesian, and bootstrapping.
-
 ## Statistical Method
 
 ## Likelihood 
@@ -176,13 +175,6 @@ pbinom(q = 0.09473689* 170,size = 170, prob = 0.4117647, lower.tail = F)
 ```
 
 ## Bayesian
-<<<<<<< HEAD
-```{r}
-library(LearnBayes)
-```
-
-$$\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{1-2\pi}{1-\pi}$$
-=======
 
 Let $X$ denote the number of infection cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group
 
@@ -263,7 +255,6 @@ $\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$
 
 Then, we can conduct a test of
 
->>>>>>> 9899287fcd492ff5a3f195bb7a44d2fa3f9288fd
 Null Hypothesis: $H_0: \psi_0 = 0.3$
 
 Alternative Hypothesis: $H_1: \psi_0 > 0.3$
@@ -286,80 +277,6 @@ BNT162b2 vaccine reduces risk of Covid-19 by about 95% compared to placebo.
 
 The parameter $\pi$ was modeled with a $Beta(0.700102, 1)$ prior.
 
-<<<<<<< HEAD
-```{r}
-n <- 170
-t <- 8
-
-prior_alpha <- 0.700102
-prior_beta <- 1
-
-posterior_median_pi <- qbeta(p=0.5, shape1=t+prior_alpha, shape2=n-t+prior_beta)
-posterior_median_pi
-posterior_0.05_pi <- qbeta(p=0.05, shape1=t+prior_alpha, shape2=n-t+prior_beta)
-posterior_0.05_pi
-
-CI_pi <- qbeta(p = c(0.025,0.975), shape1=t+prior_alpha, shape2=n-t+prior_beta)
-CI_pi_lower <- CI_pi[1]
-CI_pi_upper <- CI_pi[2]
-
-prior_psi <- beta.select(quantile1 = list(p=0.5, x=0.948),
-                         quantile2 = list(p=0.95, x=0.96559))
-
-prior_psi_alpha <- prior_psi[1]
-prior_psi_alpha
-prior_psi_beta <- prior_psi[2]
-prior_psi_beta 
-```
-
-The median of $\pi$ is `r posterior_median_pi`. The median vaccine efficacy against Covid 19 is about 0.4878%, which indicates that 50% vaccine efficacy against Covid 19 is lower than 0.4878% and 50% vaccine efficacy against Covid 19 is higher than 0.4878%.
-
-
-Prior: $g(\psi_0)$ = Beta(`r prior_psi_alpha`, `r prior_psi_beta`)
-
-Posterior distribution: 
-
-$h(\psi_0|t)=$ Beta(`r prior_psi_alpha`+8, 170-8+`r prior_psi_beta`)
-
-```{r}
-alpha_post <- prior_psi_alpha+8
-alpha_post
-beta_post <- 170-8+prior_psi_beta
-beta_post
-```
-
-Therefore, $h(\psi_0|t)=$ Beta(`r alpha_post`, `r beta_post`)
-
-```{r}
-library(ggplot2)
-
-ggplot()+
-  stat_function(fun = dbeta,
-                args = list(shape1 = prior_psi_alpha,
-                            shape2 = prior_psi_beta))+
-  stat_function(fun = dbeta,
-                args = list(shape1 = alpha_post,
-                            shape2 = beta_post),
-                color='blue')+
-  labs(title = "Prior(black) and Posterior(blue) for Vaccine Data",
-       ylab = "Density",
-       xlab = expression(psi))
-```
-```{r}
-CI_psi <- qbeta(p = c(0.025,0.975), shape1=t+prior_psi_alpha, shape2=n-t+prior_psi_beta)
-CI_psi
-```
-
-The 95\% Bayesian credible interval reported as [0.02319402, 0.08799074], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [0.02319402, 0.08799074]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately  and . It suggests that the true vaccine efficacy is very low and falls within a narrow interval.
-
-Calculate posterior probability $P(\psi_0 > 0.3|t)$
-
-```{r}
-post_prob <- pbeta(q=0.3, shape1=t+prior_psi_alpha, shape2=n-t+prior_psi_beta, lower.tail = FALSE)
-post_prob
-```
-
-=======
 ```{r, warning=F}
 library(LearnBayes)
 
@@ -487,6 +404,9 @@ CI_psi <- qbeta(p = c(0.025,0.975), shape1=posterior_psi_alpha, shape2=posterior
 CI_psi
 CI_psi_lower <- CI_psi[1]
 CI_psi_upper <- CI_psi[2]
+
+library(HDInterval)
+hdi(qbeta, credMass = 0.95, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
 ```
 
 The 95\% Bayesian credible interval reported as [`r CI_psi_lower`, `r CI_psi_upper`], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [`r CI_psi_lower`, `r CI_psi_upper`]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately `r CI_psi_lower` and `r CI_psi_upper`.
@@ -498,10 +418,12 @@ post_prob <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta,
 post_prob
 ```
 
->>>>>>> 9899287fcd492ff5a3f195bb7a44d2fa3f9288fd
 The posterior probability $P(\psi_0 > 0.3|t)=1$, which means that the probability that the true vaccine efficacy against Covid 19 is greater than 30% is about `r post_prob`. The evidence suggests that vaccine efficacy is greater than 30%.
 
 ## Bootstrap
+
+
+
 ```{r}
 set.seed(666)
 
@@ -521,7 +443,7 @@ B <- 10000
 
 ### Parametric bootstrap
 
-```{r}
+```{r, warning = F}
 para_bootstrap_samples <- lapply(1:B, function(X) {
   bootstrap_t <- rbinom(1, size = total_case, prob = pi_hat)
   bootstrap_pi <- bootstrap_t / total_case
@@ -540,88 +462,27 @@ para_sample_summary <- do.call(rbind, para_bootstrap_samples)
 # para_sample_summary$sample_psi_hat %>% range()
 # From the summary, I got the range for the data is: 1.0000000 - 0.8741722= 0.1258278
 # Thus, here, I resize the binwidth into 0.1258278/15 and breaks the bar by (0.8741722, 1.0000000, 0.1258278/15)
-ggplot(data = para_sample_summary,
+p1 <- ggplot(data = para_sample_summary,
        mapping = aes(x = sample_psi_hat)) + 
   geom_histogram(binwidth = 0.1258278/15,
                  breaks = seq(0.8741722, 1.0000000, 0.1258278/15),
                  alpha = 0.8,
                  color = 'gray') +
-  labs(title = "The distribution of bootstrapped sample ")
+  labs(title =  expression(paste("The Distribution of the \nBootstrapped Sample ", widehat(psi))),
+       subtitle = "n=10000",
+       x = expression(widehat(psi)))
 
-ggplot(data = para_sample_summary, mapping = aes(sample = sample_psi_hat)) +
-  stat_qq(distribution = qnorm) +
-  stat_qq_line(distribution = qnorm)
-
-# without bias correction
-a = 0.05
-z <- qnorm(p = 1 - a/2)
-para_ci <- para_sample_summary %>% summarize(psi_hat = mean(sample_psi_hat),
-                                         s = sd(sample_psi_hat),
-                                         lower = psi_hat - z * s,
-                                         upper = psi_hat + z * s)
-para_ci$lower
-para_ci$upper
-
-# Perform hypothesis testing
-h_0_psi <- 0.3
-para_p_value <- sum(para_sample_summary$sample_psi_hat > h_0_psi) / B
-para_p_value
-
-
-# with bias correction
-bias <- mean(para_sample_summary$sample_psi_hat) - psi_hat
-ci_correction <- para_sample_summary %>% summarize(psi_hat = mean(sample_psi_hat),
-                                         s = sd(sample_psi_hat),
-                                         lower = psi_hat - bias - z * s,
-                                         upper = psi_hat - bias + z * s)
-ci_correction$lower
-ci_correction$upper
-
-corr_p_value <- sum(para_sample_summary$sample_psi_hat > h_0_psi) / B
-corr_p_value
-
-mosaic::prop.test(x = sum(para_sample_summary$sample_psi_hat > h_0_psi),
-                  n = B, 
-                  p = 0.3,
-                  alt = "greater",
-                  conf.level = 0.95,
-                  correct = FALSE)
-```
-
-### Non-parametric bootstrap 
-
-Simple percentile method 
-
-```{r}
-non_bootstrap_samples <- lapply(1:B, function(X) {
-  # Resample from the combined dataset
-  bootstrap_data <- sample(c(rep("vaccine", case_vaccine), 
-                             rep("placebo", case_placebo)), 
-                             total_case, replace = TRUE)
-  bootstrap_case_vaccine <- sum(bootstrap_data == "vaccine")
-  bootstrap_case_placebo <- sum(bootstrap_data == "placebo")
-  bootstrap_pi_v <- bootstrap_case_vaccine / total_vaccine
-  bootstrap_pi_p <- bootstrap_case_placebo / total_placebo
-
-  bootstrap_psi_hat <- (bootstrap_pi_p - bootstrap_pi_v) / bootstrap_pi_p
-  
-  data.frame(sample_psi_hat = bootstrap_psi_hat)
-})
-
-non_sample_summary <- do.call(rbind, non_bootstrap_samples)
-
-lower_ci <- quantile(non_sample_summary$sample_psi_hat, a/2)
-upper_ci <- quantile(non_sample_summary$sample_psi_hat, 1 - a/2)
-
-# Perform hypothesis testing
-non_p_value <- sum(non_sample_summary$sample_psi_hat > h_0_psi) / B
-
-lower_ci
-upper_ci
-non_p_value
+p2 <- ggplot(data = para_sample_summary, 
+             mapping = aes(sample = sample_psi_hat)) +
+  stat_qq(distribution = qnorm) + stat_qq_line(distribution = qnorm) +
+  labs(title = "The Normal Probability Plot of \n the Bootstrapped Distribution")
+p1+p2
 ```
 
 ## Results
+
+  In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.8953488. And then, use this estimator, we build a 95\% confidence interval.
+
 
 ## Discussion/Conclusion
 
