@@ -49,7 +49,7 @@ Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
   
 ## Statistical Method
 
-## Likelihood 
+## Parameters and Assumptions
 
 Let $X$ denote the number of Covid 19 cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group while use $Y$ denote the number of Covid 19 cases among $n_2 = 17511$ subjects assigned to the Placebo group.
 
@@ -68,7 +68,7 @@ df <- data.frame(Group = group, Cases = cases, Normal = normal, No_subjects = su
 print(df)
 ```
 
-Based on the table provided above, we have $\pi_v = \frac{8}{17411}$ and $\pi_p = \frac{162}{17511}$. Therefore, we have $$\psi = \frac{\pi_p - \pi_v}{\pi_p} = \frac{\frac{162}{17511} - \frac{8}{17411}}{\frac{162}{17511}} = 1 - \frac{8 \cdot 17511}{17411 \cdot 162} = 1 - \frac{140088}{2820582} = 0.9503337$$
+Based on the table provided, we have $\pi_v = \frac{8}{17411}$ and $\pi_p = \frac{162}{17511}$. Therefore, we have $$\psi = \frac{\pi_p - \pi_v}{\pi_p} = \frac{\frac{162}{17511} - \frac{8}{17411}}{\frac{162}{17511}} = 1 - \frac{8 \cdot 17511}{17411 \cdot 162} = 1 - \frac{140088}{2820582} = 0.9503337$$
 
 This means vaccine BNT162b2 can reduce risk of having Covid 19 by 95\% compare to placebo.
 
@@ -94,6 +94,11 @@ Now, want to treat the problem together. Let S denotes the total cases in two gr
 
 Then, we have $T \sim Binom(s, \pi)$ where $\pi = P(\text{BNT162b2 | Covid 19})$. And we have $\pi = \frac{n_1 \cdot \pi_1}{n_1 \cdot \pi_1 + n_2 \cdot \pi_2}$. Because $n_1 = 17411$ and $n_2 = 17511$ are approximately equal, we have $\pi = \frac{\pi_v}{\pi_v +\pi_p}$.
 $$T \sim Binom(s, \pi = \frac{\pi_v}{\pi_v +\pi_p})$$
+
+## Likelihood 
+
+Now, want to find the Likelihood Estimator
+
 \begin{align*}
 \pi &= \frac{\pi_v}{\pi_v +\pi_p} \\
 \pi_v &= \pi \cdot \pi_v + \pi \cdot \pi_p \\
@@ -469,15 +474,13 @@ p1 <- ggplot(data = para_sample_summary,
 
 p2 <- ggplot(data = para_sample_summary, 
              mapping = aes(sample = sample_psi_hat)) +
-  stat_qq(distribution = qnorm) + stat_qq_line(distribution = qnorm) +
+  stat_qq(distribution = qnorm) + 
+  stat_qq_line(distribution = qnorm) + 
   labs(title = "The Normal Probability Plot of \n the Bootstrapped Distribution")
 p1+p2
 ```
 
 ## Results
-
-  In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.8953488. And then, use this estimator, we build a 95\% confidence interval.
-
 
   In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.8953488. And then, use this estimator, we build a 95\% confidence interval.
 
