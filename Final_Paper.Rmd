@@ -44,10 +44,8 @@ Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
   
   BNT162b2 vaccine, a Covid 19 vaccine developed by Pfizer, has entered public's view. BNT162b2 is a vaccine containing modified RNA, encapsulated in lipid nanoparticles, that carries the genetic instructions for producing a stable form of the SARS-CoV-2 spike protein, which is anchored to the viral membrane. And in this research, individuals aged 16 years or older were randomly divided into two groups. One group received two doses of either a placebo or the BNT162b2 vaccine. The two doses were rigorously administered 21 days apart. And then, researchers measure the effectiveness of vaccine by record the number of occurrence of laboratory-confirmed COVID-19. By analyzing the data calculated, we could use many statistics model to illustrates the effectiveness of the BNT162b2 vaccine.
   
-  How does this work relate to other work in the scientific literature?
+  Many previous studies have already explored the effects of the BNT162b2 vaccine, while this study illustrates and records a real-life experiment. In the following sections, we will analyse whether BNT162b2 vaccine is efficient and safety enough to against laboratory-confirmed Covid 19 by three methods: likelihood, Bayesian, and bootstrapping.
   
-  The following sections will analyse whether BNT162b2 vaccine is efficient and safety enough to against laboratory-confirmed Covid 19 by three methods: likelihood, Bayesian, and bootstrapping.
-
 ## Statistical Method
 
 ## Likelihood 
@@ -539,6 +537,9 @@ non_p_value
 ```
 
 ## Results
+
+  In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.8953488. And then, use this estimator, we build a 95\% confidence interval.
+
 
 ## Discussion/Conclusion
 
