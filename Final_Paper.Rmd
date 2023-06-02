@@ -176,11 +176,86 @@ pbinom(q = 0.09473689* 170,size = 170, prob = 0.4117647, lower.tail = F)
 ```
 
 ## Bayesian
-```{r}
-library(LearnBayes)
-```
 
-$$\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{1-2\pi}{1-\pi}$$
+Let $X$ denote the number of infection cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group
+
+Let $Y$ denote the number of infection cases among $n_2 = 17511$ subjects assigned to the Placebo group.
+
+Let $\pi_v$ and $\pi_p$ denote the probabilities of an infection in the vaccine and placebo groups respectively.
+
+Therefore, we have $X \sim Binom(\pi_v, n_1 = 17411)$ and $Y \sim Binom(\pi_p, n_2 = 17511)$. 
+
+Assuming the trial will run until $X+Y=s$ infections observed
+
+Then, we can let T denote the number of cases in vaccine group from s=170 cases.
+
+The distribution of T is well approximated by a bionomial for the vaccine study:
+
+$$T \sim Binom(s,\pi)$$
+where $\pi =$ P(vaccine|infection)
+
+By Bayes'rule, we can write $\pi$ in terms of the probabilities $\pi_v$ and $\pi_p$ as follows:
+
+$$\pi = \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}$$
+We know that $n_1=17411$ and $n_2=17511$
+
+so $n_1 \approx n2$, we can say that the randomization is 1:1.
+
+We can simplify $\pi$ as follows
+
+\begin{align*}
+\pi &= \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p} \\
+&= \frac{n_1\pi_v}{n_1\pi_v+n_1\pi_p} \\
+&= \frac{n_1\pi_v}{n_1(\pi_v+\pi_p)} \\
+&= \frac{\pi_v}{\pi_v+\pi_p}
+\end{align*}
+
+Since $n_1$ and $n_2$ are large and the event rates are small, we can say
+
+$$X \approx Pois(n_1\pi_v)$$
+is independent of
+
+$$Y \approx Pois(n_2\pi_p)$$
+
+Then
+
+\begin{align*}
+P(T=t) &= P(X=t|X+Y=s) \ t=0,1,\dots, s \\
+&= \frac{P(X=t \cap X+Y=s)}{P(X+Y=s)} \\
+&= \frac{P(X=t \times Y=s-t)}{P(X+Y=s)} \text{ X and Y are indepedent} \\
+&= \binom{s}{n} \pi^t (1-\pi)^{s-t} \text{where } \pi = \frac{\pi_v}{\pi_v+\pi_p}
+\end{align*}
+
+so we can have that
+
+$$T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$$
+
+where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
+
+The parameter of interest is vaccine efficacy $\psi$, that is 
+
+\begin{align*}
+\psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
+&= 1 - \frac{\pi_v}{\pi_p} \\
+\end{align*}
+
+Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
+
+\begin{align*}
+\pi &= \frac{\pi_v}{\pi_v+\pi_p} \\
+\pi(\pi_v+\pi_p) &= \pi_v \\
+\pi \pi_v + \pi \pi_p &= \pi_v \\
+\pi \pi_p &= \pi_v - \pi \pi_v \\
+\pi \pi_p &= \pi_v (1 - \pi) \\
+\frac{\pi_v}{\pi_p} &= \frac{\pi}{1-\pi}
+\end{align*}
+
+Then, we can find $\psi$
+
+$\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$
+
+Then, we can conduct a test of
+
 Null Hypothesis: $H_0: \psi_0 = 0.3$
 
 Alternative Hypothesis: $H_1: \psi_0 > 0.3$
@@ -203,48 +278,112 @@ BNT162b2 vaccine reduces risk of Covid-19 by about 95% compared to placebo.
 
 The parameter $\pi$ was modeled with a $Beta(0.700102, 1)$ prior.
 
-```{r}
+```{r, warning=F}
+library(LearnBayes)
+
 n <- 170
 t <- 8
 
 prior_alpha <- 0.700102
 prior_beta <- 1
 
+prior_median_pi <- qbeta(p=0.5, shape1=prior_alpha, shape2=prior_beta)
+prior_median_pi
+prior_0.05_pi <- qbeta(p=0.05, shape1=prior_alpha, shape2=prior_beta)
+prior_0.05_pi
+
+CI_pi_prior <- qbeta(p = c(0.025,0.975), shape1=prior_alpha, shape2=prior_beta)
+CI_pi_lower <- CI_pi_prior[1]
+CI_pi_upper <- CI_pi_prior[2]
+
+prior_psi <- beta.select(quantile1 = list(p=0.5, x=0.4087779),
+                             quantile2 = list(p=0.95, x=0.9859487))
+prior_psi_alpha <- prior_psi[1]
+prior_psi_alpha
+prior_psi_beta <- prior_psi[2]
+prior_psi_beta 
+
 posterior_median_pi <- qbeta(p=0.5, shape1=t+prior_alpha, shape2=n-t+prior_beta)
 posterior_median_pi
 posterior_0.05_pi <- qbeta(p=0.05, shape1=t+prior_alpha, shape2=n-t+prior_beta)
 posterior_0.05_pi
 
-CI_pi <- qbeta(p = c(0.025,0.975), shape1=t+prior_alpha, shape2=n-t+prior_beta)
-CI_pi_lower <- CI_pi[1]
-CI_pi_upper <- CI_pi[2]
+posterior_psi <- beta.select(quantile1 = list(p=0.5, x=0.94855003),
+                         quantile2 = list(p=0.95, x=0.9727862))
 
-prior_psi <- beta.select(quantile1 = list(p=0.5, x=0.948),
-                         quantile2 = list(p=0.95, x=0.96559))
-
-prior_psi_alpha <- prior_psi[1]
-prior_psi_alpha
-prior_psi_beta <- prior_psi[2]
-prior_psi_beta 
+posterior_psi_alpha <- posterior_psi[1]
+posterior_psi_alpha
+posterior_psi_beta <- posterior_psi[2]
+posterior_psi_beta 
 ```
 
-The median of $\pi$ is `r posterior_median_pi`. The median vaccine efficacy against Covid 19 is about 0.4878%, which indicates that 50% vaccine efficacy against Covid 19 is lower than 0.4878% and 50% vaccine efficacy against Covid 19 is higher than 0.4878%.
+\begin{align*}
+\psi &= \frac{1-2\pi}{1-\pi} \\
+\psi (1-\pi) &= 1-2\pi \\
+\psi - \psi \pi &= 1-2\pi \\
+2\pi - \psi \pi &= 1 - \psi \\
+\pi(2-\psi)  &= 1 - \psi \\
+\pi &= \frac{1 - \psi}{2-\psi}
+\end{align*}
 
+Then, we can find the prior distribution of $\psi$
 
-Prior: $g(\psi_0)$ = Beta(`r prior_psi_alpha`, `r prior_psi_beta`)
+By using R, the prior median of $\pi$ is `r prior_median_pi`, and the prior 5 percentile of $\pi$ is `r prior_0.05_pi`.
 
-Posterior distribution: 
+Then, we can calculate the prior median of $\psi$ and prior 95 percentile of $\psi$
 
-$h(\psi_0|t)=$ Beta(`r prior_psi_alpha`+8, 170-8+`r prior_psi_beta`)
+\begin{align*}
+P(\pi > 0.3715522|t) &= 0.5 \\
+P(\frac{1-\psi}{2-\psi} < 0.3715522|t) &= 0.5 \\
+P(1-\psi < 0.3715522(2-\psi)|t) &= 0.5 \\
+P(1-\psi < 0.7431044 - 0.3715522\psi|t) &= 0.5 \\
+P(-0.6284478\psi < -0.2568956|t) &= 0.5 \\
+P(\psi < 0.4087779|t) &= 0.5 \\
+\end{align*}
 
-```{r}
-alpha_post <- prior_psi_alpha+8
-alpha_post
-beta_post <- 170-8+prior_psi_beta
-beta_post
-```
+\begin{align*}
+P(\pi > 0.01385659|t) &= 0.95 \\
+P(\frac{1-\psi}{2-\psi} < 0.01385659|t) &= 0.95 \\
+P(1-\psi < 0.01385659(2-\psi)|t) &= 0.95 \\
+P(1-\psi < 0.02771318 - 0.01385659\psi|t) &= 0.95 \\
+P(-0.9861434\psi < -0.9722868|t) &= 0.95 \\
+P(\psi < 0.9859487|t) &= 0.95 \\
+\end{align*}
 
-Therefore, $h(\psi_0|t)=$ Beta(`r alpha_post`, `r beta_post`)
+Thus, we have that the prior median of $\psi$ is 0.4087779, and the prior 95 percentile of $\psi$ is 0.9859487.
+
+Therefore, we can say that the prior distribution of $\psi$ is: 
+
+$g(\psi_0)$ = Beta(`r prior_psi_alpha`, `r prior_psi_beta`)
+
+Then, we can find the posterior distribution of $\psi$
+
+By using R, the posterior median of $\pi$ is `r posterior_median_pi`, and the posterior 5 percentile of $\pi$ is `r posterior_0.05_pi`.
+
+\begin{align*}
+P(\pi > 0.04893234|t) &= 0.5 \\
+P(\frac{1-\psi}{2-\psi} < 0.04893234|t) &= 0.5 \\
+P(1-\psi < 0.04893234(2-\psi)|t) &= 0.5 \\
+P(1-\psi < 0.09786468 - 0.04893234\psi|t) &= 0.5 \\
+P(-0.9510677\psi < -0.9021353|t) &= 0.5 \\
+P(\psi < 0.94855003|t) &= 0.5 \\
+\end{align*}
+
+\begin{align*}
+P(\pi > 0.02649278|t) &= 0.95 \\
+P(\frac{1-\psi}{2-\psi} < 0.02649278|t) &= 0.95 \\
+P(1-\psi < 0.02649278(2-\psi)|t) &= 0.95 \\
+P(1-\psi < 0.05298556 - 0.02649278\psi|t) &= 0.95 \\
+P(-0.9735072\psi < -0.9470144|t) &= 0.95 \\
+P(\psi < 0.9727862|t) &= 0.95 \\
+\end{align*}
+
+Thus, we have that the posterior median of $\psi$ is 0.94855003, and the posterior 95 percentile of $\psi$ is 0.9727862.
+
+Therefore, we can say that the posterior distribution of $\psi$ is:
+
+$h(\psi_0|t)=$ Beta(`r posterior_psi_alpha`, `r posterior_psi_beta`)
+
 
 ```{r}
 library(ggplot2)
@@ -254,24 +393,26 @@ ggplot()+
                 args = list(shape1 = prior_psi_alpha,
                             shape2 = prior_psi_beta))+
   stat_function(fun = dbeta,
-                args = list(shape1 = alpha_post,
-                            shape2 = beta_post),
+                args = list(shape1 = posterior_psi_alpha,
+                            shape2 = posterior_psi_beta),
                 color='blue')+
   labs(title = "Prior(black) and Posterior(blue) for Vaccine Data",
        ylab = "Density",
        xlab = expression(psi))
 ```
 ```{r}
-CI_psi <- qbeta(p = c(0.025,0.975), shape1=t+prior_psi_alpha, shape2=n-t+prior_psi_beta)
+CI_psi <- qbeta(p = c(0.025,0.975), shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
 CI_psi
+CI_psi_lower <- CI_psi[1]
+CI_psi_upper <- CI_psi[2]
 ```
 
-The 95\% Bayesian credible interval reported as [0.02319402, 0.08799074], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [0.02319402, 0.08799074]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately  and . It suggests that the true vaccine efficacy is very low and falls within a narrow interval.
+The 95\% Bayesian credible interval reported as [`r CI_psi_lower`, `r CI_psi_upper`], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [`r CI_psi_lower`, `r CI_psi_upper`]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately `r CI_psi_lower` and `r CI_psi_upper`.
 
 Calculate posterior probability $P(\psi_0 > 0.3|t)$
 
 ```{r}
-post_prob <- pbeta(q=0.3, shape1=t+prior_psi_alpha, shape2=n-t+prior_psi_beta, lower.tail = FALSE)
+post_prob <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta, lower.tail = F)
 post_prob
 ```
 
