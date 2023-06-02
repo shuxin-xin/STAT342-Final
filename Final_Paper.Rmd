@@ -403,6 +403,9 @@ CI_psi <- qbeta(p = c(0.025,0.975), shape1=posterior_psi_alpha, shape2=posterior
 CI_psi
 CI_psi_lower <- CI_psi[1]
 CI_psi_upper <- CI_psi[2]
+
+library(HDInterval)
+hdi(qbeta, credMass = 0.95, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
 ```
 
 The 95\% Bayesian credible interval reported as [`r CI_psi_lower`, `r CI_psi_upper`], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [`r CI_psi_lower`, `r CI_psi_upper`]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately `r CI_psi_lower` and `r CI_psi_upper`.
