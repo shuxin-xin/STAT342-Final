@@ -474,6 +474,9 @@ ggplot()+
        ylab = "Density",
        xlab = expression(psi))
 ```
+
+The posterior distribution is skewed, so it is better to use HPDI for an interval estimate.
+
 ```{r}
 CI_psi <- qbeta(p = c(0.025,0.975), shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
 CI_psi
@@ -481,19 +484,30 @@ CI_psi_lower <- CI_psi[1]
 CI_psi_upper <- CI_psi[2]
 
 library(HDInterval)
-hdi(qbeta, credMass = 0.95, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
+credible <- hdi(qbeta, credMass = 0.95, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
+credible
+credible_lower <- credible[1]
+credible_upper <- credible[2]
 ```
 
-The 95\% Bayesian credible interval reported as [`r CI_psi_lower`, `r CI_psi_upper`], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [`r CI_psi_lower`, `r CI_psi_upper`]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately `r CI_psi_lower` and `r CI_psi_upper`.
+The 95\% Bayesian confidence interval is [`r CI_psi_lower`, `r CI_psi_upper`], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [`r CI_psi_lower`, `r CI_psi_upper`]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately 90.59% and 97.63%.
+
+The 95\% Bayesian credible interval is [`r credible_lower`, `r credible_upper`]. For $\psi$ represents the vaccine efficacy against Covid 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior is the range 91.05% to 97.92%. There is a 95% probability that $\psi_0$ in between 91.05% and 97.92%. .
 
 Calculate posterior probability $P(\psi_0 > 0.3|t)$
 
 ```{r}
 post_prob <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta, lower.tail = F)
 post_prob
+smaller_0.3 <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
+smaller_0.3
 ```
 
-The posterior probability $P(\psi_0 > 0.3|t)=1$, which means that the probability that the true vaccine efficacy against Covid 19 is greater than 30% is about `r post_prob`. The evidence suggests that vaccine efficacy is greater than 30%.
+The posterior probability $P(\psi_0 > 0.3|t)=1$, which indicates that approximately 100% of chance that the true vaccine efficacy against Covid 19 is greater than 30%. We can reject the null hypothesis that the vaccine efficacy is 30%. The evidence suggests that vaccine efficacy is greater than 30%.
+
+### The burning question is whether the prior used by Pfizer was non-informativeor was it overly optimistic? 
+
+We choose Beta(0.700102, 1) as the prior distribution of $\pi$. The prior distribution is chosen such that the mean is equal to 0.0471 ($\frac{8}{170}$) corresponding to expected vaccine efficacy 30%. The mean is much lower than vaccine efficacy = 30%, which means that it assigns a lower probability to values indicating higher vaccine efficacy, so the prior used by Pfizer was overly optimistic. Pfizer expressed a relatively high expectation for the vaccine's efficacy before observing the actual data.
 
 ## Bootstrap
 ```{r}
