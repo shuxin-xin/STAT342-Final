@@ -91,7 +91,51 @@ Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in t
 
 Similarly for this approach, our first assumption is that every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(\text{BNT162b2 | COVID 19})$.
 
-Let's find $\pi$ using the original random variables $X$ and $Y$.
+Let V denote the event that "being assigned to BNT162b2 group"
+
+Let I denote the event that "infections"
+
+By Bayes’rule, $P(V|I) = \frac{P(I|V)P(V)}{P(I)}$
+
+$P(I|V)$ represents the probability of infections given that being assigned to BNT162b2 group, which is $\pi_v$
+
+$P(I|V^c)$ represents the probability of infections given that being assigned to placebo group, which is $\pi_p$
+
+$P(V)$ represents the probability of subjects being assigned to the BNT162b2 group, which is $\frac{n_1}{n_1+n_2}$. $P(V^c)$ represents the probability of subjects being assigned to the placebo group, which is $\frac{n_2}{n_1+n_2}$
+
+$P(I)$ represents the probability of infections, that is
+
+\begin{align*}
+P(I) &= P(I \cap V) + P(I^c \cap V^c) \\
+&= P(I|V) P(V) + P(I|V^c) P(V^c) \text{ by 4.3} \\
+&= \pi_v \cdot \frac{n_1}{n_1+n_2} + \pi_p \cdot \frac{n_2}{n_1+n_2} \\
+&= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}
+\end{align*}
+
+Then, we can calculate $P(V|I)$ as follows:
+
+\begin{align*}
+P(V|I) &= \frac{P(I|V)P(V)}{P(I)} \\
+&= \frac{\pi_v \cdot \frac{n_1}{n_1+n_2}}{\frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}} \\
+&= \frac{n_1\pi_v}{n_1+n_2} \cdot \frac{n_1+n_2}{n_1 \pi_v + n_2 \pi_p} \\
+&= \frac{n_1\pi_v}{n_1 \pi_v + n_2 \pi_p}
+\end{align*}
+
+Since $\pi$ is the probability of being assigned to the BNT162b2 group given that infections has occured
+
+Then $\pi = \frac{n_1\pi_v}{n_1 \pi_v + n_2 \pi_p}$
+
+We know that $n_1=17411$ and $n_2=17511$. Since $n_1 \approx n2$, we can say that the randomization is 1:1.
+
+We can simplify $\pi$ as follows
+
+\begin{align*}
+\pi &= \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p} \\
+&= \frac{n_1\pi_v}{n_1\pi_v+n_1\pi_p} \\
+&= \frac{n_1\pi_v}{n_1(\pi_v+\pi_p)} \\
+&= \frac{\pi_v}{\pi_v+\pi_p}
+\end{align*}
+
 
 Since $n_1 = 17411$ and $n_2 = 17511$ are large and the event rates $\pi_v = \frac{8}{17411}$ and $\pi_p = \frac{162}{17511}$ are small, we can say
 
@@ -99,10 +143,6 @@ $$X \approx Pois(n_1\pi_v)$$
 is independent of
 
 $$Y \approx Pois(n_2\pi_p)$$
-
-... some steps 
-
-
 
 Then, the parameter of interest, which is the vaccine efficacy represented by $\pi$ is:
 $\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$
