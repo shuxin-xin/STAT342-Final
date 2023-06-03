@@ -49,7 +49,7 @@ Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
 
 
 # Statistical Method
-
+## Preprocessing
 ### Our Data
 Based on the paper, we have the table:
 \begin{table}[h]
@@ -62,8 +62,7 @@ Placebo & 162 & 17,511 \\ \hline
 Total & 170 & 34,922 \\ \hline
 \end{tabular}
 \end{table}
-### Parameters and Assumptions
-
+### Two Statistical Models and Their Corresponding Parameters and Assumptions
 To do appropriate inference, our three models are built on two different approaches: 1) the two binomial proportions approach and 2) the one-sample binomial approach.
 
 1) First, it's natural for us to treat the data into a two binomial proportions problem.
@@ -72,7 +71,7 @@ Let $X$ denote the number of infection cases among $n_1 = 17411$ subjects assign
 
 Let $\pi_v$ and $\pi_p$ denote the probabilities of an infection in the vaccine and placebo groups respectively.
 
-For this approach, our assumption is that every subject is independent of each other. With independence and infection probability $\pi_v$ and $\pi_p$ for the vaccine and placebo groups, a reasonable model that we can use for $X$ and $Y$ is $X \sim Binom(\pi_v, n_1 = 17411)$ and $Y \sim Binom(\pi_p, n_2 = 17511)$. 
+Since participants underwent randomization in the paper, every subject is independent of each other. With independence and infection probability $\pi_v$ and $\pi_p$ for the vaccine and placebo groups, a reasonable model that we can use for $X$ and $Y$ is $X \sim Binom(\pi_v, n_1 = 17411)$ and $Y \sim Binom(\pi_p, n_2 = 17511)$. 
 
 Then, the parameter of interest, which is the vaccine efficacy is:
 $\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{\pi_p - \pi_v}{\pi_p}$
@@ -87,62 +86,31 @@ We will utilize these approach in the non-parametric bootstrapping approach.
 
 Let $S$ denote the total cases in two groups where $S=X+Y$ and let $T$ denotes the number of cases in vaccine group from $S$ total cases. 
 
-Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(\text{BNT162b2 | COVID 19})$.
+Let $V$ denote the event that "being assigned to BNT162b2 group" and $I$ denote the event that "infections".
 
-Similarly for this approach, our first assumption is that every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(\text{BNT162b2 | COVID 19})$.
+Then, $P(V)$, the probability of subjects being assigned to the BNT162b2 group, is $\frac{n_1}{n_1+n_2}$. Then, by the rule of complement, $P(V^c)$, the probability of subjects being assigned to the placebo group, is $\frac{n_2}{n_1+n_2}$.
 
-Let V denote the event that "being assigned to BNT162b2 group"
-
-Let I denote the event that "infections"
-
-By Bayes’rule, $P(V|I) = \frac{P(I|V)P(V)}{P(I)}$
-
-$P(I|V)$ represents the probability of infections given that being assigned to BNT162b2 group, which is $\pi_v$
-
-$P(I|V^c)$ represents the probability of infections given that being assigned to placebo group, which is $\pi_p$
-
-$P(V)$ represents the probability of subjects being assigned to the BNT162b2 group, which is $\frac{n_1}{n_1+n_2}$. $P(V^c)$ represents the probability of subjects being assigned to the placebo group, which is $\frac{n_2}{n_1+n_2}$
-
-$P(I)$ represents the probability of infections, that is
-
+Then, by distributive laws, $P(I)$, the probability of infections, is:
 \begin{align*}
-P(I) &= P(I \cap V) + P(I^c \cap V^c) \\
-&= P(I|V) P(V) + P(I|V^c) P(V^c) \text{ by 4.3} \\
+P(I) &= P(I\cap (V\cup V^c))=P((I\cap V)\cup(I\cap V^c))\\
+&=P(I \cap V) + P(I \cap V^c) -P((I \cap V)\cap(I \cap V^c))\qquad\mbox{by addition rule}\\
+&= P(I \cap V) + P(I^c \cap V^c)\qquad\mbox{since complement sets are disjointed}\\
+&=P(I|V) P(V) + P(I|V^c) P(V^c) \qquad\mbox{by definition of conditional probability} \\
 &= \pi_v \cdot \frac{n_1}{n_1+n_2} + \pi_p \cdot \frac{n_2}{n_1+n_2} \\
 &= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}
 \end{align*}
+Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$.
 
-Then, we can calculate $P(V|I)$ as follows:
+Since participants underwent randomization in the paper, every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(V|I)$. Now, let's find $\pi$:
 
-\begin{align*}
-P(V|I) &= \frac{P(I|V)P(V)}{P(I)} \\
-&= \frac{\pi_v \cdot \frac{n_1}{n_1+n_2}}{\frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}} \\
-&= \frac{n_1\pi_v}{n_1+n_2} \cdot \frac{n_1+n_2}{n_1 \pi_v + n_2 \pi_p} \\
-&= \frac{n_1\pi_v}{n_1 \pi_v + n_2 \pi_p}
-\end{align*}
+By Bayes’ rule, we know that $P(V|I) = \frac{P(I|V)P(V)}{P(I)}$
 
-Since $\pi$ is the probability of being assigned to the BNT162b2 group given that infections has occured
+where $P(I|V)$ represents the probability of infections given that being assigned to BNT162b2 group, which is $\pi_v$ and $P(I|V^c)$ represents the probability of infections given that being assigned to placebo group, which is $\pi_p$.
 
-Then $\pi = \frac{n_1\pi_v}{n_1 \pi_v + n_2 \pi_p}$
+Then, by definition of conditional probability, we can calculate $\pi = P(V|I)$ as follows:
+$\pi = P(V|I) = \frac{P(I|V)P(V)}{P(I)} = \frac{\pi_v \cdot \frac{n_1}{n_1+n_2}}{\frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}} = \frac{n_1\pi_v}{n_1+n_2} \cdot \frac{n_1+n_2}{n_1 \pi_v + n_2 \pi_p} = \frac{n_1\pi_v}{n_1 \pi_v + n_2 \pi_p}$
 
-We know that $n_1=17411$ and $n_2=17511$. Since $n_1 \approx n2$, we can say that the randomization is 1:1.
-
-We can simplify $\pi$ as follows
-
-\begin{align*}
-\pi &= \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p} \\
-&= \frac{n_1\pi_v}{n_1\pi_v+n_1\pi_p} \\
-&= \frac{n_1\pi_v}{n_1(\pi_v+\pi_p)} \\
-&= \frac{\pi_v}{\pi_v+\pi_p}
-\end{align*}
-
-
-Since $n_1 = 17411$ and $n_2 = 17511$ are large and the event rates $\pi_v = \frac{8}{17411}$ and $\pi_p = \frac{162}{17511}$ are small, we can say
-
-$$X \approx Pois(n_1\pi_v)$$
-is independent of
-
-$$Y \approx Pois(n_2\pi_p)$$
+By the table, we know that $n_1=17411$ and $n_2=17511$. Since $n_1 \approx n2$, we can say that the randomization is 1:1 and further approximate $\pi$ as $\pi = \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}= \frac{n_1\pi_v}{n_1\pi_v+n_1\pi_p}= \frac{n_1\pi_v}{n_1(\pi_v+\pi_p)}= \frac{\pi_v}{\pi_v+\pi_p}$.
 
 Then, the parameter of interest, which is the vaccine efficacy represented by $\pi$ is:
 $\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$
@@ -170,6 +138,17 @@ Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
 Based on the data from the table, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$ where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
 
 We will utilize these approach in the Maximum Likelihood, Bayesian, and parametric bootstrapping approach.
+
+### Hypothesis of Interest
+
+(To do hypothesis test for inference, we first need to make certain assumptions to make our test valid.) 
+
+The FDA requires at least 30% efficacy for a new therapy to be approved. Let $\psi_0$ represent the true value of $\psi$, which is the vaccine efficacy for BNT162b2.
+
+Then, our null hypothesis is: "The vaccine efficacy of BNT162b2 is 30%", which is $H_0: \psi_0=0.3$.
+
+Our alternative hypothesis is: "The vaccine efficacy of BNT162b2 over 30%", which is $H_1: \psi_0>0.3$.
+
 
 ```{r ,include = F}
 loglikelihood = function(params) {
