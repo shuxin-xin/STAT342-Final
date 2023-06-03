@@ -29,13 +29,13 @@ library(ggplot2)
 library(patchwork)
 ```
 
-## Abstract
+# Abstract
 
-## Keywords
+# Keywords
 
 Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
 
-## Introduction
+# Introduction
 
   In 2019, human beings experiences an unprecedented outbreak of respiratory infections. This is a worldwide disease known as coronavirus disease 2019 (Covid-19). The first cases of novel coronavirus are detected in China and then spread to other countries across the world. During more than 3 years pandemic, “over 2 million people in the European Region have died from the disease.” \footnote{(Coronavirus Disease (COVID-19) Pandemic)} At the beginning of the outbreak, people didn't expect it to last for a long time and treated it like a common flu. However, because the infected person is exposed to the crowd for a long time, the development of new coronary pneumonia is out of control and gradually forms a global disease.
 
@@ -46,31 +46,90 @@ Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
   BNT162b2 vaccine, a Covid 19 vaccine developed by Pfizer, has entered public's view. BNT162b2 is a vaccine containing modified RNA, encapsulated in lipid nanoparticles, that carries the genetic instructions for producing a stable form of the SARS-CoV-2 spike protein, which is anchored to the viral membrane. And in this research, individuals aged 16 years or older were randomly divided into two groups. One group received two doses of either a placebo or the BNT162b2 vaccine. The two doses were rigorously administered 21 days apart. And then, researchers measure the effectiveness of vaccine by record the number of occurrence of laboratory-confirmed COVID-19. By analyzing the data calculated, we could use many statistics model to illustrates the effectiveness of the BNT162b2 vaccine.
   
   Many previous studies have already explored the effects of the BNT162b2 vaccine, while this study illustrates and records a real-life experiment. In the following sections, we will analyse whether BNT162b2 vaccine is efficient and safety enough to against laboratory-confirmed Covid 19 by three methods: likelihood, Bayesian, and bootstrapping.
-  
-## Statistical Method
 
-## Parameters and Assumptions
 
-Let $X$ denote the number of Covid 19 cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group while use $Y$ denote the number of Covid 19 cases among $n_2 = 17511$ subjects assigned to the Placebo group.
+# Statistical Method
 
-Based on these, we can use $\pi_1$ denote the probability of Covid 19 cases happened in the BNT162b2 group and use $\pi_2$ denote the probability of Covid 19 cases happened in the Placebo group.
+### Our Data
+Based on the paper, we have the table:
+\begin{table}[h]
+\centering
+\caption{Vaccine Efficacy against Covid 19 at least 7 days after second dose in patients without evidence of infection}
+\begin{tabular}{cccc}
+Group & Cases & No. of subjects\\ \hline
+BNT162b2 & 8 & 17,411 \\
+Placebo & 162 & 17,511 \\ \hline
+Total & 170 & 34,922 \\ \hline
+\end{tabular}
+\end{table}
+### Parameters and Assumptions
 
-Therefore, we have $X \sim Binomial(\pi_1, n_1 = 17411)$ and $Y \sim Binomial(\pi_2, n_2 = 17511)$. 
+To do appropriate inference, our three models are built on two different approaches: 1) the two binomial proportions approach and 2) the one-sample binomial approach.
 
-Then, we have $\psi = 1 - \frac{\pi_1}{\pi_2} = \frac{\pi_2 - \pi_1}{\pi_2} = \frac{\pi_p - \pi_v}{\pi_p}$
+1) First, it's natural for us to treat the data into a two binomial proportions problem.
 
-```{r, echo = F, include = F}
-group <- c("BNT162b2", "Placebo", "Total")
-cases <- c(8,162,170)
-normal <- c(17403,17349,34752)
-subject <- c(17411, 17511, 34922)
-df <- data.frame(Group = group, Cases = cases, Normal = normal, No_subjects = subject)
-print(df)
-```
+Let $X$ denote the number of infection cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group and $Y$ denote the number of infection cases among $n_2 = 17511$ subjects assigned to the Placebo group.
 
-Based on the table provided, we have $\pi_v = \frac{8}{17411}$ and $\pi_p = \frac{162}{17511}$. Therefore, we have $$\psi = \frac{\pi_p - \pi_v}{\pi_p} = \frac{\frac{162}{17511} - \frac{8}{17411}}{\frac{162}{17511}} = 1 - \frac{8 \cdot 17511}{17411 \cdot 162} = 1 - \frac{140088}{2820582} = 0.9503337$$
+Let $\pi_v$ and $\pi_p$ denote the probabilities of an infection in the vaccine and placebo groups respectively.
 
-This means vaccine BNT162b2 can reduce risk of having Covid 19 by 95\% compare to placebo.
+For this approach, our assumption is that every subject is independent of each other. With independence and infection probability $\pi_v$ and $\pi_p$ for the vaccine and placebo groups, a reasonable model that we can use for $X$ and $Y$ is $X \sim Binom(\pi_v, n_1 = 17411)$ and $Y \sim Binom(\pi_p, n_2 = 17511)$. 
+
+Then, the parameter of interest, which is the vaccine efficacy is:
+$\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{\pi_p - \pi_v}{\pi_p}$
+
+Based on the data from the table above, we can easily calculated that $\pi_v = \frac{8}{17411}$, $\pi_p = \frac{162}{17511}$, and $\hat{\psi} = \frac{\pi_p - \pi_v}{\pi_p}=0.9503337$.
+
+That means the vaccine BNT162b2 can reduce risk of having COVID 19 by around 95\% compare to placebo.
+
+We will utilize these approach in the non-parametric bootstrapping approach.
+
+2) Second, we can further reduce the problem to a one sample problem by conditioning on the number of total cases and making more assumptions:
+
+Let $S$ denote the total cases in two groups where $S=X+Y$ and let $T$ denotes the number of cases in vaccine group from $S$ total cases. 
+
+Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(\text{BNT162b2 | COVID 19})$.
+
+Similarly for this approach, our first assumption is that every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(\text{BNT162b2 | COVID 19})$.
+
+Let's find $\pi$ using the original random variables $X$ and $Y$.
+
+Since $n_1 = 17411$ and $n_2 = 17511$ are large and the event rates $\pi_v = \frac{8}{17411}$ and $\pi_p = \frac{162}{17511}$ are small, we can say
+
+$$X \approx Pois(n_1\pi_v)$$
+is independent of
+
+$$Y \approx Pois(n_2\pi_p)$$
+
+... some steps 
+
+
+
+Then, the parameter of interest, which is the vaccine efficacy represented by $\pi$ is:
+$\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$
+
+- (we can put these steps in the appendix)
+The parameter of interest is vaccine efficacy $\psi$, that is 
+
+\begin{align*}
+\psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
+&= 1 - \frac{\pi_v}{\pi_p} \\
+\end{align*}
+
+Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
+
+\begin{align*}
+\pi &= \frac{\pi_v}{\pi_v+\pi_p} \\
+\pi(\pi_v+\pi_p) &= \pi_v \\
+\pi \pi_v + \pi \pi_p &= \pi_v \\
+\pi \pi_p &= \pi_v - \pi \pi_v \\
+\pi \pi_p &= \pi_v (1 - \pi) \\
+\frac{\pi_v}{\pi_p} &= \frac{\pi}{1-\pi}
+\end{align*}
+- (we can put these steps in the appendix)
+
+Based on the data from the table, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$ where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
+
+We will utilize these approach in the Maximum Likelihood, Bayesian, and parametric bootstrapping approach.
 
 ```{r ,include = F}
 loglikelihood = function(params) {
@@ -90,10 +149,7 @@ loglikelihood = function(params) {
 #optim(par = c(0.001, 0.0009), function(m)loglikelihood(m[1],m[2]), method = "BFGS")$par
 ```
 
-Now, want to treat the problem together. Let S denotes the total cases in two groups and let T denotes the number of cases in vaccine group from S total cases.
 
-Then, we have $T \sim Binom(s, \pi)$ where $\pi = P(\text{BNT162b2 | Covid 19})$. And we have $\pi = \frac{n_1 \cdot \pi_1}{n_1 \cdot \pi_1 + n_2 \cdot \pi_2}$. Because $n_1 = 17411$ and $n_2 = 17511$ are approximately equal, we have $\pi = \frac{\pi_v}{\pi_v +\pi_p}$.
-$$T \sim Binom(s, \pi = \frac{\pi_v}{\pi_v +\pi_p})$$
 
 ## Likelihood 
 
