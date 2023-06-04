@@ -122,26 +122,6 @@ $\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$.
 
 At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$.
 
-- (we can put these steps in the appendix)
-The parameter of interest is vaccine efficacy $\psi$, that is 
-
-\begin{align*}
-\psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
-&= 1 - \frac{\pi_v}{\pi_p} \\
-\end{align*}
-
-Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
-
-\begin{align*}
-\pi &= \frac{\pi_v}{\pi_v+\pi_p} \\
-\pi(\pi_v+\pi_p) &= \pi_v \\
-\pi \pi_v + \pi \pi_p &= \pi_v \\
-\pi \pi_p &= \pi_v - \pi \pi_v \\
-\pi \pi_p &= \pi_v (1 - \pi) \\
-\frac{\pi_v}{\pi_p} &= \frac{\pi}{1-\pi}
-\end{align*}
-- (we can put these steps in the appendix)
-
 Based on the data from the table, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$ where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
 
 We will utilize these approach in the Maximum Likelihood and Bayesian approach.
@@ -667,6 +647,22 @@ Hwang TJ, Rabheru K, Peisah C, Reichman W, Ikeda M. Loneliness and social isolat
 Polack, Fernando P., et al. “Safety and Efficacy of the BNT162b2 mRNA Covid-19 Vaccine.” The New England Journal of Medicine, 10 Dec. 2020, doi.org/10.1056/nejmoa2034577.
 
 # Appendix
+
+The parameter of interest is vaccine efficacy $\psi$, that is 
+\begin{align*}
+\psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
+&= 1 - \frac{\pi_v}{\pi_p} \\
+\end{align*}
+Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
+\begin{align*}
+\pi &= \frac{\pi_v}{\pi_v+\pi_p} \\
+\pi(\pi_v+\pi_p) &= \pi_v \\
+\pi \pi_v + \pi \pi_p &= \pi_v \\
+\pi \pi_p &= \pi_v - \pi \pi_v \\
+\pi \pi_p &= \pi_v (1 - \pi) \\
+\frac{\pi_v}{\pi_p} &= \frac{\pi}{1-\pi}
+\end{align*}
+- (we can put these steps in the appendix)
 
 ## Code for Likelihood
 ```{r ref.label="likelihood", echo = TRUE, eval = F}
