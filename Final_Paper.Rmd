@@ -679,7 +679,7 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 1\\ \hline
   The third method is Non-parametric Bootstrapping. By generating 10000 bootstrapped estimation of $\psi_0$, we can construct a 95% confidence interval: [0.9097410, 0.9819328].
   
   Based on table provided above, we can see the p-value for all three analysis methods are all 1.
-For the likelihood method, we calculate the p-value $P(W > 106.5508) = 1$, therefore
+For the likelihood method, we calculate the p-value $P(W > 106.5508) = 1$, therefore,
   
 
 # Discussion/Conclusion
