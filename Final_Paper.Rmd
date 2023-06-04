@@ -27,6 +27,9 @@ library(openintro)
 library(maxLik)
 library(ggplot2)
 library(patchwork)
+library(LearnBayes)
+library(ggplot2)
+library(HDInterval)
 ```
 
 # Abstract
@@ -319,43 +322,50 @@ Then, we can find $\psi$
 $\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$
 
 
-```{r, warning=F}
-library(LearnBayes)
-
+```{r label="method1", include = FALSE, cache = TRUE, warning = F}
 n <- 170
 t <- 8
-
 prior_alpha <- 0.700102
 prior_beta <- 1
-
 prior_median_pi <- qbeta(p=0.5, shape1=prior_alpha, shape2=prior_beta)
 prior_median_pi
 prior_0.05_pi <- qbeta(p=0.05, shape1=prior_alpha, shape2=prior_beta)
 prior_0.05_pi
-
-CI_pi_prior <- qbeta(p = c(0.025,0.975), shape1=prior_alpha, shape2=prior_beta)
-CI_pi_lower <- CI_pi_prior[1]
-CI_pi_upper <- CI_pi_prior[2]
-
 prior_psi <- beta.select(quantile1 = list(p=0.5, x=0.4087779),
                              quantile2 = list(p=0.95, x=0.9859487))
 prior_psi_alpha <- prior_psi[1]
 prior_psi_alpha
 prior_psi_beta <- prior_psi[2]
 prior_psi_beta 
-
 posterior_median_pi <- qbeta(p=0.5, shape1=t+prior_alpha, shape2=n-t+prior_beta)
 posterior_median_pi
 posterior_0.05_pi <- qbeta(p=0.05, shape1=t+prior_alpha, shape2=n-t+prior_beta)
 posterior_0.05_pi
-
 posterior_psi <- beta.select(quantile1 = list(p=0.5, x=0.94855003),
                          quantile2 = list(p=0.95, x=0.9727862))
-
 posterior_psi_alpha <- posterior_psi[1]
 posterior_psi_alpha
 posterior_psi_beta <- posterior_psi[2]
 posterior_psi_beta 
+p3 <- ggplot()+
+  stat_function(fun = dbeta,
+                args = list(shape1 = prior_psi_alpha,
+                            shape2 = prior_psi_beta))+
+  stat_function(fun = dbeta,
+                args = list(shape1 = posterior_psi_alpha,
+                            shape2 = posterior_psi_beta),
+                color='blue')+
+  labs(title = "Prior(black) and Posterior(blue) for Vaccine Data",
+       ylab = "Density",
+       xlab = expression(psi))
+CI_psi <- qbeta(p = c(0.025,0.975), shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
+CI_psi_lower <- CI_psi[1]
+CI_psi_upper <- CI_psi[2]
+credible <- hdi(qbeta, credMass = 0.95, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
+credible_lower <- credible[1]
+credible_upper <- credible[2]
+post_prob <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta, lower.tail = F)
+smaller_0.3 <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
 ```
 
 \begin{align*}
@@ -425,50 +435,17 @@ Therefore, we can say that the posterior distribution of $\psi$ is:
 
 $h(\psi_0|t)=$ Beta(`r posterior_psi_alpha`, `r posterior_psi_beta`)
 
-
-```{r}
-library(ggplot2)
-
-ggplot()+
-  stat_function(fun = dbeta,
-                args = list(shape1 = prior_psi_alpha,
-                            shape2 = prior_psi_beta))+
-  stat_function(fun = dbeta,
-                args = list(shape1 = posterior_psi_alpha,
-                            shape2 = posterior_psi_beta),
-                color='blue')+
-  labs(title = "Prior(black) and Posterior(blue) for Vaccine Data",
-       ylab = "Density",
-       xlab = expression(psi))
+```{r echo = FALSE, warning=F}
+p3
 ```
 
 The posterior distribution is skewed, so it is better to use HPDI for an interval estimate.
-
-```{r}
-CI_psi <- qbeta(p = c(0.025,0.975), shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
-CI_psi
-CI_psi_lower <- CI_psi[1]
-CI_psi_upper <- CI_psi[2]
-
-library(HDInterval)
-credible <- hdi(qbeta, credMass = 0.95, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
-credible
-credible_lower <- credible[1]
-credible_upper <- credible[2]
-```
 
 The 95\% Bayesian credible interval is [`r CI_psi_lower`, `r CI_psi_upper`], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [`r CI_psi_lower`, `r CI_psi_upper`]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately 90.59% and 97.63%.
 
 The 95\% Bayesian HPDI interval is [`r credible_lower`, `r credible_upper`]. For $\psi$ represents the vaccine efficacy against Covid 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior is the range 91.05% to 97.92%. There is a 95% probability that $\psi_0$ in between 91.05% and 97.92%. .
 
 Calculate posterior probability $P(\psi_0 > 0.3|t)$
-
-```{r}
-post_prob <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta, lower.tail = F)
-post_prob
-smaller_0.3 <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
-smaller_0.3
-```
 
 The posterior probability $P(\psi_0 > 0.3|t)=1$, which indicates that approximately 100% of chance that the true vaccine efficacy against Covid 19 is greater than 30%. We can reject the null hypothesis that the vaccine efficacy is 30%. The evidence suggests that vaccine efficacy is greater than 30%.
 
@@ -499,10 +476,10 @@ Therefore, the a proper prior of $\pi$ is: $g(\pi_0) = Beta(0.700102, 1)$. Howev
 
 Since $T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$ and we assume $\pi$ follows a Beta Distribution $g(\pi_0) = Beta(0.700102, 1)$. Then, the posterior of $\pi$ is also a Beta Distribution with shape parameters $0.700102+t$ and $170-t+1$, where $t=8$ from Table 1. Therefore, we have: $h(\pi_0|t) = Beta(0.700102+8, 170-8+1) = Beta(8.700102, 163)$
 
-```{r, echo=F, eval=F}
+```{r label="interval_prior_1", include = FALSE, cache = TRUE}
 interval <- qbeta(p = c(0.025,0.975), shape1=8.700102, shape2=163)
-interval
 ```
+
 Calculated by R, the 2.5 percentile of posterior distribution of $\pi$ is 0.02319402, and the 97.5% percentile of posterior distribution of $\pi$ is 0.08799074. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
 $$[\frac{1-2 \times 0.08799074}{1-0.08799074},\frac{1-2 \times 0.02319402}{1-0.02319402}] = [0.9035199, 0.9762552]$$
 
@@ -510,16 +487,16 @@ $$[\frac{1-2 \times 0.08799074}{1-0.08799074},\frac{1-2 \times 0.02319402}{1-0.0
 
 Since $T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$ and we assume $\pi$ follows a Beta Distribution $g(\pi_0) = Beta(1, 1)$. Then, the posterior of $\pi$ is also a Beta Distribution with shape parameters $1+t$ and $170-t+1$, where $t=8$ from Table 1. Therefore, we have: $h(\pi_0|t) = Beta(1+8, 170-8+1) = Beta(9, 163)$
 
-```{r}
+```{r label="interval_prior_2", include = FALSE, cache = TRUE}
 interval_uniform <- qbeta(p = c(0.025,0.975), shape1=9, shape2=163)
-interval_uniform 
 ```
+
 Calculated by R, the 2.5 percentile of posterior distribution of $\pi$ is 0.02434818, and the 97.5% percentile of posterior distribution of $\pi$ is 0.092214. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
 $$[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.02434585}] = [0.9009794,0.9750466]$$
 
 We also plot the prior and posterior distribution plot for both of the approaches.
 
-```{r, echo=F, fig.height=3.5, fig.width=9}
+```{r label="graph", echo=F, eval=F, fig.height=3.5, fig.width=9}
 p_a <- ggplot()+
   geom_function(fun = dbeta,
                 args = list(shape1 = 0.700102,
@@ -551,13 +528,14 @@ p_b <- ggplot()+
 p_a+p_b
 ```
 
+
 ### Calculate the Bayesian P-value
 
 Since $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate posterior probability, that is:
 $$P(\psi_0 \leq 0.3|t) = P(\frac{1-2\pi}{1-\pi} \leq 0.3|t) = P(\pi \geq 0.4117647|t)$$
-```{r, echo=F, eval=F}
+
+```{r label="probability", echo=F, eval=F}
 post_prob_pi <- pbeta(q=0.4117647, shape1=8.700102, shape2=163, lower.tail = F)
-post_prob_pi
 ```
 
 Using R, we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$, which is very small. Thus, $P(\psi_0 > 0.3|t)$ is approximately 1, which means that the probability that the true vaccine efficacy against COVID 19 is greater than 30% is about 100%. The evidence suggests that vaccine efficacy is greater than 30%.
@@ -569,20 +547,16 @@ For prior Beta(0.700102, 1), the 95\% Bayesian credible interval width is approx
 ## Non-parametric Bootstrap 
 ```{r label="bootstrap", include = FALSE, cache = TRUE, warning=F}
 set.seed(666)
-
 case_vaccine <- 8
 total_vaccine <- 17411
 case_placebo <- 162
 total_placebo <- 17511
 total_case <- case_vaccine + case_placebo
-
 pi_v <- case_vaccine / total_vaccine
 pi_p <- case_placebo / total_placebo
 psi_hat <- (pi_p - pi_v) / pi_p
 pi_hat <- pi_v / (pi_p + pi_v)
-
 B <- 10000
-
 a = 0.05
 z <- qnorm(p = 1 - a/2)
 h_0_psi <- 0.3
@@ -602,12 +576,9 @@ non_bootstrap_samples <- lapply(1:B, function(X) {
   bootstrap_case_placebo <- sum(bootstrap_data == "placebo")
   bootstrap_pi_v <- bootstrap_case_vaccine / total_vaccine
   bootstrap_pi_p <- bootstrap_case_placebo / total_placebo
-
   bootstrap_psi_hat <- (bootstrap_pi_p - bootstrap_pi_v) / bootstrap_pi_p
-  
   data.frame(sample_psi_hat = bootstrap_psi_hat)
 })
-
 non_sample_summary <- do.call(rbind, non_bootstrap_samples)
 
 # Calculate the binwidth using the method we have learned in class:
@@ -643,11 +614,7 @@ lower_ci <- quantile(non_sample_summary$sample_psi_hat, a/2)
 upper_ci <- quantile(non_sample_summary$sample_psi_hat, 1 - a/2)
 
 # Perform hypothesis testing
-non_p_value <- sum(non_sample_summary$sample_psi_hat > h_0_psi) / B
-
-lower_ci
-upper_ci
-non_p_value
+non_p_value <- sum(non_sample_summary$sample_psi_hat < h_0_psi) / B
 ```
 
 ```{r echo = FALSE, warning=F}
@@ -703,11 +670,32 @@ Hwang TJ, Rabheru K, Peisah C, Reichman W, Ikeda M. Loneliness and social isolat
 
 ```
 
-## Code for Bootstrap
-```{r ref.label="bootstrap", echo = TRUE, eval = F, warning=F}
+## Code for Bayesian
+```{r ref.label="interval_prior_1", echo = TRUE, eval = F}
 
 ```
 
-```{r ref.label="interval", echo = TRUE, eval = F, warning=F}
+```{r ref.label="interval_prior_2", echo = TRUE, eval = F}
+
+```
+
+```{r ref.label="graph", echo = TRUE, eval = F}
+
+```
+
+```{r ref.label="probability", echo = TRUE, eval = F}
+
+```
+
+```{r ref.label="method1", echo = TRUE, eval = F}
+
+```
+
+## Code for Bootstrap
+```{r ref.label="bootstrap", echo = TRUE, eval = F}
+
+```
+
+```{r ref.label="interval", echo = TRUE, eval = F}
 
 ```
