@@ -560,7 +560,7 @@ For prior Beta(0.700102, 1)
 
 $T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$
 
-$h(\pi_0|t) = Beta(0.700102+8, 162-8+1) = Beta(8.700102, 163)$
+$h(\pi_0|t) = Beta(0.700102+8, 170-8+1) = Beta(8.700102, 163)$
 
 ```{r}
 library(ggplot2)
@@ -572,7 +572,7 @@ ggplot()+
                 mapping = aes(color = "prior")) +
   geom_function(fun = dbeta,
                 args = list(shape1 = 0.700102+8,
-                            shape2 = 162-8+1),
+                            shape2 = 170-8+1),
                 mapping = aes(color = "posterior")) +
   labs(title = "Beta(0.700102, 1) Prior and Beta(8.700102, 163)Posterior
        for Vaccine Data",
@@ -596,7 +596,7 @@ For prior Beta(1, 1)
 
 $T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$
 
-$h(\pi_0|t) = Beta(1+8, 162-8+1) = Beta(9, 163)$
+$h(\pi_0|t) = Beta(1+8, 170-8+1) = Beta(9, 163)$
 
 ```{r}
 library(ggplot2)
@@ -608,7 +608,7 @@ ggplot()+
                 mapping = aes(color = "prior")) +
   geom_function(fun = dbeta,
                 args = list(shape1 = 1+8,
-                            shape2 = 162-8+1),
+                            shape2 = 170-8+1),
                 mapping = aes(color = "posterior")) +
   labs(title = "Beta(1, 1) Prior and Beta(9, 163) Posterior for Vaccine Data",
        y = "PDF",
