@@ -625,6 +625,10 @@ post_prob_pi
 
 The posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$, which is very small, so $P(\psi_0 > 0.3|t)$ is approximately 1, which means that the probability that the true vaccine efficacy against Covid 19 is greater than 30% is about 100%. The evidence suggests that vaccine efficacy is greater than 30%.
 
+### Examine sensitivity to the choice of prior distribution
+
+For prior Beta(0.700102, 1), the 95\% Bayesian credible interval width is approximately 0.0727. For prior Beta(1, 1), the 95\% Bayesian credible interval width is approximately 0.0741. We can see that the 95\% Bayesian credible interval for the Beta(1, 1) non-informative prior is slightly wider than that of Beta(0.700102, 1) prior. We can say that the non-informative prior has a larger range of possible values for $\psi_0$, which is vaccine efficacy, so the Beta(1, 1) non-informative prior has greater uncertainty, which has wider interval. Therefore, the choice of prior distribution will influence the width of the credible interval.
+
 ## Non-parametric Bootstrap 
 ```{r label="bootstrap", include = FALSE, cache = TRUE, warning=F}
 set.seed(666)
