@@ -477,80 +477,51 @@ The posterior probability $P(\psi_0 > 0.3|t)=1$, which indicates that approximat
 
 We choose Beta(0.700102, 1) as the prior distribution of $\pi$. The prior distribution is chosen such that the mean is equal to 0.0471 ($\frac{8}{170}$) corresponding to expected vaccine efficacy 30%. The mean is much lower than vaccine efficacy = 30%, which means that it assigns a lower probability to values indicating higher vaccine efficacy, so the prior used by Pfizer was overly optimistic. Pfizer expressed a relatively high expectation for the vaccine's efficacy before observing the actual data.
 
-### Method 2 (interval)
-
-The parameter of interest is vaccine efficacy $\psi$, that is 
-
-\begin{align*}
-\psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
-&= 1 - \frac{\pi_v}{\pi_p} \\
-\end{align*}
-
-Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
-
-\begin{align*}
-\pi &= \frac{\pi_v}{\pi_v+\pi_p} \\
-\pi(\pi_v+\pi_p) &= \pi_v \\
-\pi \pi_v + \pi \pi_p &= \pi_v \\
-\pi \pi_p &= \pi_v - \pi \pi_v \\
-\pi \pi_p &= \pi_v (1 - \pi) \\
-\frac{\pi_v}{\pi_p} &= \frac{\pi}{1-\pi}
-\end{align*}
-
-Then, we can find $\psi$
-
-$\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$
-
-Then, we can find the expression for $\pi$ with $\psi$
-
-\begin{align*}
-\psi &= \frac{1-2\pi}{1-\pi} \\
-\psi (1-\pi) &= 1-2\pi \\
-\psi - \psi \pi &= 1-2\pi \\
-2\pi - \psi \pi &= 1 - \psi \\
-\pi(2-\psi)  &= 1 - \psi \\
-\pi &= \frac{1 - \psi}{2-\psi}
-\end{align*}
-
+---------------------------------------------------------------
 
 ### Prior Elicitation
 
-Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, so we can have that
+Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, meaning that $\pi = \frac{1-\psi}{2-\psi} = \frac{1-0.3}{2-0.3} = 0.4118$.
 
-$\pi = \frac{1-\psi}{2-\psi} = \frac{1-0.3}{2-0.3} = 0.4118$
+From 4.1.2 we know that $T\sim Binom(170, \pi)$ and we don't have explicit information about the prior. Thus, let's assume that $\pi$ follows beta distribution. Then, the expected value of $\pi$ is $E[\pi]=\frac{\alpha}{\alpha+\beta}$.
 
-We know that $\pi$ follows beta distribution, so the expected value of $\pi$ is $\frac{\alpha}{\alpha+\beta}$
-
-Assume that prior is centered closer to 0, indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $alpha$
-
+In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $alpha$ in this case. Let $\beta = 1$, then, 
 \begin{align*}
 \frac{\alpha}{\alpha+1} &= 0.4118 \\
-\alpha &= 0.4118(\alpha+1) \\
 \alpha &= 0.4118\alpha + 0.4118\\
 0.5882\alpha &= 0.4118 \\
 \alpha &= 0.700102
 \end{align*}
+Therefore, the a proper prior of $\pi$ is: $g(\pi_0) = Beta(0.700102, 1)$. However, this prior may be informative to the posterior because we assume the prior of $\pi$ is a Beta distribution. Therefore, we also choose a completely non informative uniform prior distribution of $\pi$, that is $g(\pi_0) = Beta(1,1)$ because The $Beta(1, 1)$ distribution is symmetric around its center (0.5, 0.5) and assigns equal probability to all values between 0 and 1.
 
-Therefore, the prior of $\pi$ is
+### Calculating the Posterior Distribution
 
-$$g(\pi_0) = Beta(0.700102, 1)$$
+- Beta(0.700102, 1) prior:
 
-We also choose a non informative uniform prior distribution of $\pi$
+Since $T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$ and we assume $\pi$ follows a Beta Distribution $g(\pi_0) = Beta(0.700102, 1)$. Then, the posterior of $\pi$ is also a Beta Distribution with shape parameters $0.700102+t$ and $170-t+1$, where $t=8$ from Table 1. Therefore, we have: $h(\pi_0|t) = Beta(0.700102+8, 170-8+1) = Beta(8.700102, 163)$
 
-$$g(\pi_0) = Beta(1,1)$$
+```{r, echo=F, eval=F}
+interval <- qbeta(p = c(0.025,0.975), shape1=8.700102, shape2=163)
+interval
+```
+Calculated by R, the 2.5 percentile of posterior distribution of $\pi$ is 0.02319402, and the 97.5% percentile of posterior distribution of $\pi$ is 0.08799074. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
+$$[\frac{1-2 \times 0.08799074}{1-0.08799074},\frac{1-2 \times 0.02319402}{1-0.02319402}] = [0.9035199, 0.9762552]$$
 
-### Calculating the posterior distribution
+- Beta(1, 1) prior:
 
-For prior Beta(0.700102, 1)
-
-$T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$
-
-$h(\pi_0|t) = Beta(0.700102+8, 170-8+1) = Beta(8.700102, 163)$
+Since $T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$ and we assume $\pi$ follows a Beta Distribution $g(\pi_0) = Beta(1, 1)$. Then, the posterior of $\pi$ is also a Beta Distribution with shape parameters $1+t$ and $170-t+1$, where $t=8$ from Table 1. Therefore, we have: $h(\pi_0|t) = Beta(1+8, 170-8+1) = Beta(9, 163)$
 
 ```{r}
-library(ggplot2)
+interval_uniform <- qbeta(p = c(0.025,0.975), shape1=9, shape2=163)
+interval_uniform 
+```
+Calculated by R, the 2.5 percentile of posterior distribution of $\pi$ is 0.02434818, and the 97.5% percentile of posterior distribution of $\pi$ is 0.092214. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
+$$[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.02434585}] = [0.9009794,0.9750466]$$
 
-ggplot()+
+We also plot the prior and posterior distribution plot for both of the approaches.
+
+```{r, echo=F, fig.height=3, fig.width=7}
+p_a <- ggplot()+
   geom_function(fun = dbeta,
                 args = list(shape1 = 0.700102,
                             shape2 = 1),
@@ -559,34 +530,12 @@ ggplot()+
                 args = list(shape1 = 0.700102+8,
                             shape2 = 170-8+1),
                 mapping = aes(color = "posterior")) +
-  labs(title = "Beta(0.700102, 1) Prior and Beta(8.700102, 163)Posterior
-       for Vaccine Data",
+  labs(title = "Beta(0.700102, 1) Prior and Beta(8.700102, 163)\nPosterior for Vaccine Data",
        y = "PDF",
        x = expression(pi),
        color = "Distribution")
-```
 
-```{r}
-interval <- qbeta(p = c(0.025,0.975), shape1=8.700102, shape2=163)
-interval
-```
-
-The 2.5 percentile of posterior distribution of $\pi$ is 0.02319402, and the 97.5% percentile of posterior distribution of $\pi$ is 0.08799074.
-
-We can calculate the 95\% Bayesian credible interval, that is 
-
-$[\frac{1-2 \times 0.08799074}{1-0.08799074},\frac{1-2 \times 0.02319402}{1-0.02319402}] = [0.9035199, 0.9762552]$
-
-For prior Beta(1, 1)
-
-$T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$
-
-$h(\pi_0|t) = Beta(1+8, 170-8+1) = Beta(9, 163)$
-
-```{r}
-library(ggplot2)
-
-ggplot()+
+p_b <- ggplot()+
   geom_function(fun = dbeta,
                 args = list(shape1 = 1,
                             shape2 = 1),
@@ -595,35 +544,24 @@ ggplot()+
                 args = list(shape1 = 1+8,
                             shape2 = 170-8+1),
                 mapping = aes(color = "posterior")) +
-  labs(title = "Beta(1, 1) Prior and Beta(9, 163) Posterior for Vaccine Data",
+  labs(title = "Beta(1, 1) Prior and Beta(9, 163)\nPosterior for Vaccine Data",
        y = "PDF",
        x = expression(pi),
        color = "Distribution")
+
+p_a+p_b
 ```
 
-```{r}
-interval_uniform <- qbeta(p = c(0.025,0.975), shape1=9, shape2=163)
-interval_uniform 
-```
+### Calculate the Bayesian P-value
 
-The 2.5 percentile of posterior distribution of $\pi$ is 0.02434818, and the 97.5% percentile of posterior distribution of $\pi$ is 0.092214.
-
-We can calculate the 95\% Bayesian credible interval, that is 
-
-$[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.02434585}] = [0.9009794,0.9750466]$
-
-### Calculate a Bayesian P-value
-
-We can calculate posterior probability, that is
-
+Since $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate posterior probability, that is:
 $$P(\psi_0 \leq 0.3|t) = P(\frac{1-2\pi}{1-\pi} \leq 0.3|t) = P(\pi \geq 0.4117647|t)$$
-
-```{r}
+```{r, echo=F, eval=F}
 post_prob_pi <- pbeta(q=0.4117647, shape1=8.700102, shape2=163, lower.tail = F)
 post_prob_pi
 ```
 
-The posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$, which is very small, so $P(\psi_0 > 0.3|t)$ is approximately 1, which means that the probability that the true vaccine efficacy against Covid 19 is greater than 30% is about 100%. The evidence suggests that vaccine efficacy is greater than 30%.
+Using R, we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$, which is very small. Thus, $P(\psi_0 > 0.3|t)$ is approximately 1, which means that the probability that the true vaccine efficacy against COVID 19 is greater than 30% is about 100%. The evidence suggests that vaccine efficacy is greater than 30%.
 
 ### Examine sensitivity to the choice of prior distribution
 
