@@ -236,6 +236,8 @@ W &= 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})] \\
 &= 106.5508 \\
 \end{align*}
 
+Since large level of $W$ provide evidence in the direction of alternative, the p-value is the right tail probability from the chisquare distribution.
+
 ```{r label="likelihood", include = FALSE, cache = TRUE}
 pchisq(q = 106.5508, df = 1, lower.tail = F)
 ```
