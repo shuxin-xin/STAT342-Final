@@ -184,10 +184,6 @@ Now, want to find the Likelihood Estimator
 &= \frac{1 - 2\pi}{\pi} \cdot \pi_v \cdot \frac{\pi}{(1 - \pi) \cdot \pi_v}\\
 \psi &= \frac{1 - 2 \pi}{1 - \pi} \\
 \pi &= \frac{1 - \psi}{2 - \psi} \\
-\text{Because: } 0 &< \pi < 1 \\
-0 &< \frac{1 - \psi}{2 - \psi} < 1 \\
-0 &< 1 - \psi < 2 - \psi \\
-\psi < 1 \\
 \end{align*}
 
 Based on the data given, $s = 170$, so we have $T \sim Binom(170, \pi_0)$
@@ -224,8 +220,8 @@ Therefore, $\widehat{\psi^{mle}} = 0.9506173$ is a candidate for the MLE of $\ps
 \text{Given that 8 cases in Vaccine group: } &= \frac{-8}{(1 - \psi)^{2}} + \frac{170}{(2 - \psi)^{2}} \\
 &= \frac{-8\cdot (2 - \psi)^{2} + 170 \cdot (1 - \psi)^{2}}{(1 - \psi)^{2} \cdot (2 - \psi)^{2}} \\
 \text{Because: } (1 - \psi)^{2} \cdot (2 - \psi)^{2} &> 0 \\
-\text{And because $\widehat{\psi^{mle}} = 0.95061731$: } & \\
--8\cdot (2 - 0.95061731)^{2} + 170 \cdot (1 - 0.95061731)^{2} &=  -8 \cdot 1.101204 + 170 \cdot 0.00243865 
+\text{And because } \widehat{\psi^{mle}} &= 0.95061731 \\
+-8\cdot (2 - 0.95061731)^{2} + 170 \cdot (1 - 0.95061731)^{2} &=  -8 \cdot 1.101204 + 170 \cdot 0.00243865 \\
 &= -8.395062 < 0 \\
 \text{we have } \ell''(\psi) &<0 \\
 \end{align*}
@@ -251,7 +247,7 @@ Then, to find the confidence interval, we have:
 [0.9155621, & \: 0.9856725] \\
 \end{align*}
 
-The null hypothesis is $\psi = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\pi = \frac{1 - \psi}{2 - \psi} = \frac{0.7}{1.7} = 0.4117647$.
+Because the null hypothesis is $\psi = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\pi = \frac{1 - \psi}{2 - \psi} = \frac{0.7}{1.7} = 0.4117647$.
 
 And the $\widehat{\psi^{mle}} = 0.9506173$, we have $\pi = \frac{1 - \psi}{2 - \psi} = \frac{1 - 0.9506173}{2 - 0.9506173} = \frac{0.0493827}{1.049383} = 0.0470588$
 
