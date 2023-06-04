@@ -238,13 +238,27 @@ Then, to find the confidence interval, we have:
 [0.9155621, & \: 0.9856725] \\
 \end{align*}
 
-Because the null hypothesis is $\psi = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\pi = \frac{1 - \psi}{2 - \psi} = \frac{0.7}{1.7} = 0.4117647$.
+Because the null hypothesis is $\psi^{null} = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\widehat{\psi^{mle}} = 0.9506173$.
 
-And the $\widehat{\psi^{mle}} = 0.9506173$, we have $\pi = \frac{1 - \psi}{2 - \psi} = \frac{1 - 0.9506173}{2 - 0.9506173} = \frac{0.0493827}{1.049383} = 0.0470588$
+\begin{align*}
+W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
+&= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi^{mle}}) - \\
+& \quad (ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi^{null}) - ln(2 - \psi^{null})) + (t - 170) \cdot ln(2 - \psi^{null}))] \\
+&= 2[t \cdot ((ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) - (ln(1 - \psi^{null}) + ln(2 - \psi^{null}))) \\
+& \quad + (t - 170) \cdot (ln(2 - \widehat{\psi^{mle}})-ln(2 - \psi^{null}))] \\
+&= 2[t \cdot (ln(0.0493827) - ln(1.0493827) - ln(0.7) - ln(1.7)) + (t - 170) \cdot (ln(1.0493827)-ln(1.7))] \\
+&= 2[t \cdot -3.230311 + (t - 170) \cdot -0.4824262] \\
+\text{Given $t = 8$: } &= 2[8 \cdot -3.230311 + (-164) \cdot -0.4824262] \\
+&= 2[8 \cdot -3.230311 + (-164) \cdot -0.4824262] \\
+&= 106.5508 \\
+\end{align*}
 
 ```{r}
-pbinom(q = 0.0470588* 170,size = 170, prob = 0.4117647, lower.tail = F)
+pchisq(q = 106.5508, df = 1, lower.tail = F)
+pchisq(q = 106.5508, df = 1, lower.tail = T)
 ```
+
+Because at $t = 8$, we have $W = 106.5508$, and because the P-value for $P(w < 106.5508) = 5.584252e-25$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
 
 ## Bayesian
 
@@ -726,17 +740,26 @@ The p-value is defined by presuming $\psi=0.3$ is true, of observing our test st
 \caption{Comparsion Table (ConfI: 95\% Confidence Interval, CredI: 95\% Credible Interval)}
 \begin{tabular}{|c|c|c|c|}\hline
 Approach & Lower Bound & Upper Bound & p-value \\ \hline
-Maximum Likelihood & 0.9155621 (ConfI) & 0.9856725 (ConfI) & 1  \\ \hline
-Bayesian Prior Beta(1, 1) & 0.9009794 & 0.9750466 & 1 \\ \hline
-Bayesian prior Beta(0.700102, 1) &  0.9035199 & 0.9762552 & 1 \\ \hline
-Non-parametric Bootstrap & 0.9097410 (ConfI) & 0.9819328 (ConfI) & 1\\ \hline
+Maximum Likelihood (ConfI) & 0.9155621 & 0.9856725 & 1  \\ \hline
+Bayesian prior Beta(0.700102, 1) (CredI) &  0.9035199 & 0.9762552 & 1 \\ \hline
+Bayesian Prior Beta(1, 1) (CredI) & 0.9009794 & 0.9750466 & 1 \\ \hline
+Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 1\\ \hline
 \end{tabular}
 \end{table}
 
   In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.9506173. And then, use this estimator, we build a 95\% confidence interval: [0.9155621, 0.9856725].
-
+  
+  Then, in the Bayesian analysis, based on the given information and the prior distribution: $Beta(0.700102, 1)$, we then can calculate the posterior distribution: $Beta(8.700102, 163)$. Also, the 95\% Bayesian credible interval is [0.9035199, 0.9762552]. Besides, we consider a non informative uniform prior distribution of $\pi$: $Beta(1,1)$. The posterior distribution for this non informative uniform prior distribution is $Beta(9,163)$ and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. These results are slightly different because in Bayesian analysis, the choice of prior distribution can impact the posterior distribution and, consequently, the calculation of the confidence interval.
+  
+  The third method is Non-parametric Bootstrapping. By generating 10000 bootstrapped estimation of $\psi_0$, we can construct a 95% confidence interval: [0.9097410, 0.9819328].
+  
+  Based on table provided above, we can see the p-value for all three analysis methods are all 1.
+  
 
 # Discussion/Conclusion
+
+  In conclusion, we con conclude that our 95\% confidence interval 
+
 
 # References
 
