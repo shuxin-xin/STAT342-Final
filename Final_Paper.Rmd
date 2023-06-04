@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r load-packages, message=FALSE, echo = F}
+```{r load-packages, message=FALSE, echo = F, warning = F}
 library(tidyverse)
 library(openintro)
 library(maxLik)
@@ -34,7 +34,7 @@ library(HDInterval)
 
 # Abstract
 
-The coronavirus disease 2019 (Covid-19) has afflicted tens of millions of people around the world. A total of 34,922 participants were randomly selected, while 8 out of 17,411 in the BNT162b2 group were infected and 162 out of 17,511 in the Placebo group were infected. This paper is about security and Effectiveness tests for BNT162b2 Vaccine by using three methods: Likelihood, Bayesian, and Bootstrapping. We found that BNT162b2 Vaccine conferred approximately 95% protection against Covid-19 in persons 16 years of age or beyond. The median of the vaccine's safety...
+The coronavirus disease 2019 (Covid-19) has afflicted tens of millions of people around the world. A total of 34,922 participants were randomly selected, while 8 out of 17,411 in the BNT162b2 group were infected and 162 out of 17,511 in the Placebo group were infected. This paper is about security and Effectiveness tests for BNT162b2 Vaccine by using three methods: Likelihood, Bayesian, and Bootstrapping. We use the Likelihood method to find the estimator that can maximize the probability function most $\psi$ and construct a 95\% confidence interval. Besides, we also use Bayesian and Bootstrapping methods to build 95\% credible intervals and confidence intervals respectively. We found that BNT162b2 Vaccine conferred approximately 94% protection against Covid-19 in persons 16 years of age or beyond.
 
 # Keywords
 
@@ -198,37 +198,37 @@ From Table 1, given that 8 cases in Vaccine group, we know that $t=8$, then $\ps
 
 Since we only have one critical point and the second derivative of $\ell(\psi)$ with respect to $\psi$ on that critical point is negative, we can say that the function $\ell(\psi)$ is always concave down and the critical point, $\psi = \frac{170 - 2t}{170 - t}=0.9506173$ is the global maximum of $\ell(\psi)$.
 
-Therefore, $\widehat{\psi^{mle}} = 0.9506173$ is a MLE for $\psi$. 
+Therefore, $\widehat{\psi_0^{mle}} = 0.9506173$ is a MLE for $\psi$. 
 
-Based on the given information in Chapter 25, we have the estimated variance of the MLE of $\psi$ is $-\frac{1}{\ell''(\widehat{\psi^{mle}})}$
+Based on the given information in Chapter 25, we have the estimated variance of the MLE of $\psi$ is $-\frac{1}{\ell''(\widehat{\psi_0^{mle}})}$
 
 \begin{align*}
-Var[\widehat{\psi^{mle}}] &= -\frac{1}{\ell''(\widehat{\psi^{mle}})} \\
+Var[\widehat{\psi_0^{mle}}] &= -\frac{1}{\ell''(\widehat{\psi_0^{mle}})} \\
 &= -\frac{1}{\frac{-8}{(1 - 0.9506173)^{2}} + \frac{170}{(2 - 0.9506173)^{2}}} \\
 &= -\frac{1}{\frac{-8}{0.002438651} + \frac{170}{1.101204}} \\
 &= -\frac{1}{-3280.502 + 154.3765} \\
 &= 0.0003198848 \\
-SD[\widehat{\psi^{mle}}] &= \sqrt{Var[\widehat{\psi^{mle}}]} \\
+SD[\widehat{\psi_0^{mle}}] &= \sqrt{Var[\widehat{\psi_0^{mle}}]} \\
 &= 0.01788532 \\
 \end{align*}
 
 Then, to find the confidence interval, we have: 
 
 \begin{align*}
-\widehat{\psi^{mle}} &\pm Z \cdot \widehat{SE} \\
-\widehat{\psi^{mle}} &\pm Z \cdot \sqrt{-\frac{1}{\ell''(\widehat{\psi^{mle}})}} \\
+\widehat{\psi_0^{mle}} &\pm Z \cdot \widehat{SE} \\
+\widehat{\psi_0^{mle}} &\pm Z \cdot \sqrt{-\frac{1}{\ell''(\widehat{\psi_0^{mle}})}} \\
 0.9506173 &\pm 1.96 \cdot 0.01788532 \\
 [0.9155621, & \: 0.9856725] \\
 \end{align*}
 
-Because the null hypothesis is $\psi^{null} = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\widehat{\psi^{mle}} = 0.9506173$.
+Because the null hypothesis is $\psi^{null} = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\widehat{\psi_0^{mle}} = 0.9506173$.
 
 \begin{align*}
-W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
-&= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi^{mle}}) - \\
+W &= 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})] \\
+&= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi_0^{mle}}) - ln(2 - \widehat{\psi_0^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi_0^{mle}}) - \\
 & \quad (ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi^{null}) - ln(2 - \psi^{null})) + (t - 170) \cdot ln(2 - \psi^{null}))] \\
-&= 2[t \cdot ((ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) - (ln(1 - \psi^{null}) + ln(2 - \psi^{null}))) \\
-& \quad + (t - 170) \cdot (ln(2 - \widehat{\psi^{mle}})-ln(2 - \psi^{null}))] \\
+&= 2[t \cdot ((ln(1 - \widehat{\psi_0^{mle}}) - ln(2 - \widehat{\psi_0^{mle}})) - (ln(1 - \psi^{null}) + ln(2 - \psi^{null}))) \\
+& \quad + (t - 170) \cdot (ln(2 - \widehat{\psi_0^{mle}})-ln(2 - \psi^{null}))] \\
 &= 2[t \cdot (ln(0.0493827) - ln(1.0493827) - ln(0.7) - ln(1.7)) + (t - 170) \cdot (ln(1.0493827)-ln(1.7))] \\
 &= 2[t \cdot -3.230311 + (t - 170) \cdot -0.4824262] \\
 \text{Given $t = 8$: } &= 2[8 \cdot -3.230311 + (-164) \cdot -0.4824262] \\
