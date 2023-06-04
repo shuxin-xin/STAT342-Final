@@ -237,10 +237,10 @@ W &= 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})] \\
 \end{align*}
 
 ```{r label="likelihood", include = FALSE, cache = TRUE}
-pchisq(q = 106.5508, df = 1, lower.tail = T)
+pchisq(q = 106.5508, df = 1, lower.tail = F)
 ```
 
-Because at $t = 8$, we have $W = 106.5508$, and because the P-value for $P(W > 106.5508) = 1$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
+Because at $t = 8$, we have $W = 106.5508$, and because the P-value for $P(W < 106.5508) = 5.584252\times 10^{-25}$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
 
 ## Bayesian
 
@@ -655,13 +655,14 @@ For the likelihood method, we calculate the p-value $P(W > 106.5508) = 1$, there
 
 
 # References
+“Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
 
 Coronavirus disease (COVID-19) pandemic. (2023, May 24).                  
 https://www.who.int/europe/emergencies/situations/covid-19
 
 Hwang TJ, Rabheru K, Peisah C, Reichman W, Ikeda M. Loneliness and social isolation during the COVID-19 pandemic. Int Psychogeriatr. 2020 Oct;32(10):1217-1220. doi: 10.1017/S1041610220000988. Epub 2020 May 26. PMID: 32450943; PMCID: PMC7306546.
 
-“Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
+Polack, Fernando P., et al. “Safety and Efficacy of the BNT162b2 mRNA Covid-19 Vaccine.” The New England Journal of Medicine, 10 Dec. 2020, doi.org/10.1056/nejmoa2034577.
 
 # Appendix
 
