@@ -520,7 +520,7 @@ $$[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.0
 
 We also plot the prior and posterior distribution plot for both of the approaches.
 
-```{r, echo=F, fig.height=3, fig.width=7}
+```{r, echo=F, fig.height=3.5, fig.width=9}
 p_a <- ggplot()+
   geom_function(fun = dbeta,
                 args = list(shape1 = 0.700102,
@@ -530,7 +530,7 @@ p_a <- ggplot()+
                 args = list(shape1 = 0.700102+8,
                             shape2 = 170-8+1),
                 mapping = aes(color = "posterior")) +
-  labs(title = "Beta(0.700102, 1) Prior and Beta(8.700102, 163)\nPosterior for Vaccine Data",
+  labs(title = "Beta(0.700102, 1) Prior and Beta(8.700102, 163) \nPosterior for Vaccine Data",
        y = "PDF",
        x = expression(pi),
        color = "Distribution")
