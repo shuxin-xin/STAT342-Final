@@ -657,7 +657,7 @@ To use the non parametric bootstrapping to construct a 95% bootstrap confidence 
 
 After generating 10000 bootstrapped estimates of $\psi_0$, we can see that from the histogram the bootstrapped sampling distribution is skewed to the right and the sample data points on the quantile quantile plot do not fit the line very well. Therefore, a normal distribution is not a good fit for our bootstrapped samples of $\psi_0$. Thus, we cannot construct the standard bootstrap 95% interval. Instead, here, we construct the 95% bootstrap percentile interval with the simple percentile method because it doesn't need any assumption about the distribution of $\psi_0$.
 
-```{r, warning = F}
+```{r, warning = F, echo = F}
 non_bootstrap_samples <- lapply(1:B, function(X) {
   # Resample from the combined dataset
   bootstrap_data <- sample(c(rep("vaccine", case_vaccine), 
