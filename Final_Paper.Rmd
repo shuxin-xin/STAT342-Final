@@ -154,26 +154,6 @@ Then, our null hypothesis is: "The vaccine efficacy of BNT162b2 is 30%", which i
 Our alternative hypothesis is: "The vaccine efficacy of BNT162b2 over 30%", which is $H_1: \psi_0>0.3$.
 
 
-```{r ,include = F}
-loglikelihood = function(params) {
-  pi_v <- params[1]
-  pi_p <- params[2]
-  
-  binom_v = choose(df[1,4],df[1,2])* pi_v^(df[1,2]) * (1- pi_v)^(df[1,4]-df[1,2])
-  binom_p = choose(df[2,4],df[2,2])* pi_p^(df[2,2]) * (1- pi_p)^(df[2,4]-df[2,2])
-  result = log(binom_v) + log(binom_p)
-  #return(-result)
-  ifelse(pi_v < 0 | pi_v > 1 | pi_p < 0 | pi_p > 1, NA,
-         result)
-}
-#maxLik(logLik = loglikelihood, start = c(0.0004,0.009), method = "NR")
-#maxLik(logLik = loglikelihood, start = c(0.001,0.0004), method = "NR")
-#optim(par = c(0,1), function(m)loglikelihood(m[1],m[2],m[3]), fn = loglikelihood)$par
-#optim(par = c(0.001, 0.0009), function(m)loglikelihood(m[1],m[2]), method = "BFGS")$par
-```
-
-
-
 ## Maximum Likelihood 
 
 We used the one sample approach to solve the question. Let's find the Maximum Likelihood Estimator first.
@@ -253,7 +233,7 @@ W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 &= 106.5508 \\
 \end{align*}
 
-```{r}
+```{r label="likelihood", include = FALSE, cache = TRUE}
 pchisq(q = 106.5508, df = 1, lower.tail = F)
 pchisq(q = 106.5508, df = 1, lower.tail = T)
 ```
@@ -646,7 +626,7 @@ post_prob_pi
 The posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$, which is very small, so $P(\psi_0 > 0.3|t)$ is approximately 1, which means that the probability that the true vaccine efficacy against Covid 19 is greater than 30% is about 100%. The evidence suggests that vaccine efficacy is greater than 30%.
 
 ## Non-parametric Bootstrap 
-```{r}
+```{r label="bootstrap", include = FALSE, cache = TRUE, warning=F}
 set.seed(666)
 
 case_vaccine <- 8
@@ -671,7 +651,7 @@ To use the non parametric bootstrapping to construct a 95% bootstrap confidence 
 
 After generating 10000 bootstrapped estimates of $\psi_0$, we can see that from the histogram the bootstrapped sampling distribution is skewed to the right and the sample data points on the quantile quantile plot do not fit the line very well. Therefore, a normal distribution is not a good fit for our bootstrapped samples of $\psi_0$. Thus, we cannot construct the standard bootstrap 95% interval. Instead, here, we construct the 95% bootstrap percentile interval with the simple percentile method because it doesn't need any assumption about the distribution of $\psi_0$.
 
-```{r, warning = F, echo = F}
+```{r label="interval", include = FALSE, cache = TRUE, warning = F}
 non_bootstrap_samples <- lapply(1:B, function(X) {
   # Resample from the combined dataset
   bootstrap_data <- sample(c(rep("vaccine", case_vaccine), 
@@ -729,6 +709,10 @@ upper_ci
 non_p_value
 ```
 
+```{r echo = FALSE, warning=F}
+p1+p2
+```
+
 Calculated by the R, the 95% simple bootstrap confidence interval for the true value of the vaccine efficacy $\psi_0$ is (`r lower_ci`, `r upper_ci`). That is, we are 95% confident that the true value of the vaccine efficacy $\psi_0$ is between `r lower_ci` and `r upper_ci`. 
 
 The p-value is defined by presuming $\psi=0.3$ is true, of observing our test statistic or a value that is larger than $\psi=0.3$. Since all $\psi$ in our generate sample are greater or equal to 0.8659009, all of the generated samples' test statistic are greater than 0.3, which in the null hypothesis. Therefore, the p-value is 1. That is we are 100% confident that our test statistics contradicts the null hypothesis. 
@@ -771,3 +755,17 @@ Hwang TJ, Rabheru K, Peisah C, Reichman W, Ikeda M. Loneliness and social isolat
 “Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
 
 # Appendix
+
+## Code for Likelihood
+```{r ref.label="likelihood", echo = TRUE, eval = F}
+
+```
+
+## Code for Bootstrap
+```{r ref.label="bootstrap", echo = TRUE, eval = F, warning=F}
+
+```
+
+```{r ref.label="interval", echo = TRUE, eval = F, warning=F}
+
+```
