@@ -36,6 +36,7 @@ library(HDInterval)
 
 COVID 19 has afflicted tens of millions of people around the world. In this paper, we utilize the data from the article "Safety and Efficacy of the BNT162b2 mRNA COVID 19 Vaccine", aiming to figure out whether the BNT162b2 vaccine pass the FDA's requirement that the new vaccine should be at least 30\% efficacy using three methods: Maximum Likelihood, Bayesian, and Bootstrapping. The results from the three approaches are consistent that BNT162b2 was 95% effective in preventing COVID 19 (95% confidence interval in Maximum Likelihood, 91.6% to 98.6%; 95% credible interval in Baysian, 90.3% to 97.6% for prior Beta(0.700102, 1); 95% credible interval in Baysian, 90.1% to 97.5% for prior Beta(1, 1); 95% confidence interval in Bootstrapping, 90.9% to 98.2%). Then, we conclude that the true vaccine efficacy is greater than 30% and with overlapped 95% interval [0.9155627, 0.9750466].
 
+
 # Keywords
 
 Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
@@ -162,17 +163,17 @@ Thus, $\frac{170 - 2t}{170 - t}$ is a candidate for MLE for $\psi_0$. To check w
 &= \frac{-t}{(1 - \psi)^{2}} + \frac{170}{(2 - \psi)^{2}} \\
 &= \frac{-t\cdot (2 - \psi)^{2} + 170 \cdot (1 - \psi)^{2}}{(1 - \psi)^{2} \cdot (2 - \psi)^{2}}
 \end{align*}
-From Table 1, given that 8 cases in Vaccine group, we know that $t=8$, then $\psi = \frac{170 - 2\cdot 8}{170 - \cdot 8}=0.9506173$. Then, $\ell''(\psi)=\frac{-8\cdot (2 - 0.9506173)^{2} + 170 \cdot (1 - 0.9506173)^{2}}{(1 - 0.9506173)^{2} \cdot (2 - 0.9506173)^{2}}=-3126.12565702$.
+From Table 1, given that 8 cases in Vaccine group, we know that $t=8$, then $\psi = \frac{170 - 2\cdot 8}{170 - 8}=0.9506173$. Then, $\ell''(\psi)=\frac{-8\cdot (2 - 0.9506173)^{2} + 170 \cdot (1 - 0.9506173)^{2}}{(1 - 0.9506173)^{2} \cdot (2 - 0.9506173)^{2}}=-3126.12565702$.
 
 Since we only have one critical point and the second derivative of $\ell(\psi)$ with respect to $\psi$ on that critical point is negative, we can say that the function $\ell(\psi)$ is always concave down and the critical point, $\psi = \frac{170 - 2t}{170 - t}=0.9506173$ is the global maximum of $\ell(\psi)$.
 
 Therefore, $\widehat{\psi_0^{mle}} = 0.9506173$ is a MLE for $\psi$. 
 
 ### Calculation of the Maximum Likelihood Confidence Interval
-Since $n=170$, we know that under certain regularization, $\widehat{\psi_0^{mle}}$ is approximately normally distributed with mean $\psi_0$ and estimated standard error $-\frac{1}{\sqrt{\ell''(\widehat{\psi_0^{mle}})}}$
+Since $n=170$, we know that under certain regularization, $\widehat{\psi_0^{mle}}$ is approximately normally distributed with mean $\psi_0$ and estimated standard error $\frac{1}{\sqrt{-\ell''(\widehat{\psi_0^{mle}})}}$
 
 Plug in the value $\ell''(\widehat{\psi_0^{mle}})=-3126.12565702$, we have:
-$$SD[\widehat{\psi_0^{mle}}] = -\frac{1}{\sqrt{\ell''(\widehat{\psi_0^{mle}})}}=-\frac{1}{\sqrt{-3126.12565702}}=0.01788532$$
+$$SD[\widehat{\psi_0^{mle}}] = \frac{1}{\sqrt{-\ell''(\widehat{\psi_0^{mle}})}}=\frac{1}{\sqrt{3126.12565702}}=0.01788532$$
 
 Then, we can calculate the Wald confidence interval, which is: 
 $$\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=0.9506173 \pm 1.96 \times 0.01788532$$
@@ -183,12 +184,11 @@ Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative
 
 By chapter 25.2, we know that under $H_0$ with large sample: $W\approx \chi^2_1$.
 
-Since large values of W provide evidence in the direction of the alternative, the P-value is the right tail probability from the $\chi^2_1$ distribution. 
 ```{r label="likelihood", include = FALSE, cache = TRUE}
 pchisq(q = 121.6012, df = 1, lower.tail = F)
 ```
 
-Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W > 121.6012) = P(\psi > 0.3) = 2.822313e\times 10^{-28}$.
+Assuming $H_0$ is true, the P-value is the $P(W > 121.6012)$. We only consider $W > 121.6012$ because if the ratio $\frac{L(\widehat{\psi_0}^{mle})}{L(\widehat{\psi_0}^{null})}$ equals to 1, this equation illustrates exactly the null value. And also, the larger the values of the ratio $\frac{L(\widehat{\psi_0}^{mle})}{L(\widehat{\psi_0}^{null})}$ yield larger values of $W$ and provide stronger evidence against $H_0$. Since large values of W provide evidence in the direction of the alternative, the P-value is the right tail probability from the $\chi^2_1$ distribution. Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W > 121.6012) = P(\psi > 0.3) = 2.822313e\times 10^{-28}$.
 
 ## Bayesian
 
@@ -279,7 +279,7 @@ For prior Beta(1, 1), $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
 
 ### Examine sensitivity to the choice of prior distribution
 
-For prior Beta(0.700102, 1), the 95\% Bayesian credible interval width is approximately 0.0727. For prior Beta(1, 1), the 95\% Bayesian credible interval width is approximately 0.0741. We can see that the 95\% Bayesian credible interval for the Beta(1, 1) non-informative prior is slightly wider than that of Beta(0.700102, 1) prior. We can say that the non-informative prior has a larger range of possible values for $\psi_0$, which is vaccine efficacy, so the Beta(1, 1) non-informative prior has greater uncertainty, which has wider interval. Therefore, the choice of prior distribution will influence the width of the credible interval.
+For prior Beta(0.700102, 1), the 95\% Bayesian credible interval width is approximately 0.0727. For prior Beta(1, 1), the 95\% Bayesian credible interval width is approximately 0.0741. From the graph of prior and posterior above, we can find that the shapes of posterior distributions for different priors are slightly different. We can say that the 95\% Bayesian credible interval for the Beta(1, 1) non-informative prior is slightly wider than that of Beta(0.700102, 1) prior. We can suggest that the non-informative prior has a larger range of possible values for $\psi_0$, which is vaccine efficacy, so the Beta(1, 1) non-informative prior has greater uncertainty, which has wider interval. Therefore, the choice of prior distribution will influence the width of the credible interval.
 
 ## Non-parametric Bootstrap 
 ```{r label="bootstrap", include = FALSE, cache = TRUE, warning=F}
@@ -384,7 +384,7 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
 
   In this study, we have only around 0.05\% of infection cases in the BNT162b2 vaccine group (treatment group) while we have around 0.93\% of infection cases in the placebo group (control group). Based on our data, the BNT162b2 vaccine efficacy is around 95.03\%, which pass the rule of at least 30\% efficacy for a new therapy to be approved. 
   
-  In the Likelihood method, the vaccine efficacy in the combined maximum likelihood estimator is around 95.06\%. The corresponding 95\% confidence interval for the BNT162b2 vaccine efficacy is [ 0.9155627, 0.9856719]. The likelihood ratio test statistic $W$ is 121.6012. The P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $2.822313 \times 10^{-28}$, which is smaller than any common alpha.
+  In the Likelihood method, the vaccine efficacy in the combined maximum likelihood estimator is around 95.06\%. The corresponding 95\% confidence interval for the BNT162b2 vaccine efficacy is [0.9155627, 0.9856719]. The likelihood ratio test statistic $W$ is 121.6012. The P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $2.822313 \times 10^{-28}$, which is smaller than any common alpha.
   
   Then, in the Bayesian analysis, based on the given information, the prior distribution of the infection rate in vaccine group among all cases, that is $Beta(0.700102, 1)$, and the posterior distribution is $Beta(8.700102, 163)$. The 95\% Bayesian credible interval is [0.9035199, 0.9762552]. Besides, we consider a non informative uniform prior distribution of the infection rate in vaccine group among all cases, that is $Beta(1,1)$. The posterior distribution is $Beta(9,163)$, and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
   
