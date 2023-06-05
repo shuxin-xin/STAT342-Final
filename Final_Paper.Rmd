@@ -397,7 +397,7 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 \\ \hline
   
   The third method is Non-parametric Bootstrapping. By generating 10000 bootstrapped estimation of $\psi_0$, we can construct a 95% confidence interval: [0.9097410, 0.9819328].
   
-  Based on table provided above, we can see the p-value for all three analysis methods are all very small. For the likelihood method and also the Bootstrapping method, we calculate the p-value $P(W < 121.6012) = 2.822313 \times 10^{-28}$ and empirical p-value $P(No.\hat{\psi} < 0.3) = 0$ respectively. Moreover, the p-value for Bayesian posterior probability is $P(\psi_0 \leq 0.3|t)= 1.96 \times 10^{-28}$. Therefore, we have enough evidence to reject the null hypothesis. That is the efficiency of the vaccine is larger than 30\%.
+  Based on table provided above, we can see the p-value for all three analysis methods are all very small. For the likelihood method and also the Bootstrapping method, we calculate the p-value $P(W < 121.6012) = 2.822313 \times 10^{-28}$ and empirical p-value $P(No.\hat{\psi_0} < 0.3) = 0$ respectively. Moreover, the p-value for Bayesian posterior probability is $P(\psi_0 \leq 0.3|t)= 1.96 \times 10^{-28}$. Therefore, we have enough evidence to reject the null hypothesis. That is the efficiency of the vaccine is larger than 30\%.
   
 
 # Discussion/Conclusion
