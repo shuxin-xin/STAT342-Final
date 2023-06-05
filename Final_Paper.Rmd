@@ -180,47 +180,34 @@ Since we only have one critical point and the second derivative of $\ell(\psi)$ 
 
 Therefore, $\widehat{\psi_0^{mle}} = 0.9506173$ is a MLE for $\psi$. 
 
-Based on the given information in Chapter 25, we have the estimated variance of the MLE of $\psi$ is $-\frac{1}{\ell''(\widehat{\psi_0^{mle}})}$
+Since $n=170$, we know that under certain regularization, $\widehat{\psi_0^{mle}}$ is approximately normally distributed with mean $\psi_0$ and estimated standard error $-\frac{1}{\sqrt{\ell''(\widehat{\psi_0^{mle}})}}$
 
-\begin{align*}
-Var[\widehat{\psi_0^{mle}}] &= -\frac{1}{\ell''(\widehat{\psi_0^{mle}})} \\
-&= -\frac{1}{\frac{-8}{(1 - 0.9506173)^{2}} + \frac{170}{(2 - 0.9506173)^{2}}} \\
-&= -\frac{1}{\frac{-8}{0.002438651} + \frac{170}{1.101204}} \\
-&= -\frac{1}{-3280.502 + 154.3765} \\
-&= 0.0003198848 \\
-SD[\widehat{\psi_0^{mle}}] &= \sqrt{Var[\widehat{\psi_0^{mle}}]} \\
-&= 0.01788532 \\
-\end{align*}
+Plug in the value $\ell''(\widehat{\psi_0^{mle}})=-3126.12565702$, we have:
+$$SD[\widehat{\psi_0^{mle}}] = -\frac{1}{\sqrt{\ell''(\widehat{\psi_0^{mle}})}}=-\frac{1}{\sqrt{-3126.12565702}}=0.01788532$$
 
-Then, to find the confidence interval, we have: 
+Then, we can calculate the Wald confidence interval, which is: 
+$$\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=\widehat{\psi_0^{mle}} \pm Z_{\alpha/2}=0.9506173 \pm 1.96 \times 0.01788532$$
+Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155621, \: 0.9856725]$.
 
-\begin{align*}
-\widehat{\psi_0^{mle}} &\pm Z \cdot \widehat{SE} \\
-\widehat{\psi_0^{mle}} &\pm Z \cdot \sqrt{-\frac{1}{\ell''(\widehat{\psi_0^{mle}})}} \\
-0.9506173 &\pm 1.96 \cdot 0.01788532 \\
-[0.9155621, & \: 0.9856725] \\
-\end{align*}
-
-Because the null hypothesis is $\psi^{null} = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\widehat{\psi_0^{mle}} = 0.9506173$.
+Then, we did a likelihood ratio test on $\psi$. Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to:
 
 \begin{align*}
 W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 &= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi^{mle}}) - \\
 & \quad (ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi^{null}) - ln(2 - \psi^{null})) + (t - 170) \cdot ln(2 - \psi^{null}))] \\
-&= 2[t \cdot ((ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) - (ln(1 - \psi^{null}) + ln(2 - \psi^{null}))) \\
-& \quad + (t - 170) \cdot (ln(2 - \widehat{\psi^{mle}})-ln(2 - \psi^{null}))] \\
-&= 2[8 \cdot (ln(1 - 0.9506173) - ln(2 - 0.9506173)) + (8 - 170) * ln(2 - 0.9506173) \\
-& \quad - (8 * (ln(1 - 0.3) - ln(2 - 0.3)) + (8 - 170) * ln(2 - 0.3))] \\
-&= 121.6012 \\
+&= 2[8(ln(1 - 0.9506173) - ln(2 - 0.9506173)) + (8 - 170)ln(2 - 0.9506173)\\
+& \quad-(8 (ln(1 - 0.3) - ln(2 - 0.3)) + (8 - 170) ln(2 - 0.3))] \\
+&= 121.6012 
 \end{align*}
 
-Since large level of $W$ provide evidence in the direction of alternative, the p-value is the right tail probability from the chisquare distribution.
+By chapter 25.2, we know that under $H_0$ with large sample:
+$$W\approx \chi^2_1$$
 
+Since large values of W provide evidence in the direction of the alternative, the P-value is the right tail probability from the $\chi^2_1$ distribution. 
 ```{r label="likelihood", include = FALSE, cache = TRUE}
 pchisq(q = 121.6012, df = 1, lower.tail = F)
 ```
-
-Because at $t = 8$, we have $W = 106.5508$, and because the P-value for $P(W < 121.6012) = 2.822313e\times 10^{-28}$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
+Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W < 121.6012) = 2.822313e\times 10^{-28}$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
 
 ## Bayesian
 
