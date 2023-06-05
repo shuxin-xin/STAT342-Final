@@ -95,15 +95,8 @@ Let $V$ denote the event that "being assigned to BNT162b2 group" and $I$ denote 
 
 Then, $P(V)$, the probability of subjects being assigned to the BNT162b2 group, is $\frac{n_1}{n_1+n_2}$. Then, by the rule of complement, $P(V^c)$, the probability of subjects being assigned to the placebo group, is $\frac{n_2}{n_1+n_2}$.
 
-Then, by distributive laws, $P(I)$, the probability of infections, is:
-\begin{align*}
-P(I) &= P(I\cap (V\cup V^c))=P((I\cap V)\cup(I\cap V^c))\\
-&=P(I \cap V) + P(I \cap V^c) -P((I \cap V)\cap(I \cap V^c))\qquad\mbox{by addition rule}\\
-&= P(I \cap V) + P(I \cap V^c)\qquad\mbox{since complement sets are disjointed}\\
-&=P(I|V) P(V) + P(I|V^c) P(V^c) \qquad\mbox{by definition of conditional probability} \\
-&= \pi_v \cdot \frac{n_1}{n_1+n_2} + \pi_p \cdot \frac{n_2}{n_1+n_2} \\
-&= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}
-\end{align*}
+Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See process in Appendix 8.). 
+
 Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$.
 
 Since participants underwent randomization in the paper, every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(V|I)$. Now, let's find $\pi$:
@@ -207,13 +200,8 @@ Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, m
 
 From 4.1.2 we know that $T\sim Binom(170, \pi)$ and we don't have explicit information about the prior. Thus, let's assume that $\pi$ follows beta distribution. Then, the expected value of $\pi$ is $E[\pi]=\frac{\alpha}{\alpha+\beta}$.
 
-In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $alpha$ in this case. Let $\beta = 1$, then, 
-\begin{align*}
-\frac{\alpha}{\alpha+1} &= 0.4118 \\
-\alpha &= 0.4118\alpha + 0.4118\\
-0.5882\alpha &= 0.4118 \\
-\alpha &= 0.700102
-\end{align*}
+In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $alpha$ in this case. Let $\beta = 1$, then, $\alpha =  0.700102$ (See the ).
+
 Therefore, the a proper prior of $\pi$ is: $g(\pi_0) = Beta(0.700102, 1)$. However, this prior may be informative to the posterior because we assume the prior of $\pi$ is a Beta distribution. Therefore, we also choose a completely non informative uniform prior distribution of $\pi$, that is $g(\pi_0) = Beta(1,1)$ because The $Beta(1, 1)$ distribution is symmetric around its center (0.5, 0.5) and assigns equal probability to all values between 0 and 1.
 
 ### Calculating the Posterior Distribution
@@ -437,6 +425,17 @@ Polack, Fernando P., et al. “Safety and Efficacy of the BNT162b2 mRNA Covid-19
 
 # Appendix
 
+## Detailed Calculation of $P(I)$ for 4.1.2
+
+\begin{align*}
+P(I) &= P(I\cap (V\cup V^c))=P((I\cap V)\cup(I\cap V^c))\\
+&=P(I \cap V) + P(I \cap V^c) -P((I \cap V)\cap(I \cap V^c))\qquad\mbox{by addition rule}\\
+&= P(I \cap V) + P(I \cap V^c)\qquad\mbox{since complement sets are disjointed}\\
+&=P(I|V) P(V) + P(I|V^c) P(V^c) \qquad\mbox{by definition of conditional probability} \\
+&= \pi_v \cdot \frac{n_1}{n_1+n_2} + \pi_p \cdot \frac{n_2}{n_1+n_2} \\
+&= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}
+\end{align*}
+
 ## Representing $\psi$ using $\pi$ and representing $\pi$ using $\psi$ for 4.1.2
 
 The parameter of interest is vaccine efficacy $\psi$, that is 
@@ -481,6 +480,15 @@ W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 &= 2[8(ln(1 - 0.9506173) - ln(2 - 0.9506173)) + (8 - 170)ln(2 - 0.9506173)\\
 & \quad-(8 (ln(1 - 0.3) - ln(2 - 0.3)) + (8 - 170) ln(2 - 0.3))] \\
 &= 121.6012 
+\end{align*}
+
+## Detailed Calculation of $\alpha$ for 4.3.1
+
+\begin{align*}
+\frac{\alpha}{\alpha+1} &= 0.4118 \\
+\alpha &= 0.4118\alpha + 0.4118\\
+0.5882\alpha &= 0.4118 \\
+\alpha &= 0.700102
 \end{align*}
 
 ## Code for Likelihood for 4.2
