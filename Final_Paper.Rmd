@@ -390,11 +390,12 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
   
   For Non-parametric Bootstrapping, by generating 10000 bootstrapped estimation of $\psi_0$, the 95% simple bootstrap confidence interval is [0.9097410, 0.9819328]. The empirical p-value among the 10000 generated samples is 0.
   
-  The results from all of the approaches are consistent that we have enough evidence to reject the null hypothesis and claim the true efficiency of the vaccine is larger than 30\%. We also have strong confidence that the BNT162b2 vaccine efficacy is larger than 90\%.
-  
 # Discussion/Conclusion
 
   The 95\% Confidence Intervals for Likelihood and Bootstrap are [0.9155621, 0.9856725] and [0.9097410, 0.9819328] respectively, while the 95\% Credible Intervals for Bayesian prior Beta(0.700102, 1) and Bayesian Prior Beta(1, 1) are [0.9035199, 0.9762552] and [0.9009794, 0.9750466] respectively. The 95\% Bayesian credible interval [0.9035199, 0.9762552] suggests that for $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(0.700102, 1)$ is the range 90.3% to 97.6%.
+  
+    
+  The results from all of the approaches are consistent that we have enough evidence to reject the null hypothesis and claim the true efficiency of the vaccine is larger than 30\%. We also have strong confidence that the BNT162b2 vaccine efficacy is larger than 90\%.
   
   The P-value for Likelihood, Bayesian prior Beta(0.700102, 1), Bayesian Prior Beta(1, 1), and Bootstrap are $2.822313\times10^{-28}$, $1.96\times10^{-28}$, $3.73\times10^{-28}$, and 0 respectively. Because the P-value for Baysian prior Beta(0.700102, 1) is the smallest, this method is most supportive and strongest to reject the null hypothesis that vaccine efficacy is 30%. The probability that the true vaccine efficacy against COVID 19 is greater than 30% is approximately 100%. The evidence suggests that vaccine efficacy is greater than 30%.
   
