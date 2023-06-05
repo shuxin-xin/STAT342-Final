@@ -382,7 +382,7 @@ p1+p2
 
 Calculated by the R, the 95% simple bootstrap confidence interval for the true value of the vaccine efficacy $\psi_0$ is (`r lower_ci`, `r upper_ci`). That is, we are 95% confident that the true value of the vaccine efficacy $\psi_0$ is between `r lower_ci` and `r upper_ci`. 
 
-The p-value is defined by presuming $\psi=0.3$ is true, of observing our test statistic or a value that is larger than $\psi=0.3$. Since all $\psi$ in our generate sample are greater or equal to 0.8659009, all of the generated samples' test statistic are greater than 0.3, which in the null hypothesis. Therefore, the p-value is 1. That is we are 100% confident that our test statistics contradicts the null hypothesis. 
+Since we used the simple quantile method without any assumptions, we calculated the empirical p-value. Here, since all of the samples' vaccine efficacy are greater than the $\psi_0=0.3$ in the null hypothesis and our alternative hypothesis is that $\psi_0>0.3$, then there is no chance of observing a test statistic as extreme or more extreme than the one observed under the null hypothesis, resulting in the empirical p-value to be 0.  
 
 # Results
 
