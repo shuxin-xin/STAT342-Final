@@ -66,7 +66,6 @@ Total & 170 & 34,922 \\ \hline
 
 ### Two Statistical Models and Their Corresponding Parameters and Assumptions
 To do appropriate inference, our three models are built on two different approaches: 1) the two binomial proportions approach and 2) the one-sample binomial approach.
-
 1) First, it's natural for us to treat the data into a two binomial proportions problem.
 
 Let $X$ denote the number of infection cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group and $Y$ denote the number of infection cases among $n_2 = 17511$ subjects assigned to the Placebo group.
@@ -182,7 +181,7 @@ Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155627,
 ### Calculation of the Maximum Likelihood P-Value
 Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})]=121.6012$. (See full process in Appendix 8.4)
 
-By chapter 25.2, we know that under $H_0$ with large sample: $W\approx \chi^2_1$.
+We know that under $H_0$ with large sample: $W\approx \chi^2_1$.
 
 ```{r label="likelihood", include = FALSE, cache = TRUE}
 pchisq(q = 121.6012, df = 1, lower.tail = F)
