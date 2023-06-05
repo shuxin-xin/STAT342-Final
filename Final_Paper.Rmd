@@ -1,5 +1,5 @@
 ---
-title: "BNT162b2 Vaccine Efficiency Analysis"
+title: "BNT162b2 Vaccine Efficacy Analysis"
 subtitle: "Likelihood, Bayesian, Bootstrapping"
 author: "Yanting Hu, Liuyixin Shao, Shuxin Zhang"
 graphics: yes
@@ -32,7 +32,7 @@ library(ggplot2)
 library(HDInterval)
 ```
 
-# Abstract
+# Abstract 
 
 The coronavirus disease 2019 (COVID 19) has afflicted tens of millions of people around the world. A total of 34,922 participants were randomly selected, while 8 out of 17,411 in the BNT162b2 group were infected and 162 out of 17,511 in the Placebo group were infected. This paper is about security and Effectiveness tests for BNT162b2 Vaccine by using three methods: Likelihood, Bayesian, and Bootstrapping. We use the Likelihood method to find the estimator that can maximize the probability function most $\psi$ and construct a 95\% confidence interval. Besides, we also use Bayesian and Bootstrapping methods to build 95\% credible intervals and confidence intervals respectively. We found that BNT162b2 Vaccine conferred approximately 94% protection against Covid-19 in persons 16 years of age or beyond.
 
@@ -91,7 +91,7 @@ Let $V$ denote the event that "being assigned to BNT162b2 group" and $I$ denote 
 
 Then, $P(V)$, the probability of subjects being assigned to the BNT162b2 group, is $\frac{n_1}{n_1+n_2}$. Then, by the rule of complement, $P(V^c)$, the probability of subjects being assigned to the placebo group, is $\frac{n_2}{n_1+n_2}$.
 
-Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See full process in Appendix 8.1). 
+Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= P(I \cap V) + P(I \cap V^c)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See full process in Appendix 8.1). 
 
 Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$.
 
@@ -384,7 +384,7 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
 
   In this study, we have only around 0.05\% of infection cases in the BNT162b2 vaccine group (treatment group) while we have around 0.93\% of infection cases in the placebo group (control group). Based on our data, the BNT162b2 vaccine efficacy is around 95.03\%, which pass the rule of at least 30\% efficacy for a new therapy to be approved. 
   
-  In the Likelihood method, the vaccine efficacy in the combined maximum likelihood estimator is around 95.06\%. The corresponding 95\% confidence interval for the BNT162b2 vaccine efficacy is [0.9155621, 0.9856725]. The likelihood ratio test statistic $W$ is 121.6012. The P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $2.822313 \times 10^{-28}$, which is smaller than any common alpha.
+  In the Likelihood method, the vaccine efficacy in the combined maximum likelihood estimator is around 95.06\%. The corresponding 95\% confidence interval for the BNT162b2 vaccine efficacy is [ 0.9155627, 0.9856719]. The likelihood ratio test statistic $W$ is 121.6012. The P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $2.822313 \times 10^{-28}$, which is smaller than any common alpha.
   
   Then, in the Bayesian analysis, based on the given information, the prior distribution of the infection rate in vaccine group among all cases, that is $Beta(0.700102, 1)$, and the posterior distribution is $Beta(8.700102, 163)$. The 95\% Bayesian credible interval is [0.9035199, 0.9762552]. Besides, we consider a non informative uniform prior distribution of the infection rate in vaccine group among all cases, that is $Beta(1,1)$. The posterior distribution is $Beta(9,163)$, and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
   
@@ -392,18 +392,15 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
   
 # Discussion/Conclusion
 
-  The 95\% Confidence Intervals for Likelihood and Bootstrap are [0.9155621, 0.9856725] and [0.9097410, 0.9819328] respectively, while the 95\% Credible Intervals for Bayesian prior Beta(0.700102, 1) and Bayesian Prior Beta(1, 1) are [0.9035199, 0.9762552] and [0.9009794, 0.9750466] respectively. The 95\% Bayesian credible interval [0.9035199, 0.9762552] suggests that for $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(0.700102, 1)$ is the range 90.3% to 97.6%.
-  
-    
-  The results from all of the approaches are consistent that we have enough evidence to reject the null hypothesis and claim the true efficiency of the vaccine is larger than 30\%. We also have strong confidence that the BNT162b2 vaccine efficacy is larger than 90\%.
-  
-  The P-value for Likelihood, Bayesian prior Beta(0.700102, 1), Bayesian Prior Beta(1, 1), and Bootstrap are $2.822313\times10^{-28}$, $1.96\times10^{-28}$, $3.73\times10^{-28}$, and 0 respectively. Because the P-value for Baysian prior Beta(0.700102, 1) is the smallest, this method is most supportive and strongest to reject the null hypothesis that vaccine efficacy is 30%. The probability that the true vaccine efficacy against COVID 19 is greater than 30% is approximately 100%. The evidence suggests that vaccine efficacy is greater than 30%.
-  
-   (There is a 95% probability that $\psi_0$ in between 90.3% and 97.6%. The 95\% Bayesian credible interval [0.9009794, 0.9750466] suggests that for $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(1,1)$ is the range 90.3% to 97.6%. There is a 95% probability that $\psi_0$ in between 90.1% and 97.5%.)
-   
-  In conclusion, because we calculated all P-value smaller than the significance level 0.05, we have enough evidence to reject the null hypothesis and conclude that the true vaccine efficacy is greater than 30\%. The findings from the three analysis methods (Maximum Likelihood, Bayesian, and non-parametric bootstrapping) are consistent, indicating a high efficacy of the BNT162b2 vaccine.
+## Conclusion
 
-### Strengths and Weaknesses of The Methods 
+  The 95\% Confidence Intervals of the true vaccine efficacy using the Maximum Likelihood is [0.9155627, 0.9856719]. That is, we are 95% confident that the true value of the vaccine efficacy is between 0.9155627 and 0.9856719. The 95\% Confidence Intervals of the true vaccine efficacy using the Bootstrapping is [0.9097410, 0.9819328]. That is, we are 95% confident that the true value of the vaccine efficacy is between 0.9097410 and 0.9819328. The 95\% Credible Intervals of the true vaccine efficacy for Bayesian prior Beta(0.700102, 1) and Bayesian Prior Beta(1, 1) are [0.9035199, 0.9762552] and [0.9009794, 0.9750466] respectively. The 95\% Bayesian credible interval [0.9035199, 0.9762552] suggests that the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(0.700102, 1)$ is the range 90.3% to 97.6%. Thus, there is a 95% probability that the true vaccine efficacy is between 90.3% and 97.6%. The 95\% Bayesian credible interval [0.9009794, 0.9750466], suggesting that the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(1,1)$ is the range 90.3% to 97.6%. Thus, there is a 95% probability that the true vaccine efficacy in between 90.1% and 97.5%.
+  
+  Maximum Likelihood and Bootstrapping are frequentist methods, which suggests a range of values with a certain confidence level (95% in this case), while Bayesian approach provides credible interval, which suggests a range of values with a certain probability (95% in this case). All the intervals from these three methods overlap to some extent (the overlapped interval is: [0.9155627, 0.9750466]). Maximum Likelihood and Bootstrapping illustrate similar estimates of true vaccine efficacy within intervals, but Bayesian approach provide specific information that the probability of true vaccine efficacy falls in certain range.
+  
+  The P-value that we get using the Maximum Likelihood, Bayesian prior Beta(0.700102, 1), Bayesian Prior Beta(1, 1), and Bootstrapping approaches are $2.822313\times10^{-28}$, $1.96\times10^{-28}$, $3.73\times10^{-28}$, and 0 (empirical) respectively, which are all smaller than any common alpha level. The results from all of the approaches are consistent that we have enough evidence to reject the null hypothesis and claim the true efficacy of the vaccine is larger than 30\%. Also, because the posterior probability that vaccine efficacy exceeded 30% is closer to 100% for Bayesian prior Beta(0.700102, 1), which is consistent with the result from the Pfizer analysis.
+
+## Discussion: Strengths and Weaknesses of The Methods 
 
   Under regularity conditions, the likelihood estimates converge to the true parameter values as the sample size increases. This property ensures that the likelihood method produces consistent estimates. Bayesian analysis uses prior beliefs or evidences for the parameters of interest. Compared to other two methods, the likelihood method is more efficient in terms of statistical power, because it can provide precise estimates of unknown parameters when the sample size is large. However, the likelihood method relies on assumptions about the data distribution. If we assume distribution inaccurately, the estimates obtained from the likelihood method may be biased or inefficient.
 
@@ -411,9 +408,11 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
   
   Bootstrapping is a flexible resampling technique to use sample distribution to estimate the population distribution and make inferences about a population. Compared to the other two approaches, the greatest strength of bootstrapping is that we don't rely on any specific distributional assumptions of the data. However, the results of the first two approaches are based on assumptions and distribution models. Thus, the result from bootstrapping is still applicable even though our previous assumptions are violated. This is the most powerful advantage of bootstrapping. However, bootstrapping is computationally intensive and also relies heavily on the given data. If the resampling data is not representative of the population or suffers from bias, the bootstrapped results may be hugely affected accordingly. 
   
-## The burning question is whether the prior used by Pfizer was non-informative or was it overly optimistic? 
+  Since the three methods all get similar and consistent result, we conclude that the three methods that we used are all solid.
+  
+## Discussion: Bayesian Optimization with Prior
 
-We choose a completely non informative uniform prior distribution Beta(1,1) of $\pi$, assuming equal probabilities for all values of $\pi$ between 0 and 1. It is non-informative because it does not favor any specific value of $\pi$. In this case, the prior Beta(1,1) is not based on prior belief or expected vaccine efficacy. We also choose Beta(0.700102, 1) as the prior distribution of $\pi$. The prior distribution is chosen such that the mean is equal to 0.4118 ($\frac{1-0.3}{2-0.3}$) corresponding to expected vaccine efficacy 30%. The mean is higher than vaccine efficacy = 30%, which means that Pfizer assigns a higher probability to indicate lower vaccine efficacy, so the prior used by Pfizer was pessimistic. Pfizer expressed a relatively low expectation for the vaccine's efficacy before observing the actual data. The chosen prior Beta(0.700102, 1) is informative to some extent because it assumes an expected vaccine efficacy of 30%. This implies that there is some prior belief or evidence to suggest a certain level of efficacy. 
+We choose a completely non informative uniform prior distribution Beta(1,1) of $\pi$, assuming equal probabilities for all values of $\pi$ between 0 and 1. It is non-informative because it does not favor any specific value of $\pi$. In this case, the prior Beta(1,1) is not based on prior belief or expected vaccine efficacy. We also choose Beta(0.700102, 1) as the prior distribution of $\pi$. The prior distribution is chosen such that the mean is equal to 0.4118 ($\frac{1-0.3}{2-0.3}$) corresponding to expected vaccine efficacy 30%. The mean is higher than 30%, which means that Pfizer assigns a higher probability to indicate lower vaccine efficacy, so the prior used by Pfizer was pessimistic. Pfizer expressed a relatively low expectation for the vaccine's efficacy before observing the actual data. The chosen prior Beta(0.700102, 1) is informative to some extent because it assumes an expected vaccine efficacy of 30%. This implies that there is some prior belief or evidence to suggest a certain level of efficacy. 
 
 # References
 “Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
@@ -423,7 +422,6 @@ Polack, Fernando P., et al. “Safety and Efficacy of the BNT162b2 mRNA Covid-19
 # Appendix
 
 ## Detailed Calculation of $P(I)$ for 4.1.2
-
 \begin{align*}
 P(I) &= P(I\cap (V\cup V^c))=P((I\cap V)\cup(I\cap V^c))\\
 &=P(I \cap V) + P(I \cap V^c) -P((I \cap V)\cap(I \cap V^c))\qquad\mbox{by addition rule}\\
@@ -434,7 +432,6 @@ P(I) &= P(I\cap (V\cup V^c))=P((I\cap V)\cup(I\cap V^c))\\
 \end{align*}
 
 ## Representing $\psi$ using $\pi$ and representing $\pi$ using $\psi$ for 4.1.2
-
 The parameter of interest is vaccine efficacy $\psi$, that is 
 \begin{align*}
 \psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
