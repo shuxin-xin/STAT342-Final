@@ -81,17 +81,13 @@ We will utilize these approach in the non-parametric bootstrapping approach.
 
 2) Second, we can further reduce the problem to a one sample problem by conditioning on the number of total cases and making more assumptions:
 
-Let $S$ denote the total cases in two groups where $S=X+Y$ and let $T$ denotes the number of cases in vaccine group from $S$ total cases. 
+Let $S$ denote the total cases in two groups where $S=X+Y$ and let $T$ denotes the number of cases in vaccine group from $S$ total cases. Let $V$ denote the event that "being assigned to BNT162b2 group" and $I$ denote the event that "infections".
 
-Let $V$ denote the event that "being assigned to BNT162b2 group" and $I$ denote the event that "infections".
-
-Then, $P(V)$, the probability of subjects being assigned to the BNT162b2 group, is $\frac{n_1}{n_1+n_2}$. Then, by the rule of complement, $P(V^c)$, the probability of subjects being assigned to the placebo group, is $\frac{n_2}{n_1+n_2}$.
+Then, $P(V)$, the probability of subjects being assigned to the BNT162b2 group, is $\frac{n_1}{n_1+n_2}$. With rule of complement, $P(V^c)$, the probability of subjects being assigned to the placebo group, is $\frac{n_2}{n_1+n_2}$.
 
 Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= P(I \cap V) + P(I \cap V^c)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See full process in Appendix 8.1). 
 
-Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$.
-
-Since participants underwent randomization in the paper, every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(V|I)$. Now, let's find $\pi$:
+Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$. Since participants underwent randomization in the paper, every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(V|I)$. Now, let's find $\pi$:
 
 By Bayes’ rule, we know that $P(V|I) = \frac{P(I|V)P(V)}{P(I)}$
 
