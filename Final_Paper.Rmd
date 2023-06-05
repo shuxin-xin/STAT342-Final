@@ -73,9 +73,9 @@ Let $\pi_v$ and $\pi_p$ denote the probabilities of an infection in the vaccine 
 Since participants underwent randomization in the paper, every subject is independent of each other. With independence and infection probability $\pi_v$ and $\pi_p$ for the vaccine and placebo groups, a reasonable model that we can use for $X$ and $Y$ is $X \sim Binom(\pi_v, n_1 = 17411)$ and $Y \sim Binom(\pi_p, n_2 = 17511)$. 
 
 Then, the parameter of interest, which is the vaccine efficacy is:
-$\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{\pi_p - \pi_v}{\pi_p}$. Based on the data from table 1 above, we can easily calculated that $\pi_v = \frac{8}{17411}$, $\pi_p = \frac{162}{17511}$, and $\hat{\psi} = \frac{\pi_p - \pi_v}{\pi_p}=0.9503337$. That means the vaccine BNT162b2 can reduce risk of having COVID 19 by around 95\% compare to placebo.
+$\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{\pi_p - \pi_v}{\pi_p}$. Based on the data from table 1 above, we can easily calculated that $\hat{\pi_v} = \frac{8}{17411}$, $\hat{\pi_p} = \frac{162}{17511}$, and $\hat{\psi} = \frac{\hat{\pi_p} - \hat{\pi_v}}{\hat{\pi_p}}=0.9503337$. That means the vaccine BNT162b2 can reduce risk of having COVID 19 by around 95\% compare to placebo.
 
-We will utilize these approach in the non-parametric bootstrapping approach.
+We will utilize this approach in the non-parametric bootstrapping approach.
 
 2) Second, we can further reduce the problem to a one sample problem by conditioning on the number of total cases and making more assumptions:
 
@@ -399,19 +399,6 @@ Polack, Fernando P., et al. “Safety and Efficacy of the BNT162b2 mRNA Covid-19
 The True Death Toll of COVID-19: Estimating Global Excess Mortality. www.who.int/data/stories/the-true-death-toll-of-covid-19-estimating-global-excess-mortality.
 
 # Appendix
-
-## Our Data
-Based on the paper, we have the table:
-\begin{table}[h]
-\centering
-\caption{Vaccine Efficacy against Covid 19 at least 7 days after second dose in patients without evidence of infection}
-\begin{tabular}{cccc}
-Group & Cases & No. of subjects\\ \hline
-BNT162b2 & 8 & 17,411 \\
-Placebo & 162 & 17,511 \\ \hline
-Total & 170 & 34,922 \\ \hline
-\end{tabular}
-\end{table}
 
 ## Detailed Calculation of $P(I)$ for 4.1
 \begin{align*}
