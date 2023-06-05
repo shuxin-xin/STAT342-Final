@@ -66,7 +66,6 @@ Total & 170 & 34,922 \\ \hline
 
 ### Two Statistical Models and Their Corresponding Parameters and Assumptions
 To do appropriate inference, our three models are built on two different approaches: 1) the two binomial proportions approach and 2) the one-sample binomial approach.
-
 1) First, it's natural for us to treat the data into a two binomial proportions problem.
 
 Let $X$ denote the number of infection cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group and $Y$ denote the number of infection cases among $n_2 = 17511$ subjects assigned to the Placebo group.
@@ -86,9 +85,7 @@ Let $S$ denote the total cases in two groups where $S=X+Y$ and let $T$ denotes t
 
 Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= P(I \cap V) + P(I \cap V^c)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See full process in Appendix 8.1). 
 
-Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$.
-
-Since participants underwent randomization in the paper, every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(V|I)$. Now, let's find $\pi$:
+Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$. Since participants underwent randomization in the paper, every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(V|I)$. Now, let's find $\pi$:
 
 By Bayes’ rule, we know that $P(V|I) = \frac{P(I|V)P(V)}{P(I)}$
 
@@ -165,7 +162,7 @@ Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155627,
 ### Calculation of the Maximum Likelihood P-Value
 Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})]=121.6012$. (See full process in Appendix 8.4)
 
-By chapter 25.2, we know that under $H_0$ with large sample: $W\approx \chi^2_1$.
+We know that under $H_0$ with large sample: $W\approx \chi^2_1$.
 
 ```{r label="likelihood", include = FALSE, cache = TRUE}
 pchisq(q = 121.6012, df = 1, lower.tail = F)
@@ -177,7 +174,7 @@ Assuming $H_0$ is true, the P-value is the $P(W > 121.6012)$. We only consider $
 
 ### Prior Elicitation
 
-Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, meaning that $\pi = \frac{1-\psi}{2-\psi} = \frac{1-0.3}{2-0.3} = 0.4118$.
+Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, meaning that the expected value of $\pi$ is $\frac{1-\psi}{2-\psi} = \frac{1-0.3}{2-0.3} = 0.4118$.
 
 From 4.1.2 we know that $T\sim Binom(170, \pi)$ and we don't have explicit information about the prior. Thus, let's assume that $\pi$ follows beta distribution. Then, the expected value of $\pi$ is $E[\pi]=\frac{\alpha}{\alpha+\beta}$.
 
