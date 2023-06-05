@@ -196,11 +196,8 @@ Since large values of W provide evidence in the direction of the alternative, th
 ```{r label="likelihood", include = FALSE, cache = TRUE}
 pchisq(q = 121.6012, df = 1, lower.tail = F)
 ```
-<<<<<<< HEAD
-Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W > 121.6012) = P(\psi > 0.3) = 2.822313e\times 10^{-28}$, which is very small.
-=======
-Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W > 121.6012) = 2.822313e\times 10^{-28}$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$ instead. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
->>>>>>> 669e4b68e59317fd389da18a7dccb7e28887db23
+
+Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W > 121.6012) = P(\psi > 0.3) = 2.822313e\times 10^{-28}$.
 
 ## Bayesian
 
