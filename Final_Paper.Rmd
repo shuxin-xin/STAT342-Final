@@ -34,7 +34,7 @@ library(HDInterval)
 
 # Abstract
 
-The coronavirus disease 2019 (Covid-19) has afflicted tens of millions of people around the world. A total of 34,922 participants were randomly selected, while 8 out of 17,411 in the BNT162b2 group were infected and 162 out of 17,511 in the Placebo group were infected. This paper is about security and Effectiveness tests for BNT162b2 Vaccine by using three methods: Likelihood, Bayesian, and Bootstrapping. We use the Likelihood method to find the estimator that can maximize the probability function most $\psi$ and construct a 95\% confidence interval. Besides, we also use Bayesian and Bootstrapping methods to build 95\% credible intervals and confidence intervals respectively. We found that BNT162b2 Vaccine conferred approximately 94% protection against Covid-19 in persons 16 years of age or beyond.
+The coronavirus disease 2019 (COVID 19) has afflicted tens of millions of people around the world. A total of 34,922 participants were randomly selected, while 8 out of 17,411 in the BNT162b2 group were infected and 162 out of 17,511 in the Placebo group were infected. This paper is about security and Effectiveness tests for BNT162b2 Vaccine by using three methods: Likelihood, Bayesian, and Bootstrapping. We use the Likelihood method to find the estimator that can maximize the probability function most $\psi$ and construct a 95\% confidence interval. Besides, we also use Bayesian and Bootstrapping methods to build 95\% credible intervals and confidence intervals respectively. We found that BNT162b2 Vaccine conferred approximately 94% protection against Covid-19 in persons 16 years of age or beyond.
 
 # Keywords
 
