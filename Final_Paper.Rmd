@@ -48,21 +48,8 @@ Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
   BNT162b2 vaccine, the two-dose COVID 19 vaccine developed by Pfizer, has entered public's view. Based on the research provided by the article \textit{Safety and Efficacy of the BNT162b2 mRNA COVID 19 Vaccine} by Polack et al, \footnote{(Polack et al., “Safety and Efficacy of the BNT162b2 mRNA Covid-19 Vaccine”)} individuals aged 16 years or older were randomly divided into two groups to receive two doses of either a placebo or the BNT162b2 vaccine. Then, by analyzing the data of infection cases recorded from the article, we can use 3 statistical methods (likelihood, Bayesian, and bootstrapping) to test the BNT162b2 vaccine efficacy.
 
 # Statistical Method
-## Preprocessing
-### Our Data
-Based on the paper, we have the table:
-\begin{table}[h]
-\centering
-\caption{Vaccine Efficacy against Covid 19 at least 7 days after second dose in patients without evidence of infection}
-\begin{tabular}{cccc}
-Group & Cases & No. of subjects\\ \hline
-BNT162b2 & 8 & 17,411 \\
-Placebo & 162 & 17,511 \\ \hline
-Total & 170 & 34,922 \\ \hline
-\end{tabular}
-\end{table}
 
-### Two Statistical Models and Their Corresponding Parameters and Assumptions
+## Two Statistical Models and Their Corresponding Parameters and Assumptions
 To do appropriate inference, our three models are built on two different approaches: 1) the two binomial proportions approach and 2) the one-sample binomial approach.
 1) First, it's natural for us to treat the data into a two binomial proportions problem.
 
@@ -148,10 +135,10 @@ Since we only have one critical point and the second derivative of $\ell(\psi)$ 
 
 ### Calculation of the Maximum Likelihood Confidence Interval
 Since $n=170$, we know that under certain regularization, $\widehat{\psi_0^{mle}}$ is approximately normally distributed with mean $\psi_0$ and estimated standard error $\frac{1}{\sqrt{-\ell''(\widehat{\psi_0^{mle}})}}$. Plug in the value $\ell''(\widehat{\psi_0^{mle}})=-3126.12565702$, we have:
-$$SD[\widehat{\psi_0^{mle}}] = \frac{1}{\sqrt{-\ell''(\widehat{\psi_0^{mle}})}}=\frac{1}{\sqrt{3126.12565702}}=0.01788532$$
+$SD[\widehat{\psi_0^{mle}}] = \frac{1}{\sqrt{-\ell''(\widehat{\psi_0^{mle}})}}=\frac{1}{\sqrt{3126.12565702}}=0.01788532$
 
 Then, we can calculate the Wald confidence interval, which is: 
-$$\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=0.9506173 \pm 1.96 \times 0.01788532$$
+$\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=0.9506173 \pm 1.96 \times 0.01788532$
 Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155627, \: 0.9856719]$.
 
 ### Calculation of the Maximum Likelihood P-Value
@@ -188,7 +175,7 @@ interval <- qbeta(p = c(0.025,0.975), shape1=8.700102, shape2=163)
 ```
 
 Calculated by R, the 2.5% percentile of posterior distribution of $\pi$ is 0.02319402, and the 97.5% percentile of posterior distribution of $\pi$ is 0.08799074. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
-$$[\frac{1-2 \times 0.08799074}{1-0.08799074},\frac{1-2 \times 0.02319402}{1-0.02319402}] = [0.9035199, 0.9762552]$$
+$[\frac{1-2 \times 0.08799074}{1-0.08799074},\frac{1-2 \times 0.02319402}{1-0.02319402}] = [0.9035199, 0.9762552]$
 
 - Beta(1, 1) prior:
 
@@ -199,7 +186,7 @@ interval_uniform <- qbeta(p = c(0.025,0.975), shape1=9, shape2=163)
 ```
 
 Calculated by R, the 2.5% percentile of posterior distribution of $\pi$ is 0.02434818, and the 97.5% percentile of posterior distribution of $\pi$ is 0.092214. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
-$$[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.02434585}] = [0.9009794,0.9750466]$$
+$[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.02434585}] = [0.9009794,0.9750466]$
 
 We also plot the prior and posterior distributions for both of the approaches to see the difference:
 
@@ -241,7 +228,7 @@ p_a+p_b
 ### Calculation of the Bayesian P-value
 
 Since $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate posterior probability, that is:
-$$P(\psi_0 \leq 0.3|t) = P(\frac{1-2\pi_0}{1-\pi_0} \leq 0.3|t) = P(\pi_0 \geq 0.4117647|t)$$
+$P(\psi_0 \leq 0.3|t) = P(\frac{1-2\pi_0}{1-\pi_0} \leq 0.3|t) = P(\pi_0 \geq 0.4117647|t)$
 
 ```{r label="probability", echo=F, eval=F}
 post_prob_pi_non <- pbeta(q=0.4117647, shape1=9, shape2=163, lower.tail = F)
@@ -399,6 +386,20 @@ Polack, Fernando P., et al. “Safety and Efficacy of the BNT162b2 mRNA Covid-19
 The True Death Toll of COVID-19: Estimating Global Excess Mortality. www.who.int/data/stories/the-true-death-toll-of-covid-19-estimating-global-excess-mortality.
 
 # Appendix
+
+## Preprocessing
+### Our Data
+Based on the paper, we have the table:
+\begin{table}[h]
+\centering
+\caption{Vaccine Efficacy against Covid 19 at least 7 days after second dose in patients without evidence of infection}
+\begin{tabular}{cccc}
+Group & Cases & No. of subjects\\ \hline
+BNT162b2 & 8 & 17,411 \\
+Placebo & 162 & 17,511 \\ \hline
+Total & 170 & 34,922 \\ \hline
+\end{tabular}
+\end{table}
 
 ## Detailed Calculation of $P(I)$ for 4.1.2
 \begin{align*}
