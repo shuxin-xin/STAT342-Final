@@ -278,7 +278,7 @@ For prior Beta(1, 1), $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
 
 ### Examine sensitivity to the choice of prior distribution
 
-For prior Beta(0.700102, 1), the 95\% Bayesian credible interval width is approximately 0.0727. For prior Beta(1, 1), the 95\% Bayesian credible interval width is approximately 0.0741. We can see that the 95\% Bayesian credible interval for the Beta(1, 1) non-informative prior is slightly wider than that of Beta(0.700102, 1) prior. We can say that the non-informative prior has a larger range of possible values for $\psi_0$, which is vaccine efficacy, so the Beta(1, 1) non-informative prior has greater uncertainty, which has wider interval. Therefore, the choice of prior distribution will influence the width of the credible interval.
+For prior Beta(0.700102, 1), the 95\% Bayesian credible interval width is approximately 0.0727. For prior Beta(1, 1), the 95\% Bayesian credible interval width is approximately 0.0741. From the graph of prior and posterior above, we can find that the shapes of posterior distributions for different priors are slightly different. We can say that the 95\% Bayesian credible interval for the Beta(1, 1) non-informative prior is slightly wider than that of Beta(0.700102, 1) prior. We can suggest that the non-informative prior has a larger range of possible values for $\psi_0$, which is vaccine efficacy, so the Beta(1, 1) non-informative prior has greater uncertainty, which has wider interval. Therefore, the choice of prior distribution will influence the width of the credible interval.
 
 ## Non-parametric Bootstrap 
 ```{r label="bootstrap", include = FALSE, cache = TRUE, warning=F}
