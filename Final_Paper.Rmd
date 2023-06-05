@@ -130,10 +130,7 @@ calculate the $\ell(\psi)$.
 \ell(\psi) &= ln\left(\binom{170}{t} \cdot (\frac{1 - \psi}{2 - \psi})^{t} \cdot (\frac{1}{2 - \psi})^{170 - t}\right) \\
 &= ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)\qquad\mbox{for $0<\psi_0<1$}
 \end{align*}
-Here, to maximize $\psi$, we need to take the derivative of $\ell(\psi)$ with respect to $\psi$ and set it to 0 to find the critical point. We also need to take the second derivative of $\ell(\psi)$ with respect to $\psi$ to prove that the critical point we get from the first derivative is the global maximum. If we only have one critical point and the second
-derivative of $\ell(\psi)$ with respect to $\psi$ on that critical point is negative, that means the function $\ell(\psi)$ is always concave down and the critical point has the value of the global maximum for the function $\ell(\psi)$.
-
-Let's start with the first derivative:
+Here, to maximize $\psi$, let's start with the first derivative:
 \begin{align*}
 \frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} \left(ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)\right)=0 \\
 &= -\frac{t}{1 - \psi} + \frac{170}{2 - \psi} = 0 \\
@@ -206,7 +203,7 @@ $$[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.0
 
 We also plot the prior and posterior distributions for both of the approaches to see the difference:
 
-```{r label="graph", echo=F,fig.height=4, fig.width=9.5}
+```{r label="graph", echo=F,fig.height=3, fig.width=9.5}
 p_a <- ggplot()+
   geom_function(fun = dbeta,
                 args = list(shape1 = 0.700102,
@@ -318,7 +315,7 @@ p1 <- ggplot(data = non_sample_summary,
                  color = 'gray') +
   labs(title =  expression(paste("The Bootstrapped Sampling Distribution of ", 
        widehat(psi))),
-       subtitle = "n=10000",
+       subtitle = "B=10000",
        x = expression(widehat(psi)))
 
 p2 <- ggplot(data = non_sample_summary, 
@@ -326,7 +323,7 @@ p2 <- ggplot(data = non_sample_summary,
   stat_qq(distribution = qnorm) + 
   stat_qq_line(distribution = qnorm) + 
   labs(title = "Normal Probability Plot of Bootstrapped Distribution",
-       subtitle = "n=10000",
+       subtitle = "B=10000",
        x = "theoretical",
        y = "sample")
 p1+p2
@@ -338,7 +335,7 @@ upper_ci <- quantile(non_sample_summary$sample_psi_hat, 1 - a/2)
 non_p_value <- sum(non_sample_summary$sample_psi_hat < h_0_psi) / B
 ```
 
-```{r echo = FALSE, warning=F,fig.height=4, fig.width=9.5}
+```{r echo = FALSE, warning=F,fig.height=3, fig.width=9.5}
 p1+p2
 ```
 
