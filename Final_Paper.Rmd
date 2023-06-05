@@ -124,7 +124,7 @@ Then, indexed by a parameter $\psi$ with true value $\psi_0$ the likelihood func
 \begin{align*}
 L(\psi) &= \binom{170}{t} \cdot \left(\frac{1 - \psi}{2 - \psi}\right)^{t} \cdot \left(\frac{1}{2 - \psi}\right)^{170 - t}\qquad\mbox{for $0<\psi<1$}
 \end{align*}
-Since the $\psi$ that maximizes $L(\psi)$ also maximizes $\ell(\psi) = lnL(\psi)$, and $\ell(\psi)$ is much easier to work with, let’s
+Since the $\psi$ that maximizes $L(\psi)$ also maximizes $\ell(\psi) = ln(L(\psi))$, and $\ell(\psi)$ is much easier to work with, let’s
 calculate the $\ell(\psi)$.
 \begin{align*}
 \ell(\psi) &= ln\left(\binom{170}{t} \cdot (\frac{1 - \psi}{2 - \psi})^{t} \cdot (\frac{1}{2 - \psi})^{170 - t}\right) \\
