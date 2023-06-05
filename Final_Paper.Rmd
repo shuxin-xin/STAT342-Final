@@ -34,8 +34,7 @@ library(HDInterval)
 
 # Abstract 
 
-COVID 19 has afflicted tens of millions of people around the world. In this paper, we utilize the data from the article "Safety and Efficacy of the BNT162b2 mRNA COVID 19 Vaccine", aiming to figure out whether the BNT162b2 vaccine pass the FDA's requirement that the new vaccine should be at least 30\% efficacy using three methods: Maximum Likelihood, Bayesian, and Bootstrapping. The results from the three approaches are consistent that BNT162b2 was 95% effective in preventing COVID 19 (95% confidence interval in Maximum Likelihood, 91.6% to 98.6%; 95% credible interval in Baysian, 90.3% to 97.6% for prior Beta(0.700102, 1); 95% credible interval in Baysian, 90.1% to 97.5% for prior Beta(1, 1); 95% confidence interval in Bootstrapping, 90.9% to 98.2%). Then, we conclude that the true vaccine efficacy is greater than 30% and with overlapped 95% interval [0.9155627, 0.9750466].
-
+COVID 19 has afflicted tens of millions of people around the world. In this paper, we utilize the data from the article "Safety and Efficacy of the BNT162b2 mRNA COVID 19 Vaccine", aiming to figure out whether the BNT162b2 vaccine passes the FDA's requirement that the new vaccine should be at least 30\% efficacy using three methods: Maximum Likelihood, Bayesian, and Bootstrapping. The results of the three methods are consistent in that the 95% confidence intervals or 95% confidence intervals for the three methods are highly overlapping and all provide sufficient evidence that true vaccine efficacy is greater than 30%.
 
 # Keywords
 
