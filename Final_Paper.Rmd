@@ -82,11 +82,7 @@ We will utilize these approach in the non-parametric bootstrapping approach.
 
 2) Second, we can further reduce the problem to a one sample problem by conditioning on the number of total cases and making more assumptions:
 
-Let $S$ denote the total cases in two groups where $S=X+Y$ and let $T$ denotes the number of cases in vaccine group from $S$ total cases. 
-
-Let $V$ denote the event that "being assigned to BNT162b2 group" and $I$ denote the event that "infections".
-
-Then, $P(V)$, the probability of subjects being assigned to the BNT162b2 group, is $\frac{n_1}{n_1+n_2}$. Then, by the rule of complement, $P(V^c)$, the probability of subjects being assigned to the placebo group, is $\frac{n_2}{n_1+n_2}$.
+Let $S$ denote the total cases in two groups where $S=X+Y$ and let $T$ denotes the number of cases in vaccine group from $S$ total cases. And Let $V$ denote the event that "being assigned to BNT162b2 group" and $I$ denote the event that "infections". Then, $P(V)$, the probability of subjects being assigned to the BNT162b2 group, is $\frac{n_1}{n_1+n_2}$. Then, by the rule of complement, $P(V^c)$, the probability of subjects being assigned to the placebo group, is $\frac{n_2}{n_1+n_2}$.
 
 Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= P(I \cap V) + P(I \cap V^c)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See full process in Appendix 8.1). 
 
@@ -104,9 +100,7 @@ $\pi = P(V|I) = \frac{P(I|V)P(V)}{P(I)} = \frac{\pi_v \cdot \frac{n_1}{n_1+n_2}}
 By table 1, we know that $n_1=17411$ and $n_2=17511$. Since $n_1 \approx n2$, we can say that the randomization is 1:1 and further approximate $\pi$ as $\pi = \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}= \frac{n_1\pi_v}{n_1\pi_v+n_1\pi_p}= \frac{n_1\pi_v}{n_1(\pi_v+\pi_p)}= \frac{\pi_v}{\pi_v+\pi_p}$.
 
 Then, the parameter of interest, which is the vaccine efficacy represented by $\pi$ is:
-$\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$.
-
-At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$. (See process in Appendix 8.2)
+$\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$. At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$. (See process in Appendix 8.2)
 
 Based on the data from table 1, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$. And we will utilize these approach in the Maximum Likelihood and Bayesian approach.
 
@@ -156,14 +150,12 @@ Thus, $\frac{170 - 2t}{170 - t}$ is a candidate for MLE for $\psi_0$. To check w
 &= \frac{-t}{(1 - \psi)^{2}} + \frac{170}{(2 - \psi)^{2}} \\
 &= \frac{-t\cdot (2 - \psi)^{2} + 170 \cdot (1 - \psi)^{2}}{(1 - \psi)^{2} \cdot (2 - \psi)^{2}}
 \end{align*}
-From Table 1, given that 8 cases in Vaccine group, we know that $t=8$, then $\psi = \frac{170 - 2\cdot 8}{170 - 8}=0.9506173$. Then, $\ell''(\psi)=\frac{-8\cdot (2 - 0.9506173)^{2} + 170 \cdot (1 - 0.9506173)^{2}}{(1 - 0.9506173)^{2} \cdot (2 - 0.9506173)^{2}}=-3126.12565702$.
+From Table 1, given that 8 cases in Vaccine group, we know that $t=8$, then $\psi = \frac{170 - 2\cdot 8}{170 - 8}=0.9506173$. Then, $\ell''(\psi)=\frac{-8\cdot (2 - 0.9506173)^{2} + 170 \cdot (1 - 0.9506173)^{2}}{(1 - 0.9506173)^{2} \cdot (2 - 0.9506173)^{2}}=-3126.12565702 < 0$.
 
 Since we only have one critical point and the second derivative of $\ell(\psi)$ with respect to $\psi$ on that critical point is negative, we can say that the function $\ell(\psi)$ is always concave down and the critical point, $\psi = \frac{170 - 2t}{170 - t}=0.9506173$ is the global maximum of $\ell(\psi)$. Therefore, $\widehat{\psi_0^{mle}} = 0.9506173$ is a MLE for $\psi$. 
 
 ### Calculation of the Maximum Likelihood Confidence Interval
-Since $n=170$, we know that under certain regularization, $\widehat{\psi_0^{mle}}$ is approximately normally distributed with mean $\psi_0$ and estimated standard error $\frac{1}{\sqrt{-\ell''(\widehat{\psi_0^{mle}})}}$
-
-Plug in the value $\ell''(\widehat{\psi_0^{mle}})=-3126.12565702$, we have:
+Since $n=170$, we know that under certain regularization, $\widehat{\psi_0^{mle}}$ is approximately normally distributed with mean $\psi_0$ and estimated standard error $\frac{1}{\sqrt{-\ell''(\widehat{\psi_0^{mle}})}}$. Plug in the value $\ell''(\widehat{\psi_0^{mle}})=-3126.12565702$, we have:
 $$SD[\widehat{\psi_0^{mle}}] = \frac{1}{\sqrt{-\ell''(\widehat{\psi_0^{mle}})}}=\frac{1}{\sqrt{3126.12565702}}=0.01788532$$
 
 Then, we can calculate the Wald confidence interval, which is: 
