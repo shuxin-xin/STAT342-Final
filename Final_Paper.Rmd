@@ -204,25 +204,23 @@ Then, to find the confidence interval, we have:
 Because the null hypothesis is $\psi^{null} = \frac{1 - 2\pi}{1 - \pi} = 0.3$ and $\widehat{\psi_0^{mle}} = 0.9506173$.
 
 \begin{align*}
-W &= 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})] \\
-&= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi_0^{mle}}) - ln(2 - \widehat{\psi_0^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi_0^{mle}}) - \\
+W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
+&= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi^{mle}}) - \\
 & \quad (ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi^{null}) - ln(2 - \psi^{null})) + (t - 170) \cdot ln(2 - \psi^{null}))] \\
-&= 2[t \cdot ((ln(1 - \widehat{\psi_0^{mle}}) - ln(2 - \widehat{\psi_0^{mle}})) - (ln(1 - \psi^{null}) + ln(2 - \psi^{null}))) \\
-& \quad + (t - 170) \cdot (ln(2 - \widehat{\psi_0^{mle}})-ln(2 - \psi^{null}))] \\
-&= 2[t \cdot (ln(0.0493827) - ln(1.0493827) - ln(0.7) - ln(1.7)) + (t - 170) \cdot (ln(1.0493827)-ln(1.7))] \\
-&= 2[t \cdot -3.230311 + (t - 170) \cdot -0.4824262] \\
-\text{Given $t = 8$: } &= 2[8 \cdot -3.230311 + (-164) \cdot -0.4824262] \\
-&= 2[8 \cdot -3.230311 + (-164) \cdot -0.4824262] \\
-&= 106.5508 \\
+&= 2[t \cdot ((ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) - (ln(1 - \psi^{null}) + ln(2 - \psi^{null}))) \\
+& \quad + (t - 170) \cdot (ln(2 - \widehat{\psi^{mle}})-ln(2 - \psi^{null}))] \\
+&= 2[8 \cdot (ln(1 - 0.9506173) - ln(2 - 0.9506173)) + (8 - 170) * ln(2 - 0.9506173) \\
+& \quad - (8 * (ln(1 - 0.3) - ln(2 - 0.3)) + (8 - 170) * ln(2 - 0.3))] \\
+&= 121.6012 \\
 \end{align*}
 
 Since large level of $W$ provide evidence in the direction of alternative, the p-value is the right tail probability from the chisquare distribution.
 
 ```{r label="likelihood", include = FALSE, cache = TRUE}
-pchisq(q = 106.5508, df = 1, lower.tail = F)
+pchisq(q = 121.6012, df = 1, lower.tail = F)
 ```
 
-Because at $t = 8$, we have $W = 106.5508$, and because the P-value for $P(W < 106.5508) = 5.584252\times 10^{-25}$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
+Because at $t = 8$, we have $W = 106.5508$, and because the P-value for $P(W < 121.6012) = 2.822313e\times 10^{-28}$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
 
 ## Bayesian
 
@@ -627,14 +625,12 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 1\\ \hline
   
   The third method is Non-parametric Bootstrapping. By generating 10000 bootstrapped estimation of $\psi_0$, we can construct a 95% confidence interval: [0.9097410, 0.9819328].
   
-  Based on table provided above, we can see the p-value for all three analysis methods are all 1.
-For the likelihood method, we calculate the p-value $P(W > 106.5508) = 1$, therefore,
+  Based on table provided above, we can see the p-value for all three analysis methods are all 1. For the likelihood method and also the Bootstrapping method, we calculate the p-value $P(W < 106.5508) = 1.478737 \times 10^{-24}$ and empirical p-value $P(N0.\hat{\psi} < 0.3) = 0$ respectively. Moreover, the p-value for Bayesian posterior probability is $P(\psi_0 \leq 0.3|t)= 1.96 \times 10^{-28}$. Therefore, we have enough evidence to reject the null hypothesis. That is the efficiency of the vaccine is larger than 30\%.
   
 
 # Discussion/Conclusion
 
-  In conclusion, we con conclude that our 95\% confidence interval 
-
+  In conclusion, the findings from the three analysis methods (Maximum Likelihood, Bayesian, and non-parametric bootstrapping) are consistent, indicating a high efficacy of the BNT162b2 vaccine.  
 
 # References
 “Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
