@@ -81,7 +81,7 @@ We will utilize these approach in the non-parametric bootstrapping approach.
 
 Let $S$ denote the total cases in two groups where $S=X+Y$ and let $T$ denotes the number of cases in vaccine group from $S$ total cases. And Let $V$ denote the event that "being assigned to BNT162b2 group" and $I$ denote the event that "infections". Then, $P(V)$, the probability of subjects being assigned to the BNT162b2 group, is $\frac{n_1}{n_1+n_2}$. Then, by the rule of complement, $P(V^c)$, the probability of subjects being assigned to the placebo group, is $\frac{n_2}{n_1+n_2}$.
 
-Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= P(I \cap V) + P(I \cap V^c)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See full process in Appendix 8.2). 
+Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= P(I \cap V) + P(I \cap V^c)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See full process in Appendix 8.1). 
 
 Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$. Since participants underwent randomization in the paper, every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(V|I)$. Now, let's find $\pi$:
 
@@ -95,7 +95,7 @@ $\pi = P(V|I) = \frac{P(I|V)P(V)}{P(I)} = \frac{\pi_v \cdot \frac{n_1}{n_1+n_2}}
 By table 1, we know that $n_1=17411$ and $n_2=17511$. Since $n_1 \approx n2$, we can say that the randomization is 1:1 and further approximate $\pi$ as $\pi = \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}= \frac{n_1\pi_v}{n_1\pi_v+n_1\pi_p}= \frac{n_1\pi_v}{n_1(\pi_v+\pi_p)}= \frac{\pi_v}{\pi_v+\pi_p}$.
 
 Then, the parameter of interest, which is the vaccine efficacy represented by $\pi$ is:
-$\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$. At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$. (See process in Appendix 8.3)
+$\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$. At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$. (See process in Appendix 8.2)
 
 Based on the data from table 1, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$. And we will utilize these approach in the Maximum Likelihood and Bayesian approach.
 
@@ -134,7 +134,7 @@ Here, to maximize $\psi$, let's start with the first derivative:
 \begin{align*}
 \frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} \left(ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)\right)=0 \\
 &= -\frac{t}{1 - \psi} + \frac{170}{2 - \psi} = 0 \\
-\psi &= \frac{170 - 2t}{170 - t} \qquad \text{(See full process in Appendix 8.4)}
+\psi &= \frac{170 - 2t}{170 - t} \qquad \text{(See full process in Appendix 8.3)}
 \end{align*}
 Thus, $\frac{170 - 2t}{170 - t}$ is a candidate for MLE for $\psi_0$. To check whether this candidate is a maximum value, we need to calculate the second derivative test:
 \begin{align*}
@@ -155,7 +155,7 @@ $\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=0.9506173 \pm 1.96 \
 Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155627, \: 0.9856719]$.
 
 ### Calculation of the Maximum Likelihood P-Value
-Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})]=121.6012$. (See full process in Appendix 8.5)
+Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})]=121.6012$. (See full process in Appendix 8.4)
 
 We know that under $H_0$ with large sample: $W\approx \chi^2_1$.
 
@@ -173,7 +173,7 @@ Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, m
 
 From 4.1.2 we know that $T\sim Binom(170, \pi)$ and we don't have explicit information about the prior. Thus, let's assume that $\pi$ follows beta distribution. Then, the expected value of $\pi$ is $E[\pi]=\frac{\alpha}{\alpha+\beta}$.
 
-In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $\alpha$ in this case. Let $\beta = 1$, then, $\alpha =  0.700102$ (See full process in Appendix 8.6).
+In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $\alpha$ in this case. Let $\beta = 1$, then, $\alpha =  0.700102$ (See full process in Appendix 8.5).
 
 Therefore, the a proper prior of $\pi$ is: $g(\pi_0) = Beta(0.700102, 1)$. However, this prior may be informative to the posterior because we assume the prior of $\pi$ is a Beta distribution. Therefore, we also choose a completely non informative uniform prior distribution of $\pi$, that is $g(\pi_0) = Beta(1,1)$ because The $Beta(1, 1)$ distribution is symmetric around its center (0.5, 0.5) and assigns equal probability to all values between 0 and 1.
 
@@ -400,20 +400,7 @@ The True Death Toll of COVID-19: Estimating Global Excess Mortality. www.who.int
 
 # Appendix
 
-## Our Data
-Based on the paper, we have the table:
-\begin{table}[h]
-\centering
-\caption{Vaccine Efficacy against Covid 19 at least 7 days after second dose in patients without evidence of infection}
-\begin{tabular}{cccc}
-Group & Cases & No. of subjects\\ \hline
-BNT162b2 & 8 & 17,411 \\
-Placebo & 162 & 17,511 \\ \hline
-Total & 170 & 34,922 \\ \hline
-\end{tabular}
-\end{table}
-
-## Detailed Calculation of $P(I)$ for 4.1
+## Detailed Calculation of $P(I)$ for 4.2
 \begin{align*}
 P(I) &= P(I\cap (V\cup V^c))=P((I\cap V)\cup(I\cap V^c))\\
 &=P(I \cap V) + P(I \cap V^c) -P((I \cap V)\cap(I \cap V^c))\qquad\mbox{by addition rule}\\
@@ -423,7 +410,7 @@ P(I) &= P(I\cap (V\cup V^c))=P((I\cap V)\cup(I\cap V^c))\\
 &= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}
 \end{align*}
 
-## Representing $\psi$ using $\pi$ and representing $\pi$ using $\psi$ for 4.1
+## Representing $\psi$ using $\pi$ and representing $\pi$ using $\psi$ for 4.2
 The parameter of interest is vaccine efficacy $\psi$, that is 
 \begin{align*}
 \psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
@@ -448,7 +435,7 @@ Then, we have $\psi = 1-\frac{\pi}{1-\pi}=\frac{1-2\pi}{1-\pi}$ and
 \pi &= \frac{1 - \psi}{2-\psi}
 \end{align*}
 
-## Detailed Calculation of the first derivative of $\ell(\psi)$ for 4.3.1
+## Detailed Calculation of the first derivative of $\ell(\psi)$ for 4.4.1
 \begin{align*}
 \frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} \left(ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)\right)=0 \\
 &= -\frac{t}{1 - \psi} + \frac{t}{2 - \psi} - \frac{t - 170}{2 - \psi}=0 \\
@@ -458,7 +445,7 @@ Then, we have $\psi = 1-\frac{\pi}{1-\pi}=\frac{1-2\pi}{1-\pi}$ and
 \psi &= \frac{170 - 2t}{170 - t}
 \end{align*}
 
-## Detailed Calculation of W for 4.3.3
+## Detailed Calculation of W for 4.4.3
 \begin{align*}
 W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 &= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi^{mle}}) - \\
@@ -468,7 +455,7 @@ W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 &= 121.6012 
 \end{align*}
 
-## Detailed Calculation of $\alpha$ for 4.3.1
+## Detailed Calculation of $\alpha$ for 4.5.1
 
 \begin{align*}
 \frac{\alpha}{\alpha+1} &= 0.4118 \\
