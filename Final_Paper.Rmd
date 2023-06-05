@@ -81,7 +81,7 @@ Since participants underwent randomization in the paper, every subject is indepe
 Then, the parameter of interest, which is the vaccine efficacy is:
 $\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{\pi_p - \pi_v}{\pi_p}$
 
-Based on the data from the table above, we can easily calculated that $\pi_v = \frac{8}{17411}$, $\pi_p = \frac{162}{17511}$, and $\hat{\psi} = \frac{\pi_p - \pi_v}{\pi_p}=0.9503337$.
+Based on the data from table 1 above, we can easily calculated that $\pi_v = \frac{8}{17411}$, $\pi_p = \frac{162}{17511}$, and $\hat{\psi} = \frac{\pi_p - \pi_v}{\pi_p}=0.9503337$.
 
 That means the vaccine BNT162b2 can reduce risk of having COVID 19 by around 95\% compare to placebo.
 
@@ -115,14 +115,14 @@ where $P(I|V)$ represents the probability of infections given that being assigne
 Then, by definition of conditional probability, we can calculate $\pi = P(V|I)$ as follows:
 $\pi = P(V|I) = \frac{P(I|V)P(V)}{P(I)} = \frac{\pi_v \cdot \frac{n_1}{n_1+n_2}}{\frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}} = \frac{n_1\pi_v}{n_1+n_2} \cdot \frac{n_1+n_2}{n_1 \pi_v + n_2 \pi_p} = \frac{n_1\pi_v}{n_1 \pi_v + n_2 \pi_p}$
 
-By the table, we know that $n_1=17411$ and $n_2=17511$. Since $n_1 \approx n2$, we can say that the randomization is 1:1 and further approximate $\pi$ as $\pi = \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}= \frac{n_1\pi_v}{n_1\pi_v+n_1\pi_p}= \frac{n_1\pi_v}{n_1(\pi_v+\pi_p)}= \frac{\pi_v}{\pi_v+\pi_p}$.
+By table 1, we know that $n_1=17411$ and $n_2=17511$. Since $n_1 \approx n2$, we can say that the randomization is 1:1 and further approximate $\pi$ as $\pi = \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}= \frac{n_1\pi_v}{n_1\pi_v+n_1\pi_p}= \frac{n_1\pi_v}{n_1(\pi_v+\pi_p)}= \frac{\pi_v}{\pi_v+\pi_p}$.
 
 Then, the parameter of interest, which is the vaccine efficacy represented by $\pi$ is:
 $\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$.
 
 At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$.
 
-Based on the data from the table, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$ where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
+Based on the data from table 1, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$ where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
 
 We will utilize these approach in the Maximum Likelihood and Bayesian approach.
 
@@ -160,10 +160,7 @@ derivative of $\ell(\psi)$ with respect to $\psi$ on that critical point is nega
 Let's start with the first derivative:
 \begin{align*}
 \frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} \left(ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)\right)=0 \\
-&= -\frac{t}{1 - \psi} + \frac{t}{2 - \psi} - \frac{t - 170}{2 - \psi}=0 \\
 &= -\frac{t}{1 - \psi} + \frac{170}{2 - \psi} = 0 \\
-170 - 170 \cdot \psi &= 2t - t \cdot \psi \\
-(170 - t) \cdot \psi &= 170 - 2t \\
 \psi &= \frac{170 - 2t}{170 - t}
 \end{align*}
 Thus, $\frac{170 - 2t}{170 - t}$ is a candidate for MLE for $\psi_0$. To check whether this candidate is a maximum value, we need to calculate the second derivative test:
@@ -187,15 +184,7 @@ Then, we can calculate the Wald confidence interval, which is:
 $$\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=\widehat{\psi_0^{mle}} \pm Z_{\alpha/2}=0.9506173 \pm 1.96 \times 0.01788532$$
 Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155621, \: 0.9856725]$.
 
-Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to:
-\begin{align*}
-W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
-&= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi^{mle}}) - \\
-& \quad (ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi^{null}) - ln(2 - \psi^{null})) + (t - 170) \cdot ln(2 - \psi^{null}))] \\
-&= 2[8(ln(1 - 0.9506173) - ln(2 - 0.9506173)) + (8 - 170)ln(2 - 0.9506173)\\
-& \quad-(8 (ln(1 - 0.3) - ln(2 - 0.3)) + (8 - 170) ln(2 - 0.3))] \\
-&= 121.6012 
-\end{align*}
+Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})]=121.6012$.
 
 By chapter 25.2, we know that under $H_0$ with large sample: $W\approx \chi^2_1$.
 
@@ -382,7 +371,7 @@ p1+p2
 
 Calculated by the R, the 95% simple bootstrap confidence interval for the true value of the vaccine efficacy $\psi_0$ is (`r lower_ci`, `r upper_ci`). That is, we are 95% confident that the true value of the vaccine efficacy $\psi_0$ is between `r lower_ci` and `r upper_ci`. 
 
-Since we used the simple quantile method without any assumptions, we calculated the empirical p-value. Here, since all of the samples' vaccine efficacy are greater than the $\psi_0=0.3$ in the null hypothesis and our alternative hypothesis is that $\psi_0>0.3$, then there is no chance of observing a test statistic as extreme or more extreme than the one observed under the null hypothesis, resulting in the empirical p-value to be 0.  
+Since we used the simple quantile method without any assumptions, we calculated the empirical p-value. Here, since all of the samples' vaccine efficacy are greater than the $\psi_0=0.3$ in the null hypothesis and our alternative hypothesis is that $\psi_0>0.3$, then there is no chance of observing a test statistic as extreme or more extreme than the one observed under the null hypothesis, resulting in the empirical p-value to be 0. Therefore, it’s impossible that when $H_0$ is true, do we see the the vaccine efficacy or more extreme. Since 0 is smaller than any possible alpha value, we to reject the null hypothesis and conclude that the true $\psi_0>0.3$. Therefore, the vaccine efficacy of BNT162b2 is larger than 30%.
 
 # Results
 
@@ -431,10 +420,12 @@ Polack, Fernando P., et al. “Safety and Efficacy of the BNT162b2 mRNA Covid-19
 
 # Appendix
 
+## 4.1.2 Representing $\psi$ using $\pi$ and representing $\pi$ using $\psi$
+
 The parameter of interest is vaccine efficacy $\psi$, that is 
 \begin{align*}
 \psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
-&= 1 - \frac{\pi_v}{\pi_p} \\
+&= 1 - \frac{\pi_v}{\pi_p}
 \end{align*}
 Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
 \begin{align*}
@@ -445,14 +436,42 @@ Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
 \pi \pi_p &= \pi_v (1 - \pi) \\
 \frac{\pi_v}{\pi_p} &= \frac{\pi}{1-\pi}
 \end{align*}
-- (we can put these steps in the appendix)
+Then, we have $\psi = 1-\frac{\pi}{1-\pi}=\frac{1-2\pi}{1-\pi}$ and 
+\begin{align*}
+\psi &= \frac{1-2\pi}{1-\pi} \\
+\psi (1-\pi) &= 1-2\pi \\
+\psi - \psi \pi &= 1-2\pi \\
+2\pi - \psi \pi &= 1 - \psi \\
+\pi(2-\psi)  &= 1 - \psi \\
+\pi &= \frac{1 - \psi}{2-\psi}
+\end{align*}
 
-## Code for Likelihood
+## 4.2 Detailed Calculation of the first derivative of $\ell(\psi)$
+\begin{align*}
+\frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} \left(ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)\right)=0 \\
+&= -\frac{t}{1 - \psi} + \frac{t}{2 - \psi} - \frac{t - 170}{2 - \psi}=0 \\
+&= -\frac{t}{1 - \psi} + \frac{170}{2 - \psi} = 0 \\
+170 - 170 \cdot \psi &= 2t - t \cdot \psi \\
+(170 - t) \cdot \psi &= 170 - 2t \\
+\psi &= \frac{170 - 2t}{170 - t}
+\end{align*}
+
+## 4.2 Detailed Calculation of W
+\begin{align*}
+W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
+&= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi^{mle}}) - \\
+& \quad (ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi^{null}) - ln(2 - \psi^{null})) + (t - 170) \cdot ln(2 - \psi^{null}))] \\
+&= 2[8(ln(1 - 0.9506173) - ln(2 - 0.9506173)) + (8 - 170)ln(2 - 0.9506173)\\
+& \quad-(8 (ln(1 - 0.3) - ln(2 - 0.3)) + (8 - 170) ln(2 - 0.3))] \\
+&= 121.6012 
+\end{align*}
+
+## 4.2 Code for Likelihood
 ```{r ref.label="likelihood", echo = TRUE, eval = F}
 
 ```
 
-## Code for Bayesian
+## 4.3 Code for Bayesian
 ```{r ref.label="interval_prior_1", echo = TRUE, eval = F}
 
 ```
@@ -473,7 +492,7 @@ Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
 
 ```
 
-## Code for Bootstrap
+## 4.4 Code for Bootstrap
 ```{r ref.label="bootstrap", echo = TRUE, eval = F}
 
 ```
