@@ -630,7 +630,7 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 1\\ \hline
 
 # Discussion/Conclusion
 
-  In conclusion, the findings from the three analysis methods (Maximum Likelihood, Bayesian, and non-parametric bootstrapping) are consistent, indicating a high efficacy of the BNT162b2 vaccine.  
+  Under regularity conditions, the likelihood estimates converge to the true parameter values as the sample size increases. This property ensures that the likelihood method produces consistent estimates. Bayesian... Bootstrapping...  In conclusion, the findings from the three analysis methods (Maximum Likelihood, Bayesian, and non-parametric bootstrapping) are consistent, indicating a high efficacy of the BNT162b2 vaccine.
 
 # References
 “Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
