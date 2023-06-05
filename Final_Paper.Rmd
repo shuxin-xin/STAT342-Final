@@ -91,7 +91,7 @@ Let $V$ denote the event that "being assigned to BNT162b2 group" and $I$ denote 
 
 Then, $P(V)$, the probability of subjects being assigned to the BNT162b2 group, is $\frac{n_1}{n_1+n_2}$. Then, by the rule of complement, $P(V^c)$, the probability of subjects being assigned to the placebo group, is $\frac{n_2}{n_1+n_2}$.
 
-Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See process in Appendix 8.). 
+Then, by distributive laws, $P(I)$, the probability of infections, is: $P(I)= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See full process in Appendix 8.1). 
 
 Let $\pi$ denote the probability of a subject with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$.
 
@@ -109,7 +109,7 @@ By table 1, we know that $n_1=17411$ and $n_2=17511$. Since $n_1 \approx n2$, we
 Then, the parameter of interest, which is the vaccine efficacy represented by $\pi$ is:
 $\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$.
 
-At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$. (See process in Appendix 8.1)
+At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$. (See process in Appendix 8.2)
 
 Based on the data from table 1, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$ where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
 
@@ -152,7 +152,7 @@ Let's start with the first derivative:
 \begin{align*}
 \frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} \left(ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)\right)=0 \\
 &= -\frac{t}{1 - \psi} + \frac{170}{2 - \psi} = 0 \\
-\psi &= \frac{170 - 2t}{170 - t} \qquad \text{(See full process in Appendix 8.2)}
+\psi &= \frac{170 - 2t}{170 - t} \qquad \text{(See full process in Appendix 8.3)}
 \end{align*}
 Thus, $\frac{170 - 2t}{170 - t}$ is a candidate for MLE for $\psi_0$. To check whether this candidate is a maximum value, we need to calculate the second derivative test:
 \begin{align*}
@@ -177,7 +177,7 @@ $$\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=0.9506173 \pm 1.96 
 Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155627, \: 0.9856719]$.
 
 ### Calculation of the Maximum Likelihood P-Value
-Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})]=121.6012$. (See process in Appendix 8.3)
+Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})]=121.6012$. (See full process in Appendix 8.4)
 
 By chapter 25.2, we know that under $H_0$ with large sample: $W\approx \chi^2_1$.
 
@@ -196,7 +196,7 @@ Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, m
 
 From 4.1.2 we know that $T\sim Binom(170, \pi)$ and we don't have explicit information about the prior. Thus, let's assume that $\pi$ follows beta distribution. Then, the expected value of $\pi$ is $E[\pi]=\frac{\alpha}{\alpha+\beta}$.
 
-In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $alpha$ in this case. Let $\beta = 1$, then, $\alpha =  0.700102$ (See the ).
+In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $alpha$ in this case. Let $\beta = 1$, then, $\alpha =  0.700102$ (See full process in Appendix 8.5).
 
 Therefore, the a proper prior of $\pi$ is: $g(\pi_0) = Beta(0.700102, 1)$. However, this prior may be informative to the posterior because we assume the prior of $\pi$ is a Beta distribution. Therefore, we also choose a completely non informative uniform prior distribution of $\pi$, that is $g(\pi_0) = Beta(1,1)$ because The $Beta(1, 1)$ distribution is symmetric around its center (0.5, 0.5) and assigns equal probability to all values between 0 and 1.
 
@@ -375,7 +375,7 @@ Since we used the simple quantile method without any assumptions, we calculated 
 Approach & Lower Bound & Upper Bound & p-value \\ \hline
 Maximum Likelihood (ConfI) & 0.9155627 & 0.9856719 & 2.822313×$10^{-28}$  \\ \hline
 Bayesian prior Beta(0.700102, 1) (CredI) &  0.9035199 & 0.9762552 & 1.96x$10^{-28}$ \\ \hline
-Bayesian Prior Beta(1, 1) (CredI) & 0.9009794 & 0.9750466 & 3.73$10^{-28}$ \\ \hline
+Bayesian Prior Beta(1, 1) (CredI) & 0.9009794 & 0.9750466 & 3.73x$10^{-28}$ \\ \hline
 Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hline
 \end{tabular}
 \end{table}
