@@ -384,11 +384,7 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
 
   In this study, we have only around 0.05\% of infection cases in the BNT162b2 vaccine group (treatment group) while we have around 0.93\% of infection cases in the placebo group (control group). Based on our data, the BNT162b2 vaccine efficacy is around 95.03\%, which pass the rule of at least 30\% efficacy for a new therapy to be approved. 
   
-<<<<<<< HEAD
   In the Likelihood method, the vaccine efficacy in the combined maximum likelihood estimator is around 95.06\%. The corresponding 95\% confidence interval for the BNT162b2 vaccine efficacy is [0.9155621, 0.9856725]. The likelihood ratio test statistic $W$ is 121.6012. The P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $2.822313 \times 10^{-28}$, which is smaller than any common alpha.
-=======
-  In the Likelihood method, the vaccine efficacy in the combined maximum likelihood estimator is around 95.06\%. The corresponding 95\% confidence interval for the BNT162b2 vaccine efficacy is [0.9155627, 0.9856719]. The likelihood ratio test statistic $W$ is 121.6012. The P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $2.822313e\times 10^{-28}$, which is smaller than any common alpha.
->>>>>>> b6978978f42e6409fda91777073c9ff087697dba
   
   Then, in the Bayesian analysis, based on the given information, the prior distribution of the infection rate in vaccine group among all cases, that is $Beta(0.700102, 1)$, and the posterior distribution is $Beta(8.700102, 163)$. The 95\% Bayesian credible interval is [0.9035199, 0.9762552]. Besides, we consider a non informative uniform prior distribution of the infection rate in vaccine group among all cases, that is $Beta(1,1)$. The posterior distribution is $Beta(9,163)$, and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
   
