@@ -107,7 +107,7 @@ Then, our null hypothesis is: "The vaccine efficacy of BNT162b2 is 30%", which i
 
 Our alternative hypothesis is: "The vaccine efficacy of BNT162b2 over 30%", which is $H_1: \psi_0>0.3$.
 
-We assume our significance level is 0.05.
+We assume our significance level is alpha is 0.05.
 
 
 ## Maximum Likelihood 
