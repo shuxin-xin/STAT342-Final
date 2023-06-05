@@ -268,7 +268,7 @@ p_a+p_b
 ### Calculate the Bayesian P-value
 
 Since $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate posterior probability, that is:
-$$P(\psi_0 \leq 0.3|t) = P(\frac{1-2\pi}{1-\pi} \leq 0.3|t) = P(\pi \geq 0.4117647|t)$$
+$$P(\psi_0 \leq 0.3|t) = P(\frac{1-2\pi_0}{1-\pi_0} \leq 0.3|t) = P(\pi_0 \geq 0.4117647|t)$$
 
 ```{r label="probability", echo=F, eval=F}
 post_prob_pi_non <- pbeta(q=0.4117647, shape1=9, shape2=163, lower.tail = F)
