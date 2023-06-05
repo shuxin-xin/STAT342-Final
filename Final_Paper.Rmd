@@ -46,7 +46,7 @@ Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
 
   Thus, it becomes meaningful to control the spread of the virus from the human body itself, and vaccination is one of them. The effective vaccines can greatly reduce "diseases that once routinely harmed or killed babies, children, and adults." \footnote{(“Adult Vaccination - Reasons to Vaccinate.”)}
   
-  BNT162b2 vaccine, the two-dose COVID 19 vaccine developed by Pfizer, has entered public's view. Based on the research provided by the article \textit{Safety and Efficacy of the BNT162b2 mRNA COVID 19 Vaccine} by Polack et al, \footnote{(Polack et al., “Safety and Efficacy of the BNT162b2 mRNA Covid-19 Vaccine”)} individuals aged 16 years or older were randomly divided into two groups to receive two doses of either a placebo or the BNT162b2 vaccine. Then, by analyzing the data of infection cases recorded from the article, we used 3 statistical methods (likelihood, Bayesian, and bootstrapping) to test the BNT162b2 vaccine efficacy.
+  BNT162b2 vaccine, the two-dose COVID 19 vaccine developed by Pfizer, has entered public's view. Based on the research provided by the article \textit{Safety and Efficacy of the BNT162b2 mRNA COVID 19 Vaccine} by Polack et al, \footnote{(Polack et al., “Safety and Efficacy of the BNT162b2 mRNA Covid-19 Vaccine”)} individuals aged 16 years or older were randomly divided into two groups to receive two doses of either a placebo or the BNT162b2 vaccine. Then, by analyzing the data of infection cases recorded from the article, we can use 3 statistical methods (likelihood, Bayesian, and bootstrapping) to test the BNT162b2 vaccine efficacy.
 
 # Statistical Method
 ## Preprocessing
@@ -75,11 +75,7 @@ Let $\pi_v$ and $\pi_p$ denote the probabilities of an infection in the vaccine 
 Since participants underwent randomization in the paper, every subject is independent of each other. With independence and infection probability $\pi_v$ and $\pi_p$ for the vaccine and placebo groups, a reasonable model that we can use for $X$ and $Y$ is $X \sim Binom(\pi_v, n_1 = 17411)$ and $Y \sim Binom(\pi_p, n_2 = 17511)$. 
 
 Then, the parameter of interest, which is the vaccine efficacy is:
-$\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{\pi_p - \pi_v}{\pi_p}$
-
-Based on the data from table 1 above, we can easily calculated that $\pi_v = \frac{8}{17411}$, $\pi_p = \frac{162}{17511}$, and $\hat{\psi} = \frac{\pi_p - \pi_v}{\pi_p}=0.9503337$.
-
-That means the vaccine BNT162b2 can reduce risk of having COVID 19 by around 95\% compare to placebo.
+$\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{\pi_p - \pi_v}{\pi_p}$. Based on the data from table 1 above, we can easily calculated that $\pi_v = \frac{8}{17411}$, $\pi_p = \frac{162}{17511}$, and $\hat{\psi} = \frac{\pi_p - \pi_v}{\pi_p}=0.9503337$. That means the vaccine BNT162b2 can reduce risk of having COVID 19 by around 95\% compare to placebo.
 
 We will utilize these approach in the non-parametric bootstrapping approach.
 
@@ -111,9 +107,7 @@ $\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$.
 
 At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$. (See process in Appendix 8.2)
 
-Based on the data from table 1, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$ where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
-
-We will utilize these approach in the Maximum Likelihood and Bayesian approach.
+Based on the data from table 1, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$. And we will utilize these approach in the Maximum Likelihood and Bayesian approach.
 
 ### Hypothesis of Interest
 
@@ -138,8 +132,7 @@ We know that for Binomial distribution, the PDF is $f(t)=\binom{170}{t} \cdot \p
 
 Then, indexed by a parameter $\psi$ with true value $\psi_0$ the likelihood function is:
 \begin{align*}
-L(\psi) &= \binom{170}{t} \cdot \left(\frac{1 - \psi}{2 - \psi}\right)^{t} \cdot \left(1 - \frac{1 - \psi}{2 - \psi}\right)^{170 - t} \\
-&= \binom{170}{t} \cdot \left(\frac{1 - \psi}{2 - \psi}\right)^{t} \cdot \left(\frac{1}{2 - \psi}\right)^{170 - t}\qquad\mbox{for $0<\psi<1$}
+L(\psi) &= \binom{170}{t} \cdot \left(\frac{1 - \psi}{2 - \psi}\right)^{t} \cdot \left(\frac{1}{2 - \psi}\right)^{170 - t}\qquad\mbox{for $0<\psi<1$}
 \end{align*}
 Since the $\psi$ that maximizes $L(\psi)$ also maximizes $\ell(\psi) = lnL(\psi)$, and $\ell(\psi)$ is much easier to work with, let’s
 calculate the $\ell(\psi)$.
@@ -164,9 +157,7 @@ Thus, $\frac{170 - 2t}{170 - t}$ is a candidate for MLE for $\psi_0$. To check w
 \end{align*}
 From Table 1, given that 8 cases in Vaccine group, we know that $t=8$, then $\psi = \frac{170 - 2\cdot 8}{170 - 8}=0.9506173$. Then, $\ell''(\psi)=\frac{-8\cdot (2 - 0.9506173)^{2} + 170 \cdot (1 - 0.9506173)^{2}}{(1 - 0.9506173)^{2} \cdot (2 - 0.9506173)^{2}}=-3126.12565702$.
 
-Since we only have one critical point and the second derivative of $\ell(\psi)$ with respect to $\psi$ on that critical point is negative, we can say that the function $\ell(\psi)$ is always concave down and the critical point, $\psi = \frac{170 - 2t}{170 - t}=0.9506173$ is the global maximum of $\ell(\psi)$.
-
-Therefore, $\widehat{\psi_0^{mle}} = 0.9506173$ is a MLE for $\psi$. 
+Since we only have one critical point and the second derivative of $\ell(\psi)$ with respect to $\psi$ on that critical point is negative, we can say that the function $\ell(\psi)$ is always concave down and the critical point, $\psi = \frac{170 - 2t}{170 - t}=0.9506173$ is the global maximum of $\ell(\psi)$. Therefore, $\widehat{\psi_0^{mle}} = 0.9506173$ is a MLE for $\psi$. 
 
 ### Calculation of the Maximum Likelihood Confidence Interval
 Since $n=170$, we know that under certain regularization, $\widehat{\psi_0^{mle}}$ is approximately normally distributed with mean $\psi_0$ and estimated standard error $\frac{1}{\sqrt{-\ell''(\widehat{\psi_0^{mle}})}}$
@@ -187,7 +178,7 @@ By chapter 25.2, we know that under $H_0$ with large sample: $W\approx \chi^2_1$
 pchisq(q = 121.6012, df = 1, lower.tail = F)
 ```
 
-Assuming $H_0$ is true, the P-value is the $P(W > 121.6012)$. We only consider $W > 121.6012$ because if the ratio $\frac{L(\widehat{\psi_0}^{mle})}{L(\widehat{\psi_0}^{null})}$ equals to 1, this equation illustrates exactly the null value. And also, the larger the values of the ratio $\frac{L(\widehat{\psi_0}^{mle})}{L(\widehat{\psi_0}^{null})}$ yield larger values of $W$ and provide stronger evidence against $H_0$. Since large values of W provide evidence in the direction of the alternative, the P-value is the right tail probability from the $\chi^2_1$ distribution. Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W > 121.6012) = P(\psi > 0.3) = 2.822313e\times 10^{-28}$.
+Assuming $H_0$ is true, the P-value is the $P(W > 121.6012)$. We only consider $W > 121.6012$ because if the ratio $\frac{L(\widehat{\psi_0}^{mle})}{L(\widehat{\psi_0}^{null})}$ equals to 1, this equation illustrates exactly the null value. And also, the larger the values of the ratio $\frac{L(\widehat{\psi_0}^{mle})}{L(\widehat{\psi_0}^{null})}$ yield larger values of $W$ and provide stronger evidence against $H_0$. Since large values of W provide evidence in the direction of the alternative, the P-value is the right tail probability from the $\chi^2_1$ distribution. Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W > 121.6012) = P(\psi > 0.3) = 2.822313 \times 10^{-28}$.
 
 ## Bayesian
 
@@ -197,7 +188,7 @@ Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, m
 
 From 4.1.2 we know that $T\sim Binom(170, \pi)$ and we don't have explicit information about the prior. Thus, let's assume that $\pi$ follows beta distribution. Then, the expected value of $\pi$ is $E[\pi]=\frac{\alpha}{\alpha+\beta}$.
 
-In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $alpha$ in this case. Let $\beta = 1$, then, $\alpha =  0.700102$ (See full process in Appendix 8.5).
+In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $\alpha$ in this case. Let $\beta = 1$, then, $\alpha =  0.700102$ (See full process in Appendix 8.5).
 
 Therefore, the a proper prior of $\pi$ is: $g(\pi_0) = Beta(0.700102, 1)$. However, this prior may be informative to the posterior because we assume the prior of $\pi$ is a Beta distribution. Therefore, we also choose a completely non informative uniform prior distribution of $\pi$, that is $g(\pi_0) = Beta(1,1)$ because The $Beta(1, 1)$ distribution is symmetric around its center (0.5, 0.5) and assigns equal probability to all values between 0 and 1.
 
@@ -373,10 +364,10 @@ Since we used the simple quantile method without any assumptions, we calculated 
 \centering
 \caption{Comparsion Table (ConfI: 95\% Confidence Interval, CredI: 95\% Credible Interval)}
 \begin{tabular}{|c|c|c|c|}\hline
-Approach & Lower Bound & Upper Bound & p-value \\ \hline
-Maximum Likelihood (ConfI) & 0.9155627 & 0.9856719 & 2.822313×$10^{-28}$  \\ \hline
-Bayesian prior Beta(0.700102, 1) (CredI) &  0.9035199 & 0.9762552 & 1.96x$10^{-28}$ \\ \hline
-Bayesian Prior Beta(1, 1) (CredI) & 0.9009794 & 0.9750466 & 3.73x$10^{-28}$ \\ \hline
+Approach & Lower Bound & Upper Bound & P-value \\ \hline
+Maximum Likelihood (ConfI) & 0.9155627 & 0.9856719 & 2.822313$\times 10^{-28}$  \\ \hline
+Bayesian Prior Beta(0.700102, 1) (CredI) &  0.9035199 & 0.9762552 & 1.96$\times 10^{-28}$ \\ \hline
+Bayesian Prior Beta(1, 1) (CredI) & 0.9009794 & 0.9750466 & 3.73$\times 10^{-28}$ \\ \hline
 Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hline
 \end{tabular}
 \end{table}
