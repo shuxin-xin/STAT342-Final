@@ -137,6 +137,8 @@ Our alternative hypothesis is: "The vaccine efficacy of BNT162b2 over 30%", whic
 
 ## Maximum Likelihood 
 
+### Maximum Likelihood Estimator
+
 We used the one sample approach to solve the question. Let's find the Maximum Likelihood Estimator first.
 
 Based on 4.1.2, we have know that $T$, the number of cases in vaccine group from total cases has the distribution $T \sim Binom(170, \pi_0)$ where $\pi_0 = \frac{1 - \psi_0}{2 - \psi_0}$.
@@ -175,6 +177,7 @@ Since we only have one critical point and the second derivative of $\ell(\psi)$ 
 
 Therefore, $\widehat{\psi_0^{mle}} = 0.9506173$ is a MLE for $\psi$. 
 
+### Confidence Interval
 Since $n=170$, we know that under certain regularization, $\widehat{\psi_0^{mle}}$ is approximately normally distributed with mean $\psi_0$ and estimated standard error $-\frac{1}{\sqrt{\ell''(\widehat{\psi_0^{mle}})}}$
 
 Plug in the value $\ell''(\widehat{\psi_0^{mle}})=-3126.12565702$, we have:
@@ -184,7 +187,8 @@ Then, we can calculate the Wald confidence interval, which is:
 $$\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=\widehat{\psi_0^{mle}} \pm Z_{\alpha/2}=0.9506173 \pm 1.96 \times 0.01788532$$
 Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155621, \: 0.9856725]$.
 
-Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})]=121.6012$.
+### P-Value
+Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})]=121.6012$.
 
 By chapter 25.2, we know that under $H_0$ with large sample: $W\approx \chi^2_1$.
 
@@ -192,7 +196,8 @@ Since large values of W provide evidence in the direction of the alternative, th
 ```{r label="likelihood", include = FALSE, cache = TRUE}
 pchisq(q = 121.6012, df = 1, lower.tail = F)
 ```
-Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W > 121.6012) = 2.822313e\times 10^{-28}$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$ instead. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
+
+Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W > 121.6012) = P(\psi > 0.3) = 2.822313e\times 10^{-28}$.
 
 ## Bayesian
 
@@ -221,7 +226,7 @@ Since $T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$ and we assume $\pi$ f
 interval <- qbeta(p = c(0.025,0.975), shape1=8.700102, shape2=163)
 ```
 
-Calculated by R, the 2.5 percentile of posterior distribution of $\pi$ is 0.02319402, and the 97.5% percentile of posterior distribution of $\pi$ is 0.08799074. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
+Calculated by R, the 2.5% percentile of posterior distribution of $\pi$ is 0.02319402, and the 97.5% percentile of posterior distribution of $\pi$ is 0.08799074. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
 $$[\frac{1-2 \times 0.08799074}{1-0.08799074},\frac{1-2 \times 0.02319402}{1-0.02319402}] = [0.9035199, 0.9762552]$$
 
 - Beta(1, 1) prior:
@@ -232,7 +237,7 @@ Since $T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$ and we assume $\pi$ f
 interval_uniform <- qbeta(p = c(0.025,0.975), shape1=9, shape2=163)
 ```
 
-Calculated by R, the 2.5 percentile of posterior distribution of $\pi$ is 0.02434818, and the 97.5% percentile of posterior distribution of $\pi$ is 0.092214. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
+Calculated by R, the 2.5% percentile of posterior distribution of $\pi$ is 0.02434818, and the 97.5% percentile of posterior distribution of $\pi$ is 0.092214. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
 $$[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.02434585}] = [0.9009794,0.9750466]$$
 
 We also plot the prior and posterior distributions for both of the approaches to see the difference:
@@ -395,17 +400,17 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
   
   In the Likelihood method, the vaccine efficacy in the combined maximum likelihood estimator is around 95.06\%. The corresponding 95\% confidence interval for the BNT162b2 vaccine efficacy is [0.9155621, 0.9856725]. W is ... The P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $2.822313e\times 10^{-28}$, which is smaller than any common alpha. Thus, we have enough evidence to reject the null hypothesis and conclude that the true vaccine efficacy is greater than 30\%.
   
-  Then, in the Bayesian analysis, based on the given information, the prior distribution: $Beta(0.700102, 1)$, we then can calculate the posterior distribution: $Beta(8.700102, 163)$. The 95\% Bayesian credible interval is [0.9035199, 0.9762552]. For $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior is the range 90.3% to 97.6%. There is a 95% probability that $\psi_0$ in between 90.3% and 97.6%. Besides, we consider a non informative uniform prior distribution of $\pi$: $Beta(1,1)$. The posterior distribution is $Beta(9,163)$, and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. For $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior is the range 90.3% to 97.6%. There is a 95% probability that $\psi_0$ in between 90.1% and 97.5%.
-  
-  For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$. Since $3.73 \times 10^{-28} > 1.96 \times 10^{-28}$, then $1 - 3.73 \times 10^{-28} < 1 - 1.96 \times 10^{-28}$. Thus, $P(\psi_0 > 0.3|t)$ for prior Beta(0.700102, 1) is much closer to 1, so prior Beta(0.700102, 1) has greater evidence to reject the null hypothesis that vaccine efficacy is 30%. The probability that the true vaccine efficacy against COVID 19 is greater than 30% is approximately 100%. The evidence suggests that vaccine efficacy is greater than 30%.
-  
-  For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$. For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. Since $3.73 \times 10^{-28} > 1.96 \times 10^{-28}$, then $1 - 3.73 \times 10^{-28} < 1 - 1.96 \times 10^{-28}$. Thus, $P(\psi_0 > 0.3|t)$ for prior Beta(0.700102, 1) is much closer to 1, so prior Beta(0.700102, 1) has greater evidence to reject the null hypothesis that vaccine efficacy is 30%. The probability that the true vaccine efficacy against COVID 19 is greater than 30% is approximately 100%. The evidence suggests that vaccine efficacy is greater than 30%.
+  Then, in the Bayesian analysis, based on the given information, the prior distribution: $Beta(0.700102, 1)$, and the posterior distribution: $Beta(8.700102, 163)$. The 95\% Bayesian credible interval is [0.9035199, 0.9762552].  Besides, we consider a non informative uniform prior distribution of $\pi$: $Beta(1,1)$. The posterior distribution is $Beta(9,163)$, and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
   
   For Non-parametric Bootstrapping, by generating 10000 bootstrapped estimation of $\psi_0$, the 95% simple bootstrap confidence interval is [0.9097410, 0.9819328]. The empirical p-value among the 10000 generated samples is 0, resulting that the bootstrapped vaccine efficacy is highly unlikely to have occurred under the assumption of the null hypothesis being true. Since 0 is smaller than any possible alpha value, we to reject the null hypothesis and conclude that the true vaccine efficacy of BNT162b2 is larger than 30%.
   
   The results from all of the approaches are consistent that we have enough evidence to reject the null hypothesis and claim the true efficiency of the vaccine is larger than 30\%. We also have strong confidence that the BNT162b2 vaccine efficacy is larger than 90\%.
   
 # Discussion/Conclusion
+
+   The 95\% Bayesian credible interval [0.9035199, 0.9762552] suggests that for $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(0.700102, 1)$ is the range 90.3% to 97.6%. There is a 95% probability that $\psi_0$ in between 90.3% and 97.6%. The 95\% Bayesian credible interval [0.9009794, 0.9750466] suggests that for $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(1,1)$ is the range 90.3% to 97.6%. There is a 95% probability that $\psi_0$ in between 90.1% and 97.5%.
+   
+    Since posterior probability $P(\psi_0 \leq 0.3|t)$ for $Beta(1,1)$ is greater than that of $Beta(0.700102, 1)$ ($3.73 \times 10^{-28} > 1.96 \times 10^{-28}$), then $1 - 3.73 \times 10^{-28} < 1 - 1.96 \times 10^{-28}$. Thus, $P(\psi_0 > 0.3|t)$ for prior Beta(0.700102, 1) is much closer to 1, so prior Beta(0.700102, 1) has greater evidence to reject the null hypothesis that vaccine efficacy is 30%. The probability that the true vaccine efficacy against COVID 19 is greater than 30% is approximately 100%. The evidence suggests that vaccine efficacy is greater than 30%.
 
   Under regularity conditions, the likelihood estimates converge to the true parameter values as the sample size increases. This property ensures that the likelihood method produces consistent estimates. Bayesian analysis uses prior beliefs or evidences for the parameters of interest. Compared to other two methods, the likelihood method is more efficient in terms of statistical power, because it can provide precise estimates of unknown parameters when the sample size is large. However, the likelihood method relies on assumptions about the data distribution. If we assume distribution inaccurately, the estimates obtained from the likelihood method may be biased or inefficient. 
   
