@@ -429,10 +429,6 @@ Calculate posterior probability $P(\psi_0 > 0.3|t)$
 
 The posterior probability $P(\psi_0 > 0.3|t)=1$, which indicates that approximately 100% of chance that the true vaccine efficacy against Covid 19 is greater than 30%. We can reject the null hypothesis that the vaccine efficacy is 30%. The evidence suggests that vaccine efficacy is greater than 30%.
 
-### The burning question is whether the prior used by Pfizer was non-informativeor was it overly optimistic? 
-
-We choose Beta(0.700102, 1) as the prior distribution of $\pi$. The prior distribution is chosen such that the mean is equal to 0.0471 ($\frac{8}{170}$) corresponding to expected vaccine efficacy 30%. The mean is much lower than vaccine efficacy = 30%, which means that it assigns a lower probability to values indicating higher vaccine efficacy, so the prior used by Pfizer was overly optimistic. Pfizer expressed a relatively high expectation for the vaccine's efficacy before observing the actual data.
-
 ---------------------------------------------------------------
 
 ### Prior Elicitation
@@ -631,6 +627,10 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 1\\ \hline
 # Discussion/Conclusion
 
   Under regularity conditions, the likelihood estimates converge to the true parameter values as the sample size increases. This property ensures that the likelihood method produces consistent estimates. Bayesian... Bootstrapping...  In conclusion, the findings from the three analysis methods (Maximum Likelihood, Bayesian, and non-parametric bootstrapping) are consistent, indicating a high efficacy of the BNT162b2 vaccine.
+  
+## The burning question is whether the prior used by Pfizer was non-informative or was it overly optimistic? 
+
+We choose a completely non informative uniform prior distribution Beta(1,1) of $\pi$, assuming equal probabilities for all values of $\pi$ between 0 and 1. It is non-informative because it does not favor any specific value of $\pi$. In this case, the prior Beta(1,1) is not based on prior belief or expected vaccine efficacy. We also choose Beta(0.700102, 1) as the prior distribution of $\pi$. The prior distribution is chosen such that the mean is equal to 0.4118 ($\frac{1-0.3}{2-0.3}$) corresponding to expected vaccine efficacy 30%. The mean is higher than vaccine efficacy = 30%, which means that Pfizer assigns a higher probability to indicate lower vaccine efficacy, so the prior used by Pfizer was pessimistic. Pfizer expressed a relatively low expectation for the vaccine's efficacy before observing the actual data. The chosen prior Beta(0.700102, 1) is informative to some extent because it assumes an expected vaccine efficacy of 30%. This implies that there is some prior belief or evidence to suggest a certain level of efficacy. 
 
 # References
 “Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
