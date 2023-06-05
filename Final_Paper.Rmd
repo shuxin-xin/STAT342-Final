@@ -99,7 +99,7 @@ Then, by distributive laws, $P(I)$, the probability of infections, is:
 \begin{align*}
 P(I) &= P(I\cap (V\cup V^c))=P((I\cap V)\cup(I\cap V^c))\\
 &=P(I \cap V) + P(I \cap V^c) -P((I \cap V)\cap(I \cap V^c))\qquad\mbox{by addition rule}\\
-&= P(I \cap V) + P(I^c \cap V^c)\qquad\mbox{since complement sets are disjointed}\\
+&= P(I \cap V) + P(I \cap V^c)\qquad\mbox{since complement sets are disjointed}\\
 &=P(I|V) P(V) + P(I|V^c) P(V^c) \qquad\mbox{by definition of conditional probability} \\
 &= \pi_v \cdot \frac{n_1}{n_1+n_2} + \pi_p \cdot \frac{n_2}{n_1+n_2} \\
 &= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}
@@ -398,11 +398,11 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
 
   In this study, we have only around 0.05\% of infection cases in the BNT162b2 vaccine group (treatment group) while we have around 0.93\% of infection cases in the placebo group (control group). Based on our data, the BNT162b2 vaccine efficacy is around 95.03\%, which pass the rule of at least 30\% efficacy for a new therapy to be approved. 
   
-  In the Likelihood method, the vaccine efficacy in the combined maximum likelihood estimator is around 95.06\%. The corresponding 95\% confidence interval for the BNT162b2 vaccine efficacy is [0.9155621, 0.9856725]. The likelihood ratio test statistic $W$ is 121.6012 The P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $2.822313e\times 10^{-28}$, which is smaller than any common alpha.
+  In the Likelihood method, the vaccine efficacy in the combined maximum likelihood estimator is around 95.06\%. The corresponding 95\% confidence interval for the BNT162b2 vaccine efficacy is [0.9155621, 0.9856725]. The likelihood ratio test statistic $W$ is 121.6012. The P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $2.822313e\times 10^{-28}$, which is smaller than any common alpha.
   
-  Then, in the Bayesian analysis, based on the given information, the prior distribution: $Beta(0.700102, 1)$, and the posterior distribution: $Beta(8.700102, 163)$. The 95\% Bayesian credible interval is [0.9035199, 0.9762552].  Besides, we consider a non informative uniform prior distribution of $\pi$: $Beta(1,1)$. The posterior distribution is $Beta(9,163)$, and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
+  Then, in the Bayesian analysis, based on the given information, the prior distribution of the infection rate in vaccine group among all cases, that is $Beta(0.700102, 1)$, and the posterior distribution is $Beta(8.700102, 163)$. The 95\% Bayesian credible interval is [0.9035199, 0.9762552]. Besides, we consider a non informative uniform prior distribution of the infection rate in vaccine group among all cases, that is $Beta(1,1)$. The posterior distribution is $Beta(9,163)$, and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
   
-  For Non-parametric Bootstrapping, by generating 10000 bootstrapped estimation of $\psi_0$, the 95% simple bootstrap confidence interval is [0.9097410, 0.9819328]. The empirical p-value among the 10000 generated samples is 0, resulting that the bootstrapped vaccine efficacy is highly unlikely to have occurred under the assumption of the null hypothesis being true. Since 0 is smaller than any possible alpha value, we to reject the null hypothesis and conclude that the true vaccine efficacy of BNT162b2 is larger than 30%.
+  For Non-parametric Bootstrapping, by generating 10000 bootstrapped estimation of $\psi_0$, the 95% simple bootstrap confidence interval is [0.9097410, 0.9819328]. The empirical p-value among the 10000 generated samples is 0.
   
   The results from all of the approaches are consistent that we have enough evidence to reject the null hypothesis and claim the true efficiency of the vaccine is larger than 30\%. We also have strong confidence that the BNT162b2 vaccine efficacy is larger than 90\%.
   
