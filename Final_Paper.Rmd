@@ -128,8 +128,6 @@ We will utilize these approach in the Maximum Likelihood and Bayesian approach.
 
 ### Hypothesis of Interest
 
-(To do hypothesis test for inference, we first need to make certain assumptions to make our test valid.) 
-
 The FDA requires at least 30% efficacy for a new therapy to be approved. Let $\psi_0$ represent the true value of $\psi$, which is the vaccine efficacy for BNT162b2.
 
 Then, our null hypothesis is: "The vaccine efficacy of BNT162b2 is 30%", which is $H_0: \psi_0=0.3$.
@@ -189,8 +187,7 @@ Then, we can calculate the Wald confidence interval, which is:
 $$\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=\widehat{\psi_0^{mle}} \pm Z_{\alpha/2}=0.9506173 \pm 1.96 \times 0.01788532$$
 Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155621, \: 0.9856725]$.
 
-Then, we did a likelihood ratio test on $\psi$. Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to:
-
+Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to:
 \begin{align*}
 W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 &= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi^{mle}}) - \\
@@ -200,8 +197,7 @@ W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 &= 121.6012 
 \end{align*}
 
-By chapter 25.2, we know that under $H_0$ with large sample:
-$$W\approx \chi^2_1$$
+By chapter 25.2, we know that under $H_0$ with large sample: $W\approx \chi^2_1$.
 
 Since large values of W provide evidence in the direction of the alternative, the P-value is the right tail probability from the $\chi^2_1$ distribution. 
 ```{r label="likelihood", include = FALSE, cache = TRUE}
@@ -210,213 +206,6 @@ pchisq(q = 121.6012, df = 1, lower.tail = F)
 Thus, using R, the P-value for the Likelihood Ratio Test statistic using the approximate chi square distribution is $P(W < 121.6012) = 2.822313e\times 10^{-28}$, which is very small. So, we have enough evidence to reject the null hypothesis and we have $P(\psi > 0.3) = 1$. Therefore, we can conclude that the vaccine efficacy is greater than 30\%.
 
 ## Bayesian
-
-Let $X$ denote the number of infection cases among $n_1 = 17411$ subjects assigned to the BNT162b2 group
-
-Let $Y$ denote the number of infection cases among $n_2 = 17511$ subjects assigned to the Placebo group.
-
-Let $\pi_v$ and $\pi_p$ denote the probabilities of an infection in the vaccine and placebo groups respectively.
-
-Therefore, we have $X \sim Binom(\pi_v, n_1 = 17411)$ and $Y \sim Binom(\pi_p, n_2 = 17511)$. 
-
-Assuming the trial will run until $X+Y=s$ infections observed
-
-Then, we can let T denote the number of cases in vaccine group from s=170 cases.
-
-The distribution of T is well approximated by a bionomial for the vaccine study:
-
-$$T \sim Binom(s,\pi)$$
-where $\pi =$ P(vaccine|infection)
-
-By Bayes'rule, we can write $\pi$ in terms of the probabilities $\pi_v$ and $\pi_p$ as follows:
-
-$$\pi = \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}$$
-We know that $n_1=17411$ and $n_2=17511$
-
-so $n_1 \approx n2$, we can say that the randomization is 1:1.
-
-We can simplify $\pi$ as follows
-
-\begin{align*}
-\pi &= \frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p} \\
-&= \frac{n_1\pi_v}{n_1\pi_v+n_1\pi_p} \\
-&= \frac{n_1\pi_v}{n_1(\pi_v+\pi_p)} \\
-&= \frac{\pi_v}{\pi_v+\pi_p}
-\end{align*}
-
-Since $n_1$ and $n_2$ are large and the event rates are small, we can say
-
-$$X \approx Pois(n_1\pi_v)$$
-is independent of
-
-$$Y \approx Pois(n_2\pi_p)$$
-
-Then
-
-\begin{align*}
-P(T=t) &= P(X=t|X+Y=s) \ t=0,1,\dots, s \\
-&= \frac{P(X=t \cap X+Y=s)}{P(X+Y=s)} \\
-&= \frac{P(X=t \times Y=s-t)}{P(X+Y=s)} \text{ X and Y are indepedent} \\
-&= \binom{s}{n} \pi^t (1-\pi)^{s-t} \text{where } \pi = \frac{\pi_v}{\pi_v+\pi_p}
-\end{align*}
-
-so we can have that
-
-$$T \sim Binom(s=170, \pi=\frac{\pi_v}{\pi_v+\pi_p})$$
-
-where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
-
-The parameter of interest is vaccine efficacy $\psi$, that is 
-
-\begin{align*}
-\psi &= \frac{\pi_p - \pi_v}{\pi_p} \\
-&= 1 - \frac{\pi_v}{\pi_p} \\
-\end{align*}
-
-Then, we can find $\frac{\pi_v}{\pi_p}$ by using $\pi$
-
-\begin{align*}
-\pi &= \frac{\pi_v}{\pi_v+\pi_p} \\
-\pi(\pi_v+\pi_p) &= \pi_v \\
-\pi \pi_v + \pi \pi_p &= \pi_v \\
-\pi \pi_p &= \pi_v - \pi \pi_v \\
-\pi \pi_p &= \pi_v (1 - \pi) \\
-\frac{\pi_v}{\pi_p} &= \frac{\pi}{1-\pi}
-\end{align*}
-
-Then, we can find $\psi$
-
-$\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$
-
-
-```{r label="method1", include = FALSE, cache = TRUE, warning = F}
-n <- 170
-t <- 8
-prior_alpha <- 0.700102
-prior_beta <- 1
-prior_median_pi <- qbeta(p=0.5, shape1=prior_alpha, shape2=prior_beta)
-prior_median_pi
-prior_0.05_pi <- qbeta(p=0.05, shape1=prior_alpha, shape2=prior_beta)
-prior_0.05_pi
-prior_psi <- beta.select(quantile1 = list(p=0.5, x=0.4087779),
-                             quantile2 = list(p=0.95, x=0.9859487))
-prior_psi_alpha <- prior_psi[1]
-prior_psi_alpha
-prior_psi_beta <- prior_psi[2]
-prior_psi_beta 
-posterior_median_pi <- qbeta(p=0.5, shape1=t+prior_alpha, shape2=n-t+prior_beta)
-posterior_median_pi
-posterior_0.05_pi <- qbeta(p=0.05, shape1=t+prior_alpha, shape2=n-t+prior_beta)
-posterior_0.05_pi
-posterior_psi <- beta.select(quantile1 = list(p=0.5, x=0.94855003),
-                         quantile2 = list(p=0.95, x=0.9727862))
-posterior_psi_alpha <- posterior_psi[1]
-posterior_psi_alpha
-posterior_psi_beta <- posterior_psi[2]
-posterior_psi_beta 
-p3 <- ggplot()+
-  stat_function(fun = dbeta,
-                args = list(shape1 = prior_psi_alpha,
-                            shape2 = prior_psi_beta))+
-  stat_function(fun = dbeta,
-                args = list(shape1 = posterior_psi_alpha,
-                            shape2 = posterior_psi_beta),
-                color='blue')+
-  labs(title = "Prior(black) and Posterior(blue) for Vaccine Data",
-       ylab = "Density",
-       xlab = expression(psi))
-CI_psi <- qbeta(p = c(0.025,0.975), shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
-CI_psi_lower <- CI_psi[1]
-CI_psi_upper <- CI_psi[2]
-credible <- hdi(qbeta, credMass = 0.95, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
-credible_lower <- credible[1]
-credible_upper <- credible[2]
-post_prob <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta, lower.tail = F)
-smaller_0.3 <- pbeta(q=0.3, shape1=posterior_psi_alpha, shape2=posterior_psi_beta)
-```
-
-\begin{align*}
-\psi &= \frac{1-2\pi}{1-\pi} \\
-\psi (1-\pi) &= 1-2\pi \\
-\psi - \psi \pi &= 1-2\pi \\
-2\pi - \psi \pi &= 1 - \psi \\
-\pi(2-\psi)  &= 1 - \psi \\
-\pi &= \frac{1 - \psi}{2-\psi}
-\end{align*}
-
-Then, we can find the prior distribution of $\psi$
-
-By using R, the prior median of $\pi$ is `r prior_median_pi`, and the prior 5 percentile of $\pi$ is `r prior_0.05_pi`.
-
-Then, we can calculate the prior median of $\psi$ and prior 95 percentile of $\psi$
-
-\begin{align*}
-P(\pi > 0.3715522|t) &= 0.5 \\
-P(\frac{1-\psi}{2-\psi} < 0.3715522|t) &= 0.5 \\
-P(1-\psi < 0.3715522(2-\psi)|t) &= 0.5 \\
-P(1-\psi < 0.7431044 - 0.3715522\psi|t) &= 0.5 \\
-P(-0.6284478\psi < -0.2568956|t) &= 0.5 \\
-P(\psi < 0.4087779|t) &= 0.5 \\
-\end{align*}
-
-\begin{align*}
-P(\pi > 0.01385659|t) &= 0.95 \\
-P(\frac{1-\psi}{2-\psi} < 0.01385659|t) &= 0.95 \\
-P(1-\psi < 0.01385659(2-\psi)|t) &= 0.95 \\
-P(1-\psi < 0.02771318 - 0.01385659\psi|t) &= 0.95 \\
-P(-0.9861434\psi < -0.9722868|t) &= 0.95 \\
-P(\psi < 0.9859487|t) &= 0.95 \\
-\end{align*}
-
-Thus, we have that the prior median of $\psi$ is 0.4087779, and the prior 95 percentile of $\psi$ is 0.9859487.
-
-Therefore, we can say that the prior distribution of $\psi$ is: 
-
-$g(\psi_0)$ = Beta(`r prior_psi_alpha`, `r prior_psi_beta`)
-
-Then, we can find the posterior distribution of $\psi$
-
-By using R, the posterior median of $\pi$ is `r posterior_median_pi`, and the posterior 5 percentile of $\pi$ is `r posterior_0.05_pi`.
-
-\begin{align*}
-P(\pi > 0.04893234|t) &= 0.5 \\
-P(\frac{1-\psi}{2-\psi} < 0.04893234|t) &= 0.5 \\
-P(1-\psi < 0.04893234(2-\psi)|t) &= 0.5 \\
-P(1-\psi < 0.09786468 - 0.04893234\psi|t) &= 0.5 \\
-P(-0.9510677\psi < -0.9021353|t) &= 0.5 \\
-P(\psi < 0.94855003|t) &= 0.5 \\
-\end{align*}
-
-\begin{align*}
-P(\pi > 0.02649278|t) &= 0.95 \\
-P(\frac{1-\psi}{2-\psi} < 0.02649278|t) &= 0.95 \\
-P(1-\psi < 0.02649278(2-\psi)|t) &= 0.95 \\
-P(1-\psi < 0.05298556 - 0.02649278\psi|t) &= 0.95 \\
-P(-0.9735072\psi < -0.9470144|t) &= 0.95 \\
-P(\psi < 0.9727862|t) &= 0.95 \\
-\end{align*}
-
-Thus, we have that the posterior median of $\psi$ is 0.94855003, and the posterior 95 percentile of $\psi$ is 0.9727862.
-
-Therefore, we can say that the posterior distribution of $\psi$ is:
-
-$h(\psi_0|t)=$ Beta(`r posterior_psi_alpha`, `r posterior_psi_beta`)
-
-```{r echo = FALSE, warning=F}
-p3
-```
-
-The posterior distribution is skewed, so it is better to use HPDI for an interval estimate.
-
-The 95\% Bayesian credible interval is [`r CI_psi_lower`, `r CI_psi_upper`], which indicate that there is a 95% probability that the true value of $\psi_0$ falls within the interval [`r CI_psi_lower`, `r CI_psi_upper`]. We are 95% confident that the true vaccine efficacy against Covid 19 is between approximately 90.59% and 97.63%.
-
-The 95\% Bayesian HPDI interval is [`r credible_lower`, `r credible_upper`]. For $\psi$ represents the vaccine efficacy against Covid 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior is the range 91.05% to 97.92%. There is a 95% probability that $\psi_0$ in between 91.05% and 97.92%. .
-
-Calculate posterior probability $P(\psi_0 > 0.3|t)$
-
-The posterior probability $P(\psi_0 > 0.3|t)=1$, which indicates that approximately 100% of chance that the true vaccine efficacy against Covid 19 is greater than 30%. We can reject the null hypothesis that the vaccine efficacy is 30%. The evidence suggests that vaccine efficacy is greater than 30%.
-
----------------------------------------------------------------
 
 ### Prior Elicitation
 
@@ -457,9 +246,9 @@ interval_uniform <- qbeta(p = c(0.025,0.975), shape1=9, shape2=163)
 Calculated by R, the 2.5 percentile of posterior distribution of $\pi$ is 0.02434818, and the 97.5% percentile of posterior distribution of $\pi$ is 0.092214. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
 $$[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.02434585}] = [0.9009794,0.9750466]$$
 
-We also plot the prior and posterior distribution plot for both of the approaches.
+We also plot the prior and posterior distributions for both of the approaches to see the difference:
 
-```{r label="graph", echo=F, eval=F, fig.height=3.5, fig.width=9}
+```{r label="graph", echo=F,fig.height=4, fig.width=9.5}
 p_a <- ggplot()+
   geom_function(fun = dbeta,
                 args = list(shape1 = 0.700102,
@@ -469,7 +258,8 @@ p_a <- ggplot()+
                 args = list(shape1 = 0.700102+8,
                             shape2 = 170-8+1),
                 mapping = aes(color = "posterior")) +
-  labs(title = "Beta(0.700102, 1) Prior and Beta(8.700102, 163) \nPosterior for Vaccine Data",
+  labs(title = "Beta(0.700102, 1) Prior and Beta(8.700102, 163) 
+Posterior for Vaccine Data",
        y = "PDF",
        x = expression(pi),
        color = "Distribution")
@@ -483,7 +273,8 @@ p_b <- ggplot()+
                 args = list(shape1 = 1+8,
                             shape2 = 170-8+1),
                 mapping = aes(color = "posterior")) +
-  labs(title = "Beta(1, 1) Prior and Beta(9, 163)\nPosterior for Vaccine Data",
+  labs(title = "Beta(1, 1) Prior and Beta(9, 163)
+Posterior for Vaccine Data",
        y = "PDF",
        x = expression(pi),
        color = "Distribution")
@@ -498,10 +289,13 @@ Since $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate posterior probability, tha
 $$P(\psi_0 \leq 0.3|t) = P(\frac{1-2\pi}{1-\pi} \leq 0.3|t) = P(\pi \geq 0.4117647|t)$$
 
 ```{r label="probability", echo=F, eval=F}
+post_prob_pi_non <- pbeta(q=0.4117647, shape1=9, shape2=163, lower.tail = F)
 post_prob_pi <- pbeta(q=0.4117647, shape1=8.700102, shape2=163, lower.tail = F)
 ```
 
-Using R, we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$, which is very small. Thus, $P(\psi_0 > 0.3|t)$ is approximately 1, which means that the probability that the true vaccine efficacy against COVID 19 is greater than 30% is about 100%. The evidence suggests that vaccine efficacy is greater than 30%.
+For prior Beta(0.700102, 1), $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$.
+
+For prior Beta(1, 1), $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
 
 ### Examine sensitivity to the choice of prior distribution
 
@@ -550,16 +344,18 @@ non_sample_summary <- do.call(rbind, non_bootstrap_samples)
 # Here, I took a number of 15.
 # Now, I need the range from my data.
 # para_sample_summary$sample_psi_hat %>% range()
-# From the summary, I got the range for the data is: 1.0000000 - 0.8659009 = 0.1340991
-# Thus, here, I resize the binwidth into 0.1340991/15 and breaks the bar by (0.8659009, 1.0000000, 0.1340991/15)
-
+# From the summary, I got the range for the data is: 
+# 1.0000000 - 0.8659009 = 0.1340991
+# Thus, here, I resize the binwidth into 0.1340991/15 and breaks
+# the bar by (0.8659009, 1.0000000, 0.1340991/15)
 p1 <- ggplot(data = non_sample_summary,
        mapping = aes(x = sample_psi_hat)) + 
   geom_histogram(binwidth = 0.1258278/15,
                  breaks = seq(0.8741722, 1.0000000, 0.1258278/15), 
                  alpha = 0.8,
                  color = 'gray') +
-  labs(title =  expression(paste("The Bootstrapped \nSampling Distribution of ", widehat(psi))),
+  labs(title =  expression(paste("The Bootstrapped Sampling Distribution of ", 
+       widehat(psi))),
        subtitle = "n=10000",
        x = expression(widehat(psi)))
 
@@ -567,7 +363,7 @@ p2 <- ggplot(data = non_sample_summary,
              mapping = aes(sample = sample_psi_hat)) +
   stat_qq(distribution = qnorm) + 
   stat_qq_line(distribution = qnorm) + 
-  labs(title = "The Normal Probability Plot of \nthe Bootstrapped Distribution",
+  labs(title = "Normal Probability Plot of Bootstrapped Distribution",
        subtitle = "n=10000",
        x = "theoretical",
        y = "sample")
@@ -580,7 +376,7 @@ upper_ci <- quantile(non_sample_summary$sample_psi_hat, 1 - a/2)
 non_p_value <- sum(non_sample_summary$sample_psi_hat < h_0_psi) / B
 ```
 
-```{r echo = FALSE, warning=F}
+```{r echo = FALSE, warning=F,fig.height=4, fig.width=9.5}
 p1+p2
 ```
 
@@ -604,11 +400,15 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 1\\ \hline
 
   In this study, we have only 0.05\% of cases in the treatment group while we have 0.93\% of cases in the control group. In the Likelihood method, we first analyze the efficiency of BNT162b2 by comparing the parameters of control group and treatment group. We found $\psi = 0.9503337$, shows that we have 95\% efficiency of the treatment group, which pass the rule of at least 30\% efficacy for a new therapy to be approved. Moreover, we combined the results of both groups together to find the combined maximum likelihood estimator, which is 0.9506173. And then, use this estimator, we build a 95\% confidence interval: [0.9155621, 0.9856725]. We also calculate at $t = 8$, $W = 106.5508$, and by this, we have $P(W > 106.5508) = P(\psi > 0.3) = 1$
   
-  Then, in the Bayesian analysis, based on the given information and the prior distribution: $Beta(0.700102, 1)$, we then can calculate the posterior distribution: $Beta(8.700102, 163)$. Also, the 95\% Bayesian credible interval is [0.9035199, 0.9762552]. Besides, we consider a non informative uniform prior distribution of $\pi$: $Beta(1,1)$. The posterior distribution for this non informative uniform prior distribution is $Beta(9,163)$ and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. These results are slightly different because in Bayesian analysis, the choice of prior distribution can impact the posterior distribution and, consequently, the calculation of the confidence interval.
+  Then, in the Bayesian analysis, based on the given information, the prior distribution: $Beta(0.700102, 1)$, we then can calculate the posterior distribution: $Beta(8.700102, 163)$. The 95\% Bayesian credible interval is [0.9035199, 0.9762552]. For $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior is the range 90.3% to 97.6%. There is a 95% probability that $\psi_0$ in between 90.3% and 97.6%. Besides, we consider a non informative uniform prior distribution of $\pi$: $Beta(1,1)$. The posterior distribution is $Beta(9,163)$, and the 95\% Bayesian credible interval is [0.9009794, 0.9750466]. For $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior is the range 90.3% to 97.6%. There is a 95% probability that $\psi_0$ in between 90.1% and 97.5%.
+  
+  For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$. Since $3.73 \times 10^{-28} > 1.96 \times 10^{-28}$, then $1 - 3.73 \times 10^{-28} < 1 - 1.96 \times 10^{-28}$. Thus, $P(\psi_0 > 0.3|t)$ for prior Beta(0.700102, 1) is much closer to 1, so prior Beta(0.700102, 1) has greater evidence to reject the null hypothesis that vaccine efficacy is 30%. The probability that the true vaccine efficacy against COVID 19 is greater than 30% is approximately 100%. The evidence suggests that vaccine efficacy is greater than 30%.
+  
+  For prior Beta(1, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$. For prior Beta(0.700102, 1), we calculated that the posterior probability $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$. Since $3.73 \times 10^{-28} > 1.96 \times 10^{-28}$, then $1 - 3.73 \times 10^{-28} < 1 - 1.96 \times 10^{-28}$. Thus, $P(\psi_0 > 0.3|t)$ for prior Beta(0.700102, 1) is much closer to 1, so prior Beta(0.700102, 1) has greater evidence to reject the null hypothesis that vaccine efficacy is 30%. The probability that the true vaccine efficacy against COVID 19 is greater than 30% is approximately 100%. The evidence suggests that vaccine efficacy is greater than 30%.
   
   The third method is Non-parametric Bootstrapping. By generating 10000 bootstrapped estimation of $\psi_0$, we can construct a 95% confidence interval: [0.9097410, 0.9819328].
   
-  Based on table provided above, we can see the p-value for all three analysis methods are all 1. For the likelihood method and also the Bootstrapping method, we calculate the p-value $P(W < 106.5508) = 1.478737 \times 10^{-24}$ and empirical p-value $P(N0.\hat{\psi} < 0.3) = 0$ respectively. Moreover, the p-value for Bayesian posterior probability is $P(\psi_0 \leq 0.3|t)= 1.96 \times 10^{-28}$. Therefore, we have enough evidence to reject the null hypothesis. That is the efficiency of the vaccine is larger than 30\%.
+  Based on table provided above, we can see the p-value for all three analysis methods are all 1. For the likelihood method and also the Bootstrapping method, we calculate the p-value $P(W < 106.5508) = 1.478737 \times 10^{-24}$ and empirical p-value $P(No.\hat{\psi} < 0.3) = 0$ respectively. Moreover, the p-value for Bayesian posterior probability is $P(\psi_0 \leq 0.3|t)= 1.96 \times 10^{-28}$. Therefore, we have enough evidence to reject the null hypothesis. That is the efficiency of the vaccine is larger than 30\%.
   
 
 # Discussion/Conclusion
