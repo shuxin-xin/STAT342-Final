@@ -185,7 +185,7 @@ Assuming $H_0$ is true, the P-value is the $P(W > 121.6012)$. We only consider $
 
 ### Prior Elicitation
 
-Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, meaning that $\pi = \frac{1-\psi}{2-\psi} = \frac{1-0.3}{2-0.3} = 0.4118$.
+Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, meaning that the expected value of $\pi$ is $\frac{1-\psi}{2-\psi} = \frac{1-0.3}{2-0.3} = 0.4118$.
 
 From 4.1.2 we know that $T\sim Binom(170, \pi)$ and we don't have explicit information about the prior. Thus, let's assume that $\pi$ follows beta distribution. Then, the expected value of $\pi$ is $E[\pi]=\frac{\alpha}{\alpha+\beta}$.
 
