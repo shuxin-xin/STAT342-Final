@@ -42,7 +42,7 @@ Covid-19; BNT162b2-vaccine; Likelihood; Bayesian; Bootstrapping
 
 # Introduction
 
-  In 2019, human beings experiences an unprecedented outbreak of COVID 19. At the beginning of the outbreak, people didn't expect it to last for a long time and treated it like a common flu. However, because the infected person is exposed to the crowd for a long time, the development of new coronary pneumonia is out of control and gradually forms a global disease.
+  In 2019, human beings experiences an unprecedented outbreak of COVID 19. The total number of global deaths in 2020 is "at least 3 million, representing 1.2 million more deaths than officially reported." \footnote{(The True Death Toll of COVID-19: Estimating Global Excess Mortality)} At the beginning of the outbreak, people didn't expect it to last for a long time and treated it like a common flu. However, because the infected person is exposed to the crowd for a long time, the development of new coronary pneumonia is out of control and gradually forms a global disease.
 
   Thus, it becomes meaningful to control the spread of the virus from the human body itself, and vaccination is one of them. The effective vaccines can greatly reduce "diseases that once routinely harmed or killed babies, children, and adults." \footnote{(“Adult Vaccination - Reasons to Vaccinate.”)}
   
@@ -402,7 +402,7 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
    
   In conclusion, because we calculated all P-value smaller than the significance level 0.05, we have enough evidence to reject the null hypothesis and conclude that the true vaccine efficacy is greater than 30\%. The findings from the three analysis methods (Maximum Likelihood, Bayesian, and non-parametric bootstrapping) are consistent, indicating a high efficacy of the BNT162b2 vaccine.
 
-### Strengths and Weaknesses of The Methods 
+## Strengths and Weaknesses of The Methods 
 
   Under regularity conditions, the likelihood estimates converge to the true parameter values as the sample size increases. This property ensures that the likelihood method produces consistent estimates. Bayesian analysis uses prior beliefs or evidences for the parameters of interest. Compared to other two methods, the likelihood method is more efficient in terms of statistical power, because it can provide precise estimates of unknown parameters when the sample size is large. However, the likelihood method relies on assumptions about the data distribution. If we assume distribution inaccurately, the estimates obtained from the likelihood method may be biased or inefficient.
 
@@ -418,6 +418,8 @@ We choose a completely non informative uniform prior distribution Beta(1,1) of $
 “Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
 
 Polack, Fernando P., et al. “Safety and Efficacy of the BNT162b2 mRNA Covid-19 Vaccine.” The New England Journal of Medicine, 10 Dec. 2020, doi.org/10.1056/nejmoa2034577.
+
+The True Death Toll of COVID-19: Estimating Global Excess Mortality. www.who.int/data/stories/the-true-death-toll-of-covid-19-estimating-global-excess-mortality.
 
 # Appendix
 
