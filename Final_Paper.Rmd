@@ -413,7 +413,7 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 1\\ \hline
 
 # Discussion/Conclusion
 
-  Under regularity conditions, the likelihood estimates converge to the true parameter values as the sample size increases. This property ensures that the likelihood method produces consistent estimates. Bayesian... Bootstrapping...  In conclusion, the findings from the three analysis methods (Maximum Likelihood, Bayesian, and non-parametric bootstrapping) are consistent, indicating a high efficacy of the BNT162b2 vaccine.
+  Under regularity conditions, the likelihood estimates converge to the true parameter values as the sample size increases. This property ensures that the likelihood method produces consistent estimates. Bayesian analysis uses prior beliefs or evidences for the parameters of interest. Then, we can have posterior distribution based on observed data and prior. It also allows for the direct estimation of functions of parameters by using the posterior distribution instead of plugging the estimated parameters into the functions. Bayesian gives interpretable results of probabilities of the parameters fall in credible intervals, knowing the uncertainty of the parameter directly. However, it is hard to find the prior. Prior plays an important role in results. Posterior distributions are easily affected by choices of prior. If we do not choose a proper prior, the result will be misleading. Bootstrapping...  In conclusion, the findings from the three analysis methods (Maximum Likelihood, Bayesian, and non-parametric bootstrapping) are consistent, indicating a high efficacy of the BNT162b2 vaccine.
   
 ## The burning question is whether the prior used by Pfizer was non-informative or was it overly optimistic? 
 
