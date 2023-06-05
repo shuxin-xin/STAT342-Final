@@ -120,7 +120,7 @@ By table 1, we know that $n_1=17411$ and $n_2=17511$. Since $n_1 \approx n2$, we
 Then, the parameter of interest, which is the vaccine efficacy represented by $\pi$ is:
 $\psi = 1 - \frac{\pi_v}{\pi_p} = 1 - \frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$.
 
-At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$.
+At the same time, we also know that $\pi = \frac{1 - \psi}{2 - \psi}$. (See process in Appendix 8.1)
 
 Based on the data from table 1, we can easily calculated that $s=x+y=8+162=170$ and $\pi=\frac{\pi_v}{\pi_v+\pi_p}=0.04731632$. Then, $T \sim Binom(s=170, \pi=0.04731632)$ where $\pi_v$ and $\pi_p$ are the probabilities of an infection in the vaccine and placebo groups respectively.
 
@@ -163,7 +163,7 @@ Let's start with the first derivative:
 \begin{align*}
 \frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} \left(ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)\right)=0 \\
 &= -\frac{t}{1 - \psi} + \frac{170}{2 - \psi} = 0 \\
-\psi &= \frac{170 - 2t}{170 - t}
+\psi &= \frac{170 - 2t}{170 - t} \qquad \text{(See full process in Appendix 8.2)}
 \end{align*}
 Thus, $\frac{170 - 2t}{170 - t}$ is a candidate for MLE for $\psi_0$. To check whether this candidate is a maximum value, we need to calculate the second derivative test:
 \begin{align*}
@@ -188,7 +188,7 @@ $$\widehat{\psi_0^{mle}} \pm Z_{\alpha/2} \cdot \widehat{SE}=\widehat{\psi_0^{ml
 Thus, the 95% confidence interval for the true value of $\psi_0$ is $[0.9155621, \: 0.9856725]$.
 
 ### P-Value
-Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})]=121.6012$.
+Then, we did a likelihood ratio test on $\psi$. Notice that here our alternative hypothesis becomes $H_1:\psi_0\neq 0.3$ because  Plug in $\psi_0^{mle}=0.9506173$ and $t=8$, we know that the likelihood ratio test statistic $W$ equals to: $W = 2[\ell(\widehat{\psi_0^{mle}}) - \ell(\psi^{null})]=121.6012$. (See process in Appendix 8.3)
 
 By chapter 25.2, we know that under $H_0$ with large sample: $W\approx \chi^2_1$.
 
@@ -391,7 +391,7 @@ Since we used the simple quantile method without any assumptions, we calculated 
 Approach & Lower Bound & Upper Bound & p-value \\ \hline
 Maximum Likelihood (ConfI) & 0.9155621 & 0.9856725 & 2.822313×$10^{-28}$  \\ \hline
 Bayesian prior Beta(0.700102, 1) (CredI) &  0.9035199 & 0.9762552 & 1.96x$10^{-28}$ \\ \hline
-Bayesian Prior Beta(1, 1) (CredI) & 0.9009794 & 0.9750466 & 1.96x$10^{-28}$ \\ \hline
+Bayesian Prior Beta(1, 1) (CredI) & 0.9009794 & 0.9750466 & 3.73$10^{-28}$ \\ \hline
 Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hline
 \end{tabular}
 \end{table}
@@ -408,13 +408,13 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
   
 # Discussion/Conclusion
 
+  Under regularity conditions, the likelihood estimates converge to the true parameter values as the sample size increases. This property ensures that the likelihood method produces consistent estimates. Bayesian analysis uses prior beliefs or evidences for the parameters of interest. Compared to other two methods, the likelihood method is more efficient in terms of statistical power, because it can provide precise estimates of unknown parameters when the sample size is large. However, the likelihood method relies on assumptions about the data distribution. If we assume distribution inaccurately, the estimates obtained from the likelihood method may be biased or inefficient. 
+   Thus, we have enough evidence to reject the null hypothesis and conclude that the true vaccine efficacy is greater than 30\%.
+  
    The 95\% Bayesian credible interval [0.9035199, 0.9762552] suggests that for $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(0.700102, 1)$ is the range 90.3% to 97.6%. There is a 95% probability that $\psi_0$ in between 90.3% and 97.6%. The 95\% Bayesian credible interval [0.9009794, 0.9750466] suggests that for $\psi$ represents the vaccine efficacy against COVID 19, the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(1,1)$ is the range 90.3% to 97.6%. There is a 95% probability that $\psi_0$ in between 90.1% and 97.5%.
    
   Since posterior probability $P(\psi_0 \leq 0.3|t)$ for $Beta(1,1)$ is greater than that of $Beta(0.700102, 1)$ ($3.73 \times 10^{-28} > 1.96 \times 10^{-28}$), then $1 - 3.73 \times 10^{-28} < 1 - 1.96 \times 10^{-28}$. Thus, $P(\psi_0 > 0.3|t)$ for prior Beta(0.700102, 1) is much closer to 1, so prior Beta(0.700102, 1) has greater evidence to reject the null hypothesis that vaccine efficacy is 30%. The probability that the true vaccine efficacy against COVID 19 is greater than 30% is approximately 100%. The evidence suggests that vaccine efficacy is greater than 30%.
 
-  Under regularity conditions, the likelihood estimates converge to the true parameter values as the sample size increases. This property ensures that the likelihood method produces consistent estimates. Bayesian analysis uses prior beliefs or evidences for the parameters of interest. Compared to other two methods, the likelihood method is more efficient in terms of statistical power, because it can provide precise estimates of unknown parameters when the sample size is large. However, the likelihood method relies on assumptions about the data distribution. If we assume distribution inaccurately, the estimates obtained from the likelihood method may be biased or inefficient. 
-   Thus, we have enough evidence to reject the null hypothesis and conclude that the true vaccine efficacy is greater than 30\%.
-  
   Then, we can have posterior distribution based on observed data and prior. It also allows for the direct estimation of functions of parameters by using the posterior distribution instead of plugging the estimated parameters into the functions. Bayesian gives interpretable results of probabilities of the parameters fall in credible intervals, knowing the uncertainty of the parameter directly. However, it is hard to find the prior. Prior plays an important role in results. Posterior distributions are easily affected by choices of prior. If we do not choose a proper prior, the result will be misleading. 
   
   Bootstrapping is a flexible resampling technique to use sample distribution to estimate the population distribution and make inferences about a population. Compared to the other two approaches, the greatest strength of bootstrapping is that we don't rely on any specific distributional assumptions of the data. However, the results of the first two approaches are based on assumptions and distribution models. Thus, the result from bootstrapping is still applicable even though our previous assumptions are violated. This is the most powerful advantage of bootstrapping. However, bootstrapping is computationally intensive and also relies heavily on the given data. If the resampling data is not representative of the population or suffers from bias, the bootstrapped results may be hugely affected accordingly. 
@@ -437,7 +437,7 @@ Polack, Fernando P., et al. “Safety and Efficacy of the BNT162b2 mRNA Covid-19
 
 # Appendix
 
-## 4.1.2 Representing $\psi$ using $\pi$ and representing $\pi$ using $\psi$
+## Representing $\psi$ using $\pi$ and representing $\pi$ using $\psi$ for 4.1.2
 
 The parameter of interest is vaccine efficacy $\psi$, that is 
 \begin{align*}
@@ -463,7 +463,7 @@ Then, we have $\psi = 1-\frac{\pi}{1-\pi}=\frac{1-2\pi}{1-\pi}$ and
 \pi &= \frac{1 - \psi}{2-\psi}
 \end{align*}
 
-## 4.2 Detailed Calculation of the first derivative of $\ell(\psi)$
+## Detailed Calculation of the first derivative of $\ell(\psi)$ for 4.2
 \begin{align*}
 \frac{d}{d \psi} \ell(\psi) &= \frac{d}{d \psi} \left(ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \psi) - ln(2 - \psi)) + (t - 170) \cdot ln(2 - \psi)\right)=0 \\
 &= -\frac{t}{1 - \psi} + \frac{t}{2 - \psi} - \frac{t - 170}{2 - \psi}=0 \\
@@ -473,7 +473,7 @@ Then, we have $\psi = 1-\frac{\pi}{1-\pi}=\frac{1-2\pi}{1-\pi}$ and
 \psi &= \frac{170 - 2t}{170 - t}
 \end{align*}
 
-## 4.2 Detailed Calculation of W
+## Detailed Calculation of W for 4.2
 \begin{align*}
 W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 &= 2[ln\left(\binom{170}{t}\right) + t \cdot (ln(1 - \widehat{\psi^{mle}}) - ln(2 - \widehat{\psi^{mle}})) + (t - 170) \cdot ln(2 - \widehat{\psi^{mle}}) - \\
@@ -483,12 +483,12 @@ W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 &= 121.6012 
 \end{align*}
 
-## 4.2 Code for Likelihood
+## Code for Likelihood for 4.2
 ```{r ref.label="likelihood", echo = TRUE, eval = F}
 
 ```
 
-## 4.3 Code for Bayesian
+## Code for Bayesian for 4.3
 ```{r ref.label="interval_prior_1", echo = TRUE, eval = F}
 
 ```
@@ -509,7 +509,7 @@ W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 
 ```
 
-## 4.4 Code for Bootstrap
+## Code for Bootstrap for 4.4
 ```{r ref.label="bootstrap", echo = TRUE, eval = F}
 
 ```
