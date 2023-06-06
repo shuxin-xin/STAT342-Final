@@ -461,12 +461,12 @@ W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 \alpha &= 0.700102
 \end{align*}
 
-## Code for Likelihood for 4.4.1
+## Code for Likelihood for 4.4.3
 ```{r ref.label="likelihood", echo = TRUE, eval = F}
 
 ```
 
-## Code for Bayesian for 4.3
+## Code for Bayesian for 4.5
 ```{r ref.label="interval_prior_1", echo = TRUE, eval = F}
 
 ```
@@ -487,7 +487,7 @@ W &= 2[\ell(\widehat{\psi^{mle}}) - \ell(\psi^{null})] \\
 
 ```
 
-## Code for Bootstrap for 4.4
+## Code for Bootstrap for 4.6
 ```{r ref.label="bootstrap", echo = TRUE, eval = F}
 
 ```
