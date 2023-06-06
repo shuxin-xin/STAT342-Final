@@ -70,7 +70,7 @@ Let $X$ denote the number of infection cases among $n_1 = 17411$ subjects assign
 
 Let $\pi_v$ and $\pi_p$ denote the probabilities of an infection in the vaccine and placebo groups respectively.
 
-Since participants underwent randomization in the paper, every subject is independent of each other. With independence and infection probability $\pi_v$ and $\pi_p$ for the vaccine and placebo groups, a reasonable model that we can use for $X$ and $Y$ is $X \sim Binom(\pi_v, n_1 = 17411)$ and $Y \sim Binom(\pi_p, n_2 = 17511)$. 
+Because participants underwent randomization in the paper, every subject is independent of each other. With independence and infection probability $\pi_v$ and $\pi_p$ for the vaccine and placebo groups, a reasonable model that we can use for $X$ and $Y$ is $X \sim Binom(\pi_v, n_1 = 17411)$ and $Y \sim Binom(\pi_p, n_2 = 17511)$. 
 
 Then, the parameter of interest, which is the vaccine efficacy is:
 $\psi = 1 - \frac{\pi_v}{\pi_p} = \frac{\pi_p - \pi_v}{\pi_p}$. Based on the data from table 1 above, we can easily calculated that $\hat{\pi_v} = \frac{8}{17411}$, $\hat{\pi_p} = \frac{162}{17511}$, and $\hat{\psi} = \frac{\hat{\pi_p} - \hat{\pi_v}}{\hat{\pi_p}}=0.9503337$. That means the vaccine BNT162b2 can reduce risk of having COVID 19 by around 95\% compare to placebo.
@@ -83,7 +83,7 @@ Let $S$ denote the total cases in two groups where $S=X+Y$ and let $T$ denotes t
 
 By distributive laws, $P(I)$, the probability of infections, is: $P(I)= P(I \cap V) + P(I \cap V^c)=P(I|V) P(V) + P(I|V^c) P(V^c)=\frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}$ (See full process in Appendix 8.1). 
 
-Let $\pi$ denote the probability of a subjecy with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$. Since participants underwent randomization in the paper, every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(V|I)$. Now, let's find $\pi$:
+Let $\pi$ denote the probability of a subjecy with the BNT162b2 vaccine but in the infection group, that is $\pi = P(V|I)=P(\text{BNT162b2 | COVID 19})$. Because participants underwent randomization in the paper, every case is independent of each other. With independence and a fixed probability of $\pi$, a reasonable model that we can use for $T$ is $T \sim Binom(s, \pi)$ where $\pi = P(V|I)$. Now, let's find $\pi$:
 
 By Bayes’ rule, we know that: $P(V|I) = \frac{P(I|V)P(V)}{P(I)}$ where $P(I|V)$ represents the probability of infections given that being assigned to BNT162b2 group, which is $\pi_v$ and $P(I|V^c)$ represents the probability of infections given that being assigned to placebo group, which is $\pi_p$.
 
@@ -167,9 +167,9 @@ Assuming $H_0$ is true, the P-value is the $P(W > 121.6012)$. We only consider $
 
 Under the null hypothesis, the prior value of vaccine efficacy($\psi$) is 30%, meaning that the expected value of $\pi$ is $\frac{1-\psi}{2-\psi} = \frac{1-0.3}{2-0.3} = 0.4118$.
 
-From 4.1.2 we know that $T\sim Binom(170, \pi_0)$ and we don't have explicit information about the prior. Thus, let's assume that $\pi$ follows beta distribution. Then, the expected value of $\pi$ is $E[\pi]=\frac{\alpha}{\alpha+\beta}$.
+From 4.2 we know that $T\sim Binom(170, \pi_0)$ and we don't have explicit information about the prior. Thus, let's assume that $\pi$ follows beta distribution. Then, the expected value of $\pi$ is $E[\pi]=\frac{\alpha}{\alpha+\beta}$.
 
-In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice since it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $\alpha$ in this case. Let $\beta = 1$, then, $\frac{\alpha}{\alpha+1} = 0.4118$, then $\alpha =  0.700102$ (See full process in Appendix 8.5).
+In the absence of explicit prior information or evidence, we also know that centering the prior at 0 is often a conservative choice because it avoids strong assumption and allows for a more unbiased approach. Since we have assumed that $\pi$ follows beta distribution, by the property of Beta Distribution, assuming the prior is centered closer to 0 indicating a prior belief that $\alpha$ and $\beta$ is more likely to have lower values, so we choose $\beta = 1$ and a smaller $\alpha$ in this case. Let $\beta = 1$, then, $\frac{\alpha}{\alpha+1} = 0.4118$, then $\alpha =  0.700102$ (See full process in Appendix 8.5).
 
 Therefore, the a proper prior of $\pi$ is: $g(\pi_0) = Beta(0.700102, 1)$. However, this prior may be informative to the posterior because we assume the prior of $\pi$ is a Beta distribution. Therefore, we also choose a completely non informative uniform prior distribution of $\pi$, that is $g(\pi_0) = Beta(1,1)$ because the $Beta(1, 1)$ distribution is symmetric around its center (0.5, 0.5) and assigns equal probability to all values between 0 and 1.
 
@@ -183,7 +183,7 @@ Since $T \sim Binom(s=170, \pi_0)$ and we assume $\pi$ follows a Beta Distributi
 interval <- qbeta(p = c(0.025,0.975), shape1=8.700102, shape2=163)
 ```
 
-Calculated by R, the 2.5% percentile of posterior distribution of $\pi$ is 0.02319402, and the 97.5% percentile of posterior distribution of $\pi$ is 0.08799074. Since by 4.1.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
+Calculated by R, the 2.5% percentile of posterior distribution of $\pi$ is 0.02319402, and the 97.5% percentile of posterior distribution of $\pi$ is 0.08799074. Since by 4.2, we know that $\psi = \frac{1-2\pi}{1-\pi}$, we can calculate the 95\% Bayesian credible interval, that is:
 
 $[\frac{1-2 \times 0.08799074}{1-0.08799074},\frac{1-2 \times 0.02319402}{1-0.02319402}] = [0.9035199, 0.9762552]$
 
@@ -199,9 +199,9 @@ Calculated by R, the 2.5% percentile of posterior distribution of $\pi$ is 0.024
 
 $[\frac{1-2 \times 0.09009896}{1-0.09009896},\frac{1-2 \times 0.02434585}{1-0.02434585}] = [0.9009794,0.9750466]$
 
-We also plot the prior and posterior distributions for both of the approaches to see the difference:
+We also plot the prior and posterior distributions for both approaches to see the difference:
 
-```{r label="graph", echo=F,fig.height=3, fig.width=9.5}
+```{r label="graph", echo=F,fig.height=3.3, fig.width=9.5}
 p_a <- ggplot()+
   geom_function(fun = dbeta,
                 args = list(shape1 = 0.700102,
@@ -246,9 +246,9 @@ post_prob_pi_non <- pbeta(q=0.4117647, shape1=9, shape2=163, lower.tail = F)
 post_prob_pi <- pbeta(q=0.4117647, shape1=8.700102, shape2=163, lower.tail = F)
 ```
 
-For prior Beta(0.700102, 1), $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$.
+Using R, for prior Beta(0.700102, 1), $P(\psi_0 \leq 0.3|t)=1.96 \times 10^{-28}$.
 
-For prior Beta(1, 1), $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
+Using R, for prior Beta(1, 1), $P(\psi_0 \leq 0.3|t)=3.73 \times 10^{-28}$.
 
 ### Examine sensitivity to the choice of prior distribution
 
@@ -274,7 +274,7 @@ h_0_psi <- 0.3
 
 ### Bootstrapping Method Description
 
-To use the non parametric bootstrapping to construct a 95% bootstrap confidence interval for the BNT162b2 vaccine efficacy $\psi$, we do not need to make any assumption about the probability distribution of the sample. We can directly generate 10000 $\pi_v$ and $\pi_p$ to calculate the exact $\psi$ for each generated sample and do the inference. Here, we assume that the population distribution for the infection in the vaccine group is a discrete probability distribution that gives probability $\frac{1}{170}$ (since we have a total number of 170 infections) to each observed participants who is vaccinated the BNT162b2 vaccine but is infected by COVID 19. We assume that the population distribution for the infection in the placebo group is a discrete probability distribution that gives probability $\frac{1}{170}$ to each observed participants who is not vaccinate the BNT162b2 vaccine and is infected by COVID 19.
+To use the non parametric bootstrapping to construct a 95% bootstrap confidence interval for the BNT162b2 vaccine efficacy $\psi_0$, we do not need to make any assumption about the probability distribution of the sample. We can directly generate 10000 $\pi_v$ and $\pi_p$ to calculate the exact $\psi_0$ for each generated sample and do the inference. Here, we assume that the population distribution for the infection in the vaccine group is a discrete probability distribution that gives probability $\frac{1}{170}$ (because we have a total number of 170 infections) to each observed participants who is vaccinated the BNT162b2 vaccine but is infected by COVID 19. We assume that the population distribution for the infection in the placebo group is a discrete probability distribution that gives probability $\frac{1}{170}$ to each observed participants who is not vaccinate the BNT162b2 vaccine and is infected by COVID 19.
 
 ### Calculation of Simple Bootstrap Confidence Interval and P-value
 
@@ -300,15 +300,15 @@ non_sample_summary <- do.call(rbind, non_bootstrap_samples)
 # log2(10000) + 1 = 14.28771
 # Here, I took a number of 15.
 # Now, I need the range from my data.
-# para_sample_summary$sample_psi_hat %>% range()
+# non_sample_summary$sample_psi_hat %>% range()
 # From the summary, I got the range for the data is: 
 # 1.0000000 - 0.8659009 = 0.1340991
 # Thus, here, I resize the binwidth into 0.1340991/15 and breaks
 # the bar by (0.8659009, 1.0000000, 0.1340991/15)
 p1 <- ggplot(data = non_sample_summary,
        mapping = aes(x = sample_psi_hat)) + 
-  geom_histogram(binwidth = 0.1258278/15,
-                 breaks = seq(0.8741722, 1.0000000, 0.1258278/15), 
+  geom_histogram(binwidth = 0.1340991/15,
+                 breaks = seq(0.8659009, 1.0000000, 0.1340991/15), 
                  alpha = 0.8,
                  color = 'gray') +
   labs(title =  expression(paste("The Bootstrapped Sampling Distribution of ", 
@@ -333,13 +333,13 @@ upper_ci <- quantile(non_sample_summary$sample_psi_hat, 1 - a/2)
 non_p_value <- sum(non_sample_summary$sample_psi_hat < h_0_psi) / B
 ```
 
-```{r echo = FALSE, warning=F,fig.height=3, fig.width=9.5}
+```{r echo = FALSE, warning=F,fig.height=4, fig.width=9.5}
 p1+p2
 ```
 
 Calculated by the R, the 95% simple bootstrap confidence interval for the true value of the vaccine efficacy $\psi_0$ is [`r lower_ci`, `r upper_ci`]. 
 
-Since we used the simple quantile method without any assumptions, we calculated the empirical p-value. Here, since all of the samples' vaccine efficacy are greater than the $\psi_0=0.3$ in the null hypothesis and our alternative hypothesis is that $\psi_0>0.3$, then there is no chance of observing a test statistic as extreme or more extreme than the one observed under the null hypothesis, resulting in the empirical p-value to be 0.
+Since we used the simple quantile method without any assumptions, we calculated the empirical p-value. Here, because all of the samples' vaccine efficacy are greater than the $\psi_0=0.3$ in the null hypothesis and our alternative hypothesis is that $\psi_0>0.3$, then there is no chance of observing a test statistic as extreme or more extreme than the one observed under the null hypothesis, resulting in the empirical p-value to be 0.
 
 # Results
 
@@ -363,13 +363,11 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
   
   For Non-parametric Bootstrapping, by generating 10000 bootstrapped estimation of $\psi_0$, the 95% simple bootstrap confidence interval is [0.9097410, 0.9819328]. The empirical p-value among the 10000 generated samples is 0.
   
-  The results from all of the approaches are consistent that we have enough evidence to reject the null hypothesis and claim the true efficiency of the vaccine is larger than 30\%. We also have strong confidence that the BNT162b2 vaccine efficacy is larger than 90\%.
-  
 # Discussion/Conclusion
 
 ## Conclusion
 
-  The 95\% Confidence Interval of the true vaccine efficacy using the Maximum Likelihood is [0.9155627, 0.9856719]. That is, we are 95% confident that the true value of the vaccine efficacy is between 0.9155627 and 0.9856719. The 95\% Confidence Intervals of the true vaccine efficacy using the Bootstrapping is [0.9097410, 0.9819328]. That is, we are 95% confident that the true value of the vaccine efficacy is between 0.9097410 and 0.9819328. The 95\% Credible Intervals of the true vaccine efficacy for Bayesian prior Beta(0.700102, 1) and Bayesian Prior Beta(1, 1) are [0.9035199, 0.9762552] and [0.9009794, 0.9750466] respectively. The 95\% Bayesian credible interval [0.9035199, 0.9762552] suggests that the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(0.700102, 1)$ is the range 90.3% to 97.6%. Thus, there is a 95% probability that the true vaccine efficacy is between 90.3% and 97.6%. The 95\% Bayesian credible interval [0.9009794, 0.9750466], suggesting that the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(1,1)$ is the range 90.3% to 97.6%. Thus, there is a 95% probability that the true vaccine efficacy in between 90.1% and 97.5%.
+  The 95\% Confidence Interval of the true vaccine efficacy using the Maximum Likelihood is [0.9155627, 0.9856719]. That is, we are 95% confident that the true value of the vaccine efficacy is between 0.9155627 and 0.9856719. The 95\% Confidence Interval of the true vaccine efficacy using the Bootstrapping is [0.9097410, 0.9819328]. That is, we are 95% confident that the true value of the vaccine efficacy is between 0.9097410 and 0.9819328. The 95\% Credible Intervals of the true vaccine efficacy for Bayesian prior Beta(0.700102, 1) and Bayesian Prior Beta(1, 1) are [0.9035199, 0.9762552] and [0.9009794, 0.9750466] respectively. The 95\% Bayesian credible interval [0.9035199, 0.9762552] suggests that the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(0.700102, 1)$ is the range 90.3% to 97.6%. Thus, there is a 95% probability that the true vaccine efficacy is between 90.3% and 97.6%. The 95\% Bayesian credible interval [0.9009794, 0.9750466], suggesting that the middle 95% of the posterior distribution of vaccine efficacy resulting from the prior $Beta(1,1)$ is the range 90.1% and 97.5%. Thus, there is a 95% probability that the true vaccine efficacy in between 90.1% and 97.5%.
   
   Maximum Likelihood and Bootstrapping are frequentist methods, which suggests a range of values with a certain confidence level (95% in this case), while Bayesian approach provides credible interval, which suggests a range of values with a certain probability (95% in this case). All the intervals from these three methods overlap to some extent (the overlapped interval is: [0.9155627, 0.9750466]). Maximum Likelihood and Bootstrapping illustrate similar estimates of true vaccine efficacy within intervals, but Bayesian approach provide specific information that the probability of true vaccine efficacy falls in certain range.
   
@@ -383,11 +381,11 @@ Non-parametric Bootstrap (ConfI) & 0.9097410 & 0.9819328 & 0 (empirical)\\ \hlin
   
   Bootstrapping is a flexible resampling technique to use sample distribution to estimate the population distribution and make inferences about a population. Compared to the other two approaches, the greatest strength of bootstrapping is that we don't rely on any specific distributional assumptions of the data. However, the results of the first two approaches are based on assumptions and distribution models. Thus, the result from bootstrapping is still applicable even though our previous assumptions are violated. This is the most powerful advantage of bootstrapping. However, bootstrapping is computationally intensive and also relies heavily on the given data. If the resampling data is not representative of the population or suffers from bias, the bootstrapped results may be hugely affected accordingly. 
   
-  Since the three methods all get similar and consistent result, we conclude that the three methods that we used are all solid.
+  Because the three methods all get similar and consistent results, we conclude that the three methods that we used are all solid.
   
 ## Discussion: Bayesian Optimization with Prior
 
-We choose a completely non informative uniform prior distribution Beta(1,1) of $\pi$, assuming equal probabilities for all values of $\pi$ between 0 and 1. It is non-informative because it does not favor any specific value of $\pi$. In this case, the prior Beta(1,1) is not based on prior belief or expected vaccine efficacy. We also choose Beta(0.700102, 1) as the prior distribution of $\pi$. The prior distribution is chosen such that the mean is equal to 0.4118 ($\frac{1-0.3}{2-0.3}$) corresponding to expected vaccine efficacy 30%. The mean is higher than 30%, which means that Pfizer assigns a higher probability to indicate lower vaccine efficacy, so the prior used by Pfizer was pessimistic. Pfizer expressed a relatively low expectation for the vaccine's efficacy before observing the actual data. The chosen prior Beta(0.700102, 1) is informative to some extent because it assumes an expected vaccine efficacy of 30%. This implies that there is some prior belief or evidence to suggest a certain level of efficacy. 
+We choose a completely non informative uniform prior distribution Beta(1,1) of $\pi$, assuming equal probabilities for all values of $\pi$ between 0 and 1. It is non-informative because it does not favor any specific value of $\pi$. In this case, the prior Beta(1,1) is not based on prior belief or expected vaccine efficacy. We also choose Beta(0.700102, 1) as the prior distribution of $\pi$. The prior distribution is chosen such that the mean is equal to 0.4118 (that is $\frac{1-0.3}{2-0.3}$) corresponding to expected vaccine efficacy 30%. The mean is higher than 30%, which means that Pfizer assigns a higher probability to indicate lower vaccine efficacy, so the prior used by Pfizer was pessimistic. Pfizer expressed a relatively low expectation for the vaccine's efficacy before observing the actual data. The chosen prior Beta(0.700102, 1) is informative to some extent because it assumes an expected vaccine efficacy of 30%. This implies that there is some prior belief or evidence to suggest a certain level of efficacy. 
 
 # References
 “Adult Vaccination - Reasons to Vaccinate.” Centers for Disease Control and Prevention, 22 Sept. 2022, www.cdc.gov/vaccines/adults/reasons-to-vaccinate.html.
@@ -403,7 +401,7 @@ The True Death Toll of COVID-19: Estimating Global Excess Mortality. www.who.int
 \begin{align*}
 P(I) &= P(I\cap (V\cup V^c))=P((I\cap V)\cup(I\cap V^c))\\
 &=P(I \cap V) + P(I \cap V^c) -P((I \cap V)\cap(I \cap V^c))\qquad\mbox{by addition rule}\\
-&= P(I \cap V) + P(I \cap V^c)\qquad\mbox{since complement sets are disjointed}\\
+&= P(I \cap V) + P(I \cap V^c)\qquad\mbox{because complement sets are disjointed}\\
 &=P(I|V) P(V) + P(I|V^c) P(V^c) \qquad\mbox{by definition of conditional probability} \\
 &= \pi_v \cdot \frac{n_1}{n_1+n_2} + \pi_p \cdot \frac{n_2}{n_1+n_2} \\
 &= \frac{n_1 \pi_v + n_2 \pi_p}{n_1 + n_2}
