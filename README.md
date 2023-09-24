@@ -1,5 +1,7 @@
 # STAT342-Final
 
+By Yanting Hu, Liuyixin Shao, and Shuxin Zhang
+
 ## Introduction
 
   In 2019, human beings experiences an unprecedented outbreak of COVID 19. The total number of global deaths in 2020 is "at least 3 million, representing 1.2 million more deaths than officially reported." \footnote{(The True Death Toll of COVID-19: Estimating Global Excess Mortality)} At the beginning of the outbreak, people didn't expect it to last for a long time and treated it like a common flu. However, because the infected person is exposed to the crowd for a long time, the development of new coronary pneumonia is out of control and gradually forms a global disease. Thus, it becomes meaningful to control the spread of the virus from the human body itself, and vaccination is one of them. The effective vaccines can greatly reduce "diseases that once routinely harmed or killed babies, children, and adults." \footnote{(“Adult Vaccination - Reasons to Vaccinate.”)}
